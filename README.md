@@ -217,5 +217,73 @@ This instructs all the minions those who have 'cluster_type=openstack' defined i
 
 The states have done almost all the stuff for you. You still have to follow [neutron deployment use cases](http://docs.openstack.org/trunk/install-guide/install/apt/content/neutron-deploy-use-cases.html "Networking Options") to have your network up and running. This involves creation of your intergration bridge, external bridge, physical networks etc.
 
+To make things clear lets have a look at a part of the pillar configuration.
+
+<pre>
+    "controller": [
+        "hawk"
+    ],
+    "compute": [
+        "lammer"
+    ],
+    "install": {
+        "controller": [
+            "generics.host",
+            "generics.havana",
+            "generics.ntp",
+            "mysql",
+            "queue.rabbit",
+            "keystone",
+            "glance",
+            "nova",
+            "mysql.client",
+            "horizon",
+            "neutron",
+            "neutron.openvswitch"
+        ],
+        "compute": [
+            "generics.host",
+            "generics.havana",
+            "generics.ntp",
+            "mysql.client",
+            "nova.compute_kvm",
+            "neutron.openvswitch"
+        ]
+    },
+    "config-folder": "cluster1",
+</pre>
+
+First define one controller node, which is 'hawk', and one compute node 'lammer'. 
+
+Under the “install” section we define what states to apply on a machine in order to deploy a controller or a compute node.
+
+The “config-folder” options tells the minions where to get their configuration files from. Setting it to 'cluster1' will tell the minions to get their configuration files from 'file_roots/config/cluster1/'. These have been used extensively in state definitions.
+
+The rest of the pillar definition is self explanatory.
 
 
+Adding new compute node
+=======================
+
+Follow the below steps to have a new compute node in your cluster
+
+1. Add a new machine to salt-master.
+2. Add it under the list of compute nodes like so
+<pre>    
+"compute": [
+         "lammer",
+     	 "goshawk"
+    ]
+</pre>
+3. Under 'file_root/config/cluster1/' add a new directory named 'goshawk'. Copy all the files from 'file_root/config/cluster1/lammer/' into 'file_root/config/cluster1/goshawk'.
+4. Run the below command to modify configuration files according to new compute node hostname
+<pre>
+find file_root/config/cluster1/goshawk -type f -name *.* -exec sed -i 's/lammer/goshawk/' {} \;
+</pre>
+5. Finally sync the cluster
+<pre>
+salt -C 'I@cluster_type:openstack' state.highstate
+</pre>
+
+
+The above methodology can be used to perform auto scaling, which off course is the next project.
