@@ -217,6 +217,17 @@ This instructs all the minions those who have 'cluster_type=openstack' defined i
 
 The states have done almost all the stuff for you. You still have to follow [neutron deployment use cases](http://docs.openstack.org/trunk/install-guide/install/apt/content/neutron-deploy-use-cases.html "Networking Options") to have your network up and running. This involves creation of your intergration bridge, external bridge, physical networks etc.
 
+Note
+====
+The state generics.havana installs a file at /etc/apt/apt.conf.d/01proxy. This points to your salt master as [apt cache proxy](https://help.ubuntu.com/community/Apt-Cacher-Server "Apt Cache"). If you do not want this to happen comment the contents of 'file_root/config/cluster1/common/etc/apt/apt.conf.d/01proxy'
+
+<pre>
+sed -i "s/^Acquire/#Acquire/" /etc/apt/apt.conf.d/01proxy
+</pre>
+
+Cluster Definition
+==================
+
 To make things clear lets have a look at a part of the pillar configuration.
 
 <pre>
@@ -260,6 +271,55 @@ Under the “install” section we define what states to apply on a machine in o
 The “config-folder” options tells the minions where to get their configuration files from. Setting it to 'cluster1' will tell the minions to get their configuration files from 'file_roots/config/cluster1/'. These have been used extensively in state definitions.
 
 The rest of the pillar definition is self explanatory.
+
+
+Adding a new cluster entity
+===========================
+Lets say you need a network node all you have to do is redefine the cluster and sync.
+
+To redefine first we need to add a new entity under "install" and then add machines under that entity like so
+
+<pre>
+    "controller": [
+        "hawk"
+    ],
+    "compute": [
+        "lammer"
+    ],
+    "network": [
+        "goshawk"
+    ],
+    "install": {
+        "controller": [
+            "generics.host",
+            "generics.havana",
+            "generics.ntp",
+            "mysql",
+            "queue.rabbit",
+            "keystone",
+            "glance",
+            "nova",
+            "mysql.client",
+            "horizon"
+        ],
+        "network": [
+            "neutron",
+            "neutron.openvswitch"
+        ],
+        "compute": [
+            "generics.host",
+            "generics.havana",
+            "generics.ntp",
+            "mysql.client",
+            "nova.compute_kvm",
+            "neutron.openvswitch"
+        ]
+    },
+    "config-folder": "cluster1",
+</pre>
+
+After this you need to create a directory 'file_root/config/cluster1/goshawk/' and put whatever configurations you want under that.
+For a network node the only file that needs to be there is '/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini'
 
 
 Adding new compute node
@@ -312,3 +372,5 @@ Now run
 <pre>
 salt (machine id here) state.highstate
 </pre>
+
+
