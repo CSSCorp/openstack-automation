@@ -277,9 +277,9 @@ Follow the below steps to have a new compute node in your cluster
 </pre>
 3. Under 'file_root/config/cluster1/' add a new directory named 'goshawk'. Copy all the files from 'file_root/config/cluster1/lammer/' into 'file_root/config/cluster1/goshawk'.
 4. Run the below command to modify configuration files according to new compute node hostname
-<pre>
-find file_root/config/cluster1/goshawk -type f -name *.* -exec sed -i 's/lammer/goshawk/' {} \;
-</pre>
+<code>
+find file_root/config/cluster1/goshawk -type f -name \*.\* -exec sed -i 's/lammer/goshawk/' {} \;
+</code>
 5. Finally sync the cluster
 <pre>
 salt -C 'I@cluster_type:openstack' state.highstate
