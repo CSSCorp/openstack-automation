@@ -285,5 +285,30 @@ find file_root/config/cluster1/goshawk -type f -name \*.\* -exec sed -i 's/lamme
 salt -C 'I@cluster_type:openstack' state.highstate
 </pre>
 
-
 The above methodology can be used to perform auto scaling, which off course is the next project.
+
+Removing a node
+===============
+
+Change the file 'pillar_root/top.sls' from 
+
+<pre>
+havana:
+  hawk:
+    - cluster1
+  lammer:
+    - cluster1
+</pre>
+to
+<pre>
+havana:
+  hawk:
+    - cluster1_inverse
+  lammer:
+    - cluster1_inverse
+</pre>
+
+Now run 
+<pre>
+salt (machine id here) state.highstate
+</pre>
