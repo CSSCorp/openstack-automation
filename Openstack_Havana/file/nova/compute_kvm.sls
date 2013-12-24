@@ -31,7 +31,8 @@
                     {
                         "pkg": "nova-compute"
                     }
-                ]
+                ],
+                "user": "nova"
             }
         ]
     },
@@ -50,7 +51,8 @@
                     {
                         "pkg": "nova-compute-kvm"
                     }
-                ]
+                ],
+                "user": "nova"
             }
         ]
     },
@@ -64,7 +66,8 @@
                     {
                         "pkg": "nova-compute-kvm"
                     }
-                ]
+                ],
+                "user": "nova"
             }
         ]
     }

@@ -1,176 +1,197 @@
 #!jinja|json
 {
+    "keystone.endpoint": "http://hawk:35357/v2.0", 
+    "DM": {
+        "swap": {
+            "threshold": 70, 
+            "actions": {
+                "email": {
+                    "destination": "ageeleshwar.kandavelu@csscorp.com"
+                }
+            }
+        }, 
+        "cpu": {
+            "threshold": 70, 
+            "actions": {
+                "email": {
+                    "destination": "ageeleshwar.kandavelu@csscorp.com"
+                }
+            }
+        }, 
+        "memory": {
+            "threshold": 70, 
+            "actions": {
+                "scale": {
+                    "types": [
+                        "compute"
+                    ]
+                }, 
+                "email": {
+                    "destination": "ageeleshwar.kandavelu@csscorp.com"
+                }
+            }
+        }
+    }, 
+    "compute": [
+        "lammergeier"
+    ], 
+    "schedule": {
+        "salt-monitor": {
+            "function": "metric_monitor.monitor", 
+            "minutes": 5
+        }
+    }, 
+    "cluster_type": "openstack", 
+    "mysql": {
+        "nova": {
+            "username": "nova", 
+            "password": "nova_pass", 
+            "sync": "nova-manage db sync", 
+            "service": "nova-api"
+        }, 
+        "dash": {
+            "username": "dash", 
+            "password": "dash_pass"
+        }, 
+        "keystone": {
+            "username": "keystone", 
+            "password": "keystone_pass", 
+            "sync": "keystone-manage db_sync", 
+            "service": "keystone"
+        }, 
+        "cinder": {
+            "username": "cinder", 
+            "password": "cinder_pass"
+        }, 
+        "glance": {
+            "username": "glance", 
+            "password": "glance_pass", 
+            "sync": "glance-manage db_sync", 
+            "service": "glance"
+        }, 
+        "neutron": {
+            "username": "neutron", 
+            "password": "neutron_pass"
+        }
+    }, 
+    "cluster_name": "cluster1", 
     "controller": [
         "hawk"
-    ],
-    "compute": [
-        "lammer"
-    ],
-    "install": {
-        "controller": [
-            "generics.host",
-            "generics.havana",
-            "generics.ntp",
-            "mysql",
-            "queue.rabbit",
-            "keystone",
-            "glance",
-            "nova",
-            "mysql.client",
-            "horizon",
-            "neutron",
-            "neutron.openvswitch"
-        ],
-        "compute": [
-            "generics.host",
-            "generics.havana",
-            "generics.ntp",
-            "mysql.client",
-            "nova.compute_kvm",
-            "neutron.openvswitch"
-        ]
-    },
-    "salt-master": "10.8.27.28",
-    "cluster_type": "openstack",
-    "config-folder": "cluster1",
-    "keystone.token": "24811ee3d9a09915bef0",
-    "keystone.endpoint": "http://hawk:35357/v2.0",
+    ], 
     "keystone": {
-        "token": "24811ee3d9a09915bef0",
-        "endpoint": "http://hawk:35357/v2.0",
-        "dbname": "keystone",
+        "endpoint": "http://hawk:35357/v2.0", 
+        "roles": [
+            "admin", 
+            "Member"
+        ], 
+        "token": "24811ee3d9a09915bef0", 
+        "services": { 
+            "glance": {
+                "service_type": "image", 
+                "endpoint": {
+                    "adminurl": "http://{{ grains['id'] }}:9292", 
+                    "internalurl": "http://{{ grains['id'] }}:9292", 
+                    "publicurl": "http://{{ grains['id'] }}:9292"
+                }, 
+                "description": "glance image service"
+            }, 
+            "keystone": {
+                "service_type": "identity", 
+                "endpoint": {
+                    "adminurl": "http://{{ grains['id'] }}:35357/v2.0", 
+                    "internalurl": "http://{{ grains['id'] }}:5000/v2.0", 
+                    "publicurl": "http://{{ grains['id'] }}:5000/v2.0"
+                }, 
+                "description": "keystone identity service"
+            }, 
+            "neutron": {
+                "service_type": "network", 
+                "endpoint": {
+                    "adminurl": "http://{{ grains['id'] }}:9696", 
+                    "internalurl": "http://{{ grains['id'] }}:9696", 
+                    "publicurl": "http://{{ grains['id'] }}:9696"
+                }, 
+                "description": "Openstack network service"
+            }, 
+            "nova": {
+                "service_type": "compute", 
+                "endpoint": {
+                    "adminurl": "http://{{ grains['id'] }}:8774/v2/%(tenant_id)s", 
+                    "internalurl": "http://{{ grains['id'] }}:8774/v2/%(tenant_id)s", 
+                    "publicurl": "http://{{ grains['id'] }}:8774/v2/%(tenant_id)s"
+                }, 
+                "description": "nova compute service"
+            }
+        }, 
         "tenants": {
             "admin": {
                 "users": {
                     "admin": {
-                        "password": "admin_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
+                        "password": "admin_pass", 
+                        "role": "admin", 
+                        "email": "salt@csscorp.com"
                     }
                 }
-            },
+            }, 
             "service": {
                 "users": {
-                    "glance": {
-                        "password": "glance_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
-                    },
-                    "nova": {
-                        "password": "nova_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
-                    },
                     "cinder": {
-                        "password": "cinder_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
-                    },
+                        "password": "cinder_pass", 
+                        "role": "admin", 
+                        "email": "salt@csscorp.com"
+                    }, 
+                    "glance": {
+                        "password": "glance_pass", 
+                        "role": "admin", 
+                        "email": "salt@csscorp.com"
+                    }, 
                     "neutron": {
-                        "password": "neutron_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
+                        "password": "neutron_pass", 
+                        "role": "admin", 
+                        "email": "salt@csscorp.com"
+                    }, 
+                    "nova": {
+                        "password": "nova_pass", 
+                        "role": "admin", 
+                        "email": "salt@csscorp.com"
                     }
                 }
             }
-        },
-        "roles": [
-            "admin",
-            "Member"
-        ],
-        "services": {
-            "keystone": {
-                "service_type": "identity",
-                "description": "keystone identity service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:5000/v2.0",
-                    "internalurl": "http://{{ grains['id'] }}:5000/v2.0",
-                    "adminurl": "http://{{ grains['id'] }}:35357/v2.0"
-                }
-            },
-            "glance": {
-                "service_type": "image",
-                "description": "glance image service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:9292",
-                    "internalurl": "http://{{ grains['id'] }}:9292",
-                    "adminurl": "http://{{ grains['id'] }}:9292"
-                }
-            },
-            "nova": {
-                "service_type": "compute",
-                "description": "nova compute service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:8774/v2/%(tenant_id)s",
-                    "internalurl": "http://{{ grains['id'] }}:8774/v2/%(tenant_id)s",
-                    "adminurl": "http://{{ grains['id'] }}:8774/v2/%(tenant_id)s"
-                }
-            },
-            "cinder": {
-                "service_type": "volume",
-                "description": "cinder volume service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:8776/v1/%(tenant_id)s",
-                    "internalurl": "http://{{ grains['id'] }}:8776/v1/%(tenant_id)s",
-                    "adminurl": "http://{{ grains['id'] }}:8776/v1/%(tenant_id)s"
-                }
-            },
-            "neutron": {
-                "service_type": "network",
-                "description": "Openstack network service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:9696",
-                    "internalurl": "http://{{ grains['id'] }}:9696",
-                    "adminurl": "http://{{ grains['id'] }}:9696"
-                }
-            }
-        }
-    },
-    "mysql": {
-        "keystone": {
-            "username": "keystone",
-            "password": "keystone_pass",
-            "sync": "keystone-manage db_sync",
-            "service": "keystone"
-        },
-        "glance": {
-            "username": "glance",
-            "password": "glance_pass",
-            "sync": "glance-manage db_sync",
-            "service": "glance"
-        },
-        "cinder": {
-            "username": "cinder",
-            "password": "cinder_pass"
-        },
-        "nova": {
-            "username": "nova",
-            "password": "nova_pass",
-            "sync": "nova-manage db sync",
-            "service": "nova-api"
-        },
-        "neutron": {
-            "username": "neutron",
-            "password": "neutron_pass"
-        },
-        "dash": {
-            "username": "dash",
-            "password": "dash_pass"
-        }
-    },
-    "DM": {
-        "cpu": {
-            "threshold": 70
-        },
-        "memory": {
-            "threshold": 70
-        },
-        "swap": {
-            "threshold": 70
-        }
-    },
+        }, 
+        "dbname": "keystone"
+    }, 
+    "install": {
+        "controller": [
+            "generics.host", 
+            "generics.havana", 
+            "generics.ntp", 
+            "mysql", 
+            "queue.rabbit", 
+            "keystone", 
+            "glance", 
+            "nova", 
+            "mysql.client", 
+            "horizon", 
+            "neutron", 
+            "neutron.openvswitch"
+        ], 
+        "compute": [
+            "generics.host", 
+            "generics.havana", 
+            "generics.ntp", 
+            "mysql.client", 
+            "nova.compute_kvm", 
+            "neutron.openvswitch"
+        ]
+    }, 
     "hosts": {
-        "hawk": "10.8.27.71",
-        "lammer": "10.8.27.74"
-    }
+        "lammergeier": "10.8.27.74", 
+        "hawk": "10.8.27.71", 
+        "osprey": "10.8.27.73"
+    }, 
+    "scale_options": [], 
+    "salt-master": "10.8.27.28", 
+    "config-folder": "cluster1",
+    "keystone.auth_url": "http://hawk:5000/v2.0/", 
+    "keystone.token": "24811ee3d9a09915bef0"
 }

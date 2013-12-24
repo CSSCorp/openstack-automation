@@ -33,7 +33,8 @@
                     {
                         "pkg": "keystone"
                     }
-                ]
+                ],
+                "user": "keystone"
             }
         ]
     },

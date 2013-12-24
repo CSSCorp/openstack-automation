@@ -4,7 +4,8 @@
         "hawk"
     ],
     "compute": [
-        "lammer"
+        "lammergeier",
+        "osprey"
     ],
     "install": {
         "controller": [
@@ -47,8 +48,9 @@
         }
     },
     "hosts": {
-        "hawk": "10.8.27.15",
-        "lammer": "10.8.27.43"
+        "hawk": "10.8.27.71",
+        "lammergeier": "10.8.27.74",
+        "osprey": "10.8.27.73"
     },
     "salt-master": "10.8.27.28"
 }

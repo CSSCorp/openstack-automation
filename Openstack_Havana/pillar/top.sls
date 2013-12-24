@@ -1,5 +1,4 @@
 havana:
-  hawk:
-    - cluster1
-  lammer:
-    - cluster1
+  hawk: [cluster1]
+  lammergeier: [cluster1]
+  osprey: [cluster1_inverse]

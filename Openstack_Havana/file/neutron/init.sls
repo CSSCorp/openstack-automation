@@ -26,7 +26,8 @@
                     {
                         "pkg": "neutron-server"
                     }
-                ]
+                ],
+                "user": "neutron"
             }
         ]
     },
@@ -56,7 +57,8 @@
                     {
                         "pkg": "neutron-dhcp-agent"
                     }
-                ]
+                ],
+                "user": "neutron"
             }
         ]
     },
@@ -86,7 +88,8 @@
                     {
                         "pkg": "neutron-metadata-agent"
                     }
-                ]
+                ],
+                "user": "neutron"
             }
         ]
     },
@@ -116,7 +119,8 @@
                     {
                         "pkg": "neutron-l3-agent"
                     }
-                ]
+                ],
+                "user": "neutron"
             }
         ]
     },

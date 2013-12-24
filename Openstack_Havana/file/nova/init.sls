@@ -153,7 +153,8 @@
                     {
                         "pkg": "nova-api"
                     }
-                ]
+                ],
+                "user": "nova"
             }
         ]
     },
@@ -167,7 +168,8 @@
                     {
                         "pkg": "nova-api"
                     }
-                ]
+                ],
+                "user": "nova"
             }
         ]
     }

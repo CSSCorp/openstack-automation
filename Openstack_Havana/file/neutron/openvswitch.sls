@@ -26,7 +26,8 @@
                     {
                         "pkg": "neutron-plugin-openvswitch-agent"
                     }
-                ]
+                ],
+                "user": "neutron"
             }
         ]
     },
@@ -40,7 +41,8 @@
                     {
                         "pkg": "neutron-plugin-openvswitch-agent"
                     }
-                ]
+                ],
+                "user": "neutron"
             }
         ]
     },
@@ -54,7 +56,8 @@
                     {
                         "pkg": "neutron-plugin-openvswitch-agent"
                     }
-                ]
+                ],
+                "user": "neutron"
             }
         ]
     },

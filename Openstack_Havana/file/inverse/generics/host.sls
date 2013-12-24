@@ -4,7 +4,7 @@
         "host": [
             "present",
             {
-                "ip": {{ pillar['salt-master'] }}
+                "ip": "{{ pillar['salt-master'] }}"
             }
         ]
     }

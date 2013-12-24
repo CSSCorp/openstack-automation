@@ -34,7 +34,8 @@
                     {
                         "pkg": "glance"
                     }
-                ]
+                ],
+                "user": "glance"
             }
         ]
     },
@@ -48,7 +49,8 @@
                     {
                         "pkg": "glance"
                     }
-                ]
+                ],
+                "user": "glance"
             }
         ]
     },
