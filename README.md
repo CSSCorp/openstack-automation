@@ -9,178 +9,85 @@ Saltstack provides us an infrastructure management framework that makes our job 
 
 <pre>
 {
-    "controller": [
-        "hawk"
-    ],
+	"cluster_entities": [
+		"compute",
+		"controller",
+		"network"
+	],
     "compute": [
-        "lammer"
+        "venus"
     ],
+    "controller": [
+        "mercury"
+    ], 
+    "network": [
+		"mercury"
+    ],
+    "neutron": {
+		"metadata_secret": "414c66b22b1e7a20cc35",
+		"intergration_bridge": "br-int",
+		"network_mode": "vlan",
+		"venus": {
+			"Intnet1": {
+				"start_vlan": "100",
+				"end_vlan": "200",
+				"bridge": "br-eth1",
+				"interface": "eth1"
+			}
+		},
+		"mercury": {
+			"Intnet1": {
+				"start_vlan": "100",
+				"end_vlan": "200",
+				"bridge": "br-eth1",
+				"interface": "eth1"
+			},
+			"Extnet": {
+				"bridge": "br-ex",
+				"interface": "eth2"
+			}
+		}
+    },
     "install": {
         "controller": [
+            "generics.havana_cloud_repo", 
+            "generics.apt-proxy", 
+            "generics.headers",
             "generics.host",
-            "generics.havana",
-            "generics.ntp",
             "mysql",
+            "mysql.client",
+            "mysql.openstack_dbschema",
             "queue.rabbit",
             "keystone",
+            "keystone.openstack_tenants",
+            "keystone.openstack_users",
+            "keystone.openstack_services",
             "glance",
             "nova",
-            "mysql.client",
-            "horizon",
+            "horizon"
+        ], 
+        "network": [
+            "generics.havana_cloud_repo", 
+            "generics.apt-proxy", 
+            "generics.headers",
+            "generics.host",
             "neutron",
             "neutron.openvswitch"
         ],
         "compute": [
+            "generics.havana_cloud_repo", 
+            "generics.apt-proxy", 
+            "generics.headers",
             "generics.host",
-            "generics.havana",
-            "generics.ntp",
-            "mysql.client",
             "nova.compute_kvm",
             "neutron.openvswitch"
         ]
     },
-    "salt-master": "<salt master ip address here>",
-    "cluster_type": "openstack",
-    "config-folder": "cluster1",
-    "keystone.token": "24811ee3f7f09915bef0",
-    "keystone.endpoint": "http://hawk:35357/v2.0",
-    "keystone": {
-        "token": "24811ee3f7f09915bef0",
-        "endpoint": "http://hawk:35357/v2.0",
-        "dbname": "keystone",
-        "tenants": {
-            "admin": {
-                "users": {
-                    "admin": {
-                        "password": "admin_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
-                    }
-                }
-            },
-            "service": {
-                "users": {
-                    "glance": {
-                        "password": "glance_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
-                    },
-                    "nova": {
-                        "password": "nova_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
-                    },
-                    "cinder": {
-                        "password": "cinder_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
-                    },
-                    "neutron": {
-                        "password": "neutron_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
-                    }
-                }
-            }
-        },
-        "roles": [
-            "admin",
-            "Member"
-        ],
-        "services": {
-            "keystone": {
-                "service_type": "identity",
-                "description": "keystone identity service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:5000/v2.0",
-                    "internalurl": "http://{{ grains['id'] }}:5000/v2.0",
-                    "adminurl": "http://{{ grains['id'] }}:35357/v2.0"
-                }
-            },
-            "glance": {
-                "service_type": "image",
-                "description": "glance image service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:9292",
-                    "internalurl": "http://{{ grains['id'] }}:9292",
-                    "adminurl": "http://{{ grains['id'] }}:9292"
-                }
-            },
-            "nova": {
-                "service_type": "compute",
-                "description": "nova compute service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:8774/v2/%(tenant_id)s",
-                    "internalurl": "http://{{ grains['id'] }}:8774/v2/%(tenant_id)s",
-                    "adminurl": "http://{{ grains['id'] }}:8774/v2/%(tenant_id)s"
-                }
-            },
-            "cinder": {
-                "service_type": "volume",
-                "description": "cinder volume service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:8776/v1/%(tenant_id)s",
-                    "internalurl": "http://{{ grains['id'] }}:8776/v1/%(tenant_id)s",
-                    "adminurl": "http://{{ grains['id'] }}:8776/v1/%(tenant_id)s"
-                }
-            },
-            "neutron": {
-                "service_type": "network",
-                "description": "Openstack network service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:9696",
-                    "internalurl": "http://{{ grains['id'] }}:9696",
-                    "adminurl": "http://{{ grains['id'] }}:9696"
-                }
-            }
-        }
-    },
-    "mysql": {
-        "keystone": {
-            "username": "keystone",
-            "password": "keystone_pass",
-            "sync": "keystone-manage db_sync",
-            "service": "keystone"
-        },
-        "glance": {
-            "username": "glance",
-            "password": "glance_pass",
-            "sync": "glance-manage db_sync",
-            "service": "glance"
-        },
-        "cinder": {
-            "username": "cinder",
-            "password": "cinder_pass"
-        },
-        "nova": {
-            "username": "nova",
-            "password": "nova_pass",
-            "sync": "nova-manage db sync",
-            "service": "nova-api"
-        },
-        "neutron": {
-            "username": "neutron",
-            "password": "neutron_pass"
-        },
-        "dash": {
-            "username": "dash",
-            "password": "dash_pass"
-        }
-    },
-    "DM": {
-        "cpu": {
-            "threshold": 70
-        },
-        "memory": {
-            "threshold": 70
-        },
-        "swap": {
-            "threshold": 70
-        }
-    },
     "hosts": {
-        "hawk": "<hawk ip address here>",
-        "lammer": "<lammer ip address here>"
+		"mercury": "mercury_ip_here",
+		"venus": "venus_ip_here",
+		"saturn": "saturn_ip_here",
+		"salt": "sat_master_ip_here"
     }
 }
 </pre>
@@ -206,24 +113,22 @@ pillar_roots:
 
 This will add the havana environment to your saltstack. The 'file_roots' will have [state definitions](http://docs.saltstack.com/topics/tutorials/starting_states.html "Salt States") in a bunch of '.sls' files and the few special directories, while the 'pillar_roots' has your cluster definition. 
 
-At this stage I assume that you have two machines 'hawk' and 'lammer' (these are their hostnames as well as their minion id). The pillar definition file shown at the begining has a key 'cluster_type'. We will use this key to deliver commands to the two machines alone like so.
+At this stage I assume that you have two machines 'mercury' and 'venus' (these are their hostnames as well as their minion id) added to the salt master. See [setting up salt minion](http://docs.saltstack.com/topics/tutorials/walkthrough.html#setting-up-a-salt-minion "minion setup") to add minions to the master. The pillar definition file shown at the begining has a key 'cluster_type'. We will use this key to deliver commands to the two machines alone like so.
 
 <pre>
+salt '*' saltutil.sync_all
+salt '*' saltutil.refresh_pillar
 salt -C 'I@cluster_type:openstack' state.highstate
 </pre>
 
 
-This instructs all the minions those who have 'cluster_type=openstack' defined in their pillar data to download all the state defined for them and execute the same. Once the command is run once you will note that several states have failed. Not to worry. Run the command again. You will note that each time you run will bring your cluster closer to completion. At third run you will have all your states applied successfully. At this stage you can login to your newly installed openstack setup 'http://hawk/horizon'.
+This instructs all the minions those who have 'cluster_type=openstack' defined in their pillar data to download all the state defined for them and execute the same. If all goes well you can login to your newly installed openstack setup 'http://mercury/horizon'.
 
-The states have done almost all the stuff for you. You still have to follow [neutron deployment use cases](http://docs.openstack.org/trunk/install-guide/install/apt/content/neutron-deploy-use-cases.html "Networking Options") to have your network up and running. This involves creation of your intergration bridge, external bridge, physical networks etc.
 
 Note
 ====
-The state generics.havana installs a file at /etc/apt/apt.conf.d/01proxy. This points to your salt master as [apt cache proxy](https://help.ubuntu.com/community/Apt-Cacher-Server "Apt Cache"). If you do not want this to happen comment the contents of 'file_root/config/cluster1/common/etc/apt/apt.conf.d/01proxy'
+The state generics.apt-proxy installs a file at /etc/apt/apt.conf.d/01proxy. This points to your salt master as [apt cache proxy](https://help.ubuntu.com/community/Apt-Cacher-Server "Apt Cache"). If you do not want this to happen delete the file '/etc/apt/apt.conf.d/01proxy' and remove the formula "generics.apt-proxy" from your pillar config file.
 
-<pre>
-sed -i "s/^Acquire/#Acquire/" /etc/apt/apt.conf.d/01proxy
-</pre>
 
 Cluster Definition
 ==================
@@ -231,121 +136,249 @@ Cluster Definition
 To make things clear lets have a look at a part of the pillar configuration.
 
 <pre>
-    "controller": [
-        "hawk"
-    ],
+    "cluster_entities": [
+		"compute",
+		"controller",
+		"network"
+	],
     "compute": [
-        "lammer"
+        "venus"
+    ],
+    "controller": [
+        "mercury"
+    ], 
+    "network": [
+	"mercury"
     ],
     "install": {
         "controller": [
+            "generics.havana_cloud_repo", 
+            "generics.apt-proxy", 
+            "generics.headers",
             "generics.host",
-            "generics.havana",
-            "generics.ntp",
             "mysql",
+            "mysql.client",
+            "mysql.openstack_dbschema",
             "queue.rabbit",
             "keystone",
+            "keystone.openstack_tenants",
+            "keystone.openstack_users",
+            "keystone.openstack_services",
             "glance",
             "nova",
-            "mysql.client",
-            "horizon",
+            "horizon"
+        ], 
+        "network": [
+            "generics.havana_cloud_repo", 
+            "generics.apt-proxy", 
+            "generics.headers",
+            "generics.host",
             "neutron",
             "neutron.openvswitch"
         ],
         "compute": [
+            "generics.havana_cloud_repo", 
+            "generics.apt-proxy", 
+            "generics.headers",
             "generics.host",
-            "generics.havana",
-            "generics.ntp",
-            "mysql.client",
             "nova.compute_kvm",
             "neutron.openvswitch"
         ]
-    },
-    "config-folder": "cluster1",
+    }
 </pre>
 
-First define one controller node, which is 'hawk', and one compute node 'lammer'. 
+This "cluster_entities" defines what are the entities that form the cluster. The controller node, network node and compute node form the entities of an openstack cluster.
 
-Under the “install” section we define what states to apply on a machine in order to deploy a controller or a compute node.
+Then we define which machine performs the role of each of the defined entities.
 
-The “config-folder” options tells the minions where to get their configuration files from. Setting it to 'cluster1' will tell the minions to get their configuration files from 'file_roots/config/cluster1/'. These have been used extensively in state definitions.
+Finally the “install” section defines what formulas to apply on a machine in order to deploy each of the entities.
 
-The rest of the pillar definition is self explanatory.
 
 
 Adding a new cluster entity
 ===========================
-Lets say you need a network node all you have to do is redefine the cluster and sync.
 
-To redefine first we need to add a new entity under "install" and then add machines under that entity like so
-
+Lets say we need add a new entity called queue_server which will run rabbitmq. This is how we do it.
+1. Add a new entitiy "queue_server" under "cluster_entities"
+2. Define what minions will perform the role of "queue_server"
+3. Finally define which formula deploys a "queue_server" under the "install"."queue_server" section.
 <pre>
-    "controller": [
-        "hawk"
-    ],
+    "cluster_entities": [
+	"compute",
+	"controller",
+	"network",
+	"queue_server"
+	],
     "compute": [
-        "lammer"
+        "venus"
     ],
+    "controller": [
+        "mercury"
+    ], 
     "network": [
-        "goshawk"
+	"mercury"
+    ],
+    "queue_server": [
+    	"jupiter"
     ],
     "install": {
         "controller": [
+            "generics.havana_cloud_repo", 
+            "generics.apt-proxy", 
+            "generics.headers",
             "generics.host",
-            "generics.havana",
-            "generics.ntp",
             "mysql",
-            "queue.rabbit",
+            "mysql.client",
+            "mysql.openstack_dbschema",
             "keystone",
+            "keystone.openstack_tenants",
+            "keystone.openstack_users",
+            "keystone.openstack_services",
             "glance",
             "nova",
-            "mysql.client",
             "horizon"
-        ],
+        ], 
         "network": [
+            "generics.havana_cloud_repo", 
+            "generics.apt-proxy", 
+            "generics.headers",
+            "generics.host",
             "neutron",
             "neutron.openvswitch"
         ],
         "compute": [
+            "generics.havana_cloud_repo", 
+            "generics.apt-proxy", 
+            "generics.headers",
             "generics.host",
-            "generics.havana",
-            "generics.ntp",
-            "mysql.client",
             "nova.compute_kvm",
             "neutron.openvswitch"
+        ],
+        "queue_server": [
+            "queue.rabbit"
         ]
-    },
-    "config-folder": "cluster1",
+    }
 </pre>
 
-After this you need to create a directory 'file_root/config/cluster1/goshawk/' and put whatever configurations you want under that.
-For a network node the only file that needs to be there is '/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini'
+Then edit your 'pillar/top.sls' and point jupiter to use 'openstack_cluster.sls'
+
+<pre>
+havana:
+  mercury: [openstack_cluster]
+  venus: [openstack_cluster]
+  jupiter: [openstack_cluster]
+</pre>
+
+Then sync up the cluster as shown below.
+
+<pre>
+salt '*' saltutil.sync_all
+salt '*' saltutil.refresh_pillar
+salt -C 'I@cluster_type:openstack' state.highstate
+</pre>
 
 
 Adding new compute node
 =======================
 
-Follow the below steps to have a new compute node in your cluster
+Adding a new machine to a cluster is as easy as editing a json file. All you have to do is edit 'pillar/openstack_cluster.sls' as below.
 
-1. Add a new machine to salt-master.
-2. Add it under the list of compute nodes like so
-<pre>    
+<pre>
 "compute": [
-         "lammer",
-     	 "goshawk"
+        "venus",
+        "saturn"
     ]
 </pre>
-3. Under 'file_root/config/cluster1/' add a new directory named 'goshawk'. Copy all the files from 'file_root/config/cluster1/lammer/' into 'file_root/config/cluster1/goshawk'.
-4. Run the below command to modify configuration files according to new compute node hostname
-<code>
-find file_root/config/cluster1/goshawk -type f -name \*.\* -exec sed -i 's/lammer/goshawk/' {} \;
-</code>
-5. Finally sync the cluster
+
+Then edit your 'pillar/top.sls' and point saturn to use 'openstack_cluster.sls'
+
 <pre>
+havana:
+  mercury: [openstack_cluster]
+  venus: [openstack_cluster]
+  jupiter: [openstack_cluster]
+  saturn: [openstack_cluster]
+</pre>
+
+Then sync up the cluster as shown below.
+
+<pre>
+salt '*' saltutil.sync_all
+salt '*' saltutil.refresh_pillar
 salt -C 'I@cluster_type:openstack' state.highstate
 </pre>
 
-The above methodology can be used to perform auto scaling, which off course is the next project.
+
+OVS Vlan mode networking
+========================
+
+The default configuration will install a vlan mode network. Have a close look at the configuration.
+
+<pre>
+    "neutron": {
+	"metadata_secret": "414c66b22b1e7a20cc35",
+	"intergration_bridge": "br-int",
+	"network_mode": "vlan",
+	"venus": {
+		"Intnet1": {
+			"start_vlan": "100",
+			"end_vlan": "200",
+			"bridge": "br-eth1",
+			"interface": "eth1"
+		}
+	},
+	"mercury": {
+		"Intnet1": {
+			"start_vlan": "100",
+			"end_vlan": "200",
+			"bridge": "br-eth1",
+			"interface": "eth1"
+		},
+		"Extnet": {
+			"bridge": "br-ex",
+			"interface": "eth2"
+		}
+	}
+    }
+</pre>
+For each node "venus", "mercury" etc you specify the physical_networks, the start and end vlan id in that physnet, the bridge that is connected to the physnet and the interface that should be present in the brdige. For flat network do not provide any start and end vlan. 
+
+
+OVS GRE mode networking
+=======================
+
+If GRE mode networking is desired please alter the pillar file as below.
+
+<pre>
+    "neutron": {
+	"metadata_secret": "414c66b22b1e7a20cc35",
+	"intergration_bridge": "br-int",
+	"network_mode": "tunnel",
+	"tunnel_start": "100",
+	"tunnel_end": "200",
+	"tunnel_type": "gre"
+    }
+</pre>
+
+
+OVS VXLAN mode networking
+=========================
+
+If GRE mode networking is desired please alter the pillar file as below.
+
+<pre>
+    "neutron": {
+	"metadata_secret": "414c66b22b1e7a20cc35",
+	"intergration_bridge": "br-int",
+	"network_mode": "tunnel",
+	"tunnel_start": "100",
+	"tunnel_end": "200",
+	"tunnel_type": "vxlan"
+    }
+</pre>
+
+
+
 
 Removing a node
 ===============
@@ -355,22 +388,26 @@ Change the file 'pillar_root/top.sls' from
 <pre>
 havana:
   hawk:
-    - cluster1
+    - openstack_cluster
   lammer:
-    - cluster1
+    - openstack_cluster
 </pre>
 to
 <pre>
 havana:
   hawk:
-    - cluster1_inverse
+    - openstack_cluster_inverse
   lammer:
-    - cluster1_inverse
+    - openstack_cluster_inverse
 </pre>
 
-Now run 
+Then sync up the cluster as always.
+
 <pre>
-salt (machine id here) state.highstate
+salt '*' saltutil.sync_all
+salt -C 'I@cluster_type:openstack' state.highstate
 </pre>
 
-
+Note
+====
+This is not tested completely and it will remove only the packages from the hosts. Detaching the host from openstack controller is still a manual task. 
