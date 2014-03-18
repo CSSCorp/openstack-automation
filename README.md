@@ -309,6 +309,77 @@ salt -C 'I@cluster_type:openstack' state.highstate
 </pre>
 
 
+OVS Vlan mode networking
+========================
+
+The default configuration will install a vlan mode network. Have a close look at the configuration.
+
+<pre>
+    "neutron": {
+	"metadata_secret": "414c66b22b1e7a20cc35",
+	"intergration_bridge": "br-int",
+	"network_mode": "vlan",
+	"venus": {
+		"Intnet1": {
+			"start_vlan": "100",
+			"end_vlan": "200",
+			"bridge": "br-eth1",
+			"interface": "eth1"
+		}
+	},
+	"mercury": {
+		"Intnet1": {
+			"start_vlan": "100",
+			"end_vlan": "200",
+			"bridge": "br-eth1",
+			"interface": "eth1"
+		},
+		"Extnet": {
+			"bridge": "br-ex",
+			"interface": "eth2"
+		}
+	}
+    }
+</pre>
+For each node "venus", "mercury" etc you specify the physical_networks, the start and end vlan id in that physnet, the bridge that is connected to the physnet and the interface that should be present in the brdige. For flat network do not provide any start and end vlan. 
+
+
+OVS GRE mode networking
+=======================
+
+If GRE mode networking is desired please alter the pillar file as below.
+
+<pre>
+    "neutron": {
+	"metadata_secret": "414c66b22b1e7a20cc35",
+	"intergration_bridge": "br-int",
+	"network_mode": "tunnel",
+	"tunnel_start": "100",
+	"tunnel_end": "200",
+	"tunnel_type": "gre"
+    }
+</pre>
+
+
+OVS VXLAN mode networking
+=========================
+
+If GRE mode networking is desired please alter the pillar file as below.
+
+<pre>
+    "neutron": {
+	"metadata_secret": "414c66b22b1e7a20cc35",
+	"intergration_bridge": "br-int",
+	"network_mode": "tunnel",
+	"tunnel_start": "100",
+	"tunnel_end": "200",
+	"tunnel_type": "vxlan"
+    }
+</pre>
+
+
+
+
 Removing a node
 ===============
 
@@ -337,3 +408,6 @@ salt '*' saltutil.sync_all
 salt -C 'I@cluster_type:openstack' state.highstate
 </pre>
 
+Note
+====
+This is not tested completely and it will remove only the packages from the hosts. Detaching the host from openstack controller is still a manual task. 
