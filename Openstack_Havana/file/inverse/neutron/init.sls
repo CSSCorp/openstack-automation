@@ -24,9 +24,19 @@
         "file": [
             "managed",
             {
-                "name": "/etc/sysctl.conf",
-                "source": "salt://config/{{ pillar['config-folder'] }}/common/etc/sysctl.conf"
+                "name": "/etc/sysctl.conf"
             }
+        ],
+        "ini": [
+			"options_present",
+			{
+				"name": "/etc/sysctl.conf",
+				"sections": {
+					"DEFAULT_IMPLICIT": {
+						"net.ipv4.ip_forward": "0"
+					}
+				}
+			}
         ]
     },
     "networking-service": {

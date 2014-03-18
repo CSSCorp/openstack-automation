@@ -53,7 +53,7 @@
 						"enable_tunneling": "False", 
 						"network_vlan_ranges": "{{ salt['cluster_ops.get_vlan_ranges']() }}", 
 						"bridge_mappings": "{{ salt['cluster_ops.get_bridge_mappings']() }}"
-						{% else %}
+						{% elif pillar['neutron']['network_mode'] == 'tunnel' %}
 						"enable_tunneling": "True", 
 						"tunnel_id_ranges": "{{ pillar['tunnel_start'] }}:{{ pillar['tunnel_end'] }}",
 						"tunnel_type": "{{ pillar['tunnel_type'] }}"

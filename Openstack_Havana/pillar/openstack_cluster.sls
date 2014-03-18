@@ -6,7 +6,7 @@
 		"network"
 	],
     "compute": [
-        "venus"
+        "saturn"
     ],
     "controller": [
         "mercury"
@@ -154,7 +154,7 @@
 		"metadata_secret": "414c66b22b1e7a20cc35",
 		"intergration_bridge": "br-int",
 		"network_mode": "vlan",
-		"venus": {
+		"saturn": {
 			"Intnet1": {
 				"start_vlan": "100",
 				"end_vlan": "200",
@@ -213,7 +213,7 @@
     "hosts": {
 		"mercury": "10.8.27.10",
 		"venus": "10.8.27.26",
-		"saturn": "10.8.27.32",
+		"saturn": "10.8.27.37",
 		"salt": "10.8.27.28"
     }
 }

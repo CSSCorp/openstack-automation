@@ -42,7 +42,11 @@
 				"name": "/etc/nova/nova-compute.conf",
 				"sections": {
 					"DEFAULT": {
+						{% if 'virt.is_hyper' in salt and salt['virt.is_hyper'] %}
 						"libvirt_type": "kvm",
+						{% else %}
+						"libvirt_type": "qemu",
+						{% endif %}
 						"compute_driver": "libvirt.LibvirtDriver",
 						"libvirt_use_virtio_for_bridges": "True", 
 						"libvirt_vif_type": "ethernet", 
@@ -101,8 +105,8 @@
 						"network_api_class": "nova.network.neutronv2.api.API", 
 						"vncserver_proxyclient_address": "{{ grains['id'] }}", 
 						"rpc_backend": "nova.rpc.impl_kombu", 
-						"neutron_url": "http://{{ salt['cluster_ops.get_candidate']('neutron-server') }}:9696", 
-						"novncproxy_base_url": "http://{{ salt['cluster_ops.get_candidate']('nova-api') }}:6080/vnc_auto.html", 
+						"neutron_url": "http://{{ salt['cluster_ops.get_candidate']('neutron') }}:9696", 
+						"novncproxy_base_url": "http://{{ salt['cluster_ops.get_candidate']('nova') }}:6080/vnc_auto.html", 
 						"auth_strategy": "keystone"
 					}, 
 					"keystone_authtoken": {

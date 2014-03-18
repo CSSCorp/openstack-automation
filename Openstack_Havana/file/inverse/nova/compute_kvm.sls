@@ -1,6 +1,6 @@
 #!jinja|json
 {
-    "nova-compute-lxc": {
+    "nova-compute-kvm": {
         "pkg": [
             "purged"
         ]
