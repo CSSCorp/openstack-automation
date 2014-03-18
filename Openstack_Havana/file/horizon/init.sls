@@ -10,21 +10,6 @@
                 "watch": [
                     {
                       "pkg": "memcached"
-                    },
-                    {
-                        "file": "memcached"
-                    }
-                ]
-            }
-        ],
-        "file": [
-            "managed",
-            {
-                "name": "/etc/memcached.conf",
-                "source": "salt://config/{{ pillar['config-folder'] }}/common/etc/memcached.conf",
-                "require": [
-                    {
-                        "pkg": "memcached"
                     }
                 ]
             }
@@ -51,18 +36,6 @@
     "openstack-dashboard": {
         "pkg": [
             "installed"
-        ],
-        "file": [
-            "managed",
-            {
-                "name": "/etc/openstack-dashboard/local_settings.py",
-                "source": "salt://config/{{ pillar['config-folder'] }}/common/etc/openstack-dashboard/local_settings.py",
-                "require": [
-                    {
-                        "pkg": "openstack-dashboard"
-                    }
-                ]
-            }
         ]
     }
 }

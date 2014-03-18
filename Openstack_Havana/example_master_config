@@ -1,0 +1,13 @@
+file_roots:
+   base:
+     - /srv/salt/
+   havana:
+     - <base_project_directory>/file
+
+
+pillar_roots:
+  base:
+    - /srv/pillar
+  havana:
+    - <base_project_directory>/pillar
+

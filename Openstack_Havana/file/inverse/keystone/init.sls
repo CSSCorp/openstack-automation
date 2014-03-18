@@ -2,7 +2,7 @@
 {
     "keystone": {
         "pkg": [
-            "purged",
+            "purged"
         ]
     }
 }

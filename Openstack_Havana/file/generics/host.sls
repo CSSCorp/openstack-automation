@@ -1,21 +1,22 @@
 #!jinja|json
 {
-    "salt": {
-        "host": [
-            "present",
-            {
-                "ip": "{{ pillar['salt-master'] }}"
-            }
-        ]
-    }
     {% for server in pillar['hosts'] %}
-    ,"{{ server }}": {
+    "{{ server }}": {
         "host": [
             "present",
             {
                 "ip" : "{{ pillar['hosts'][server] }}"
             }
         ]
-    }
+    },
     {% endfor %}
+    "salt": {
+        "host": [
+            "present",
+            {
+                "ip": "{{ pillar['hosts']['salt'] }}"
+            }
+        ]
+    }
+
 }
