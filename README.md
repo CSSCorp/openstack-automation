@@ -9,178 +9,85 @@ Saltstack provides us an infrastructure management framework that makes our job 
 
 <pre>
 {
-    "controller": [
-        "hawk"
-    ],
+	"cluster_entities": [
+		"compute",
+		"controller",
+		"network"
+	],
     "compute": [
-        "lammer"
+        "venus"
     ],
+    "controller": [
+        "mercury"
+    ], 
+    "network": [
+		"mercury"
+    ],
+    "neutron": {
+		"metadata_secret": "414c66b22b1e7a20cc35",
+		"intergration_bridge": "br-int",
+		"network_mode": "vlan",
+		"venus": {
+			"Intnet1": {
+				"start_vlan": "100",
+				"end_vlan": "200",
+				"bridge": "br-eth1",
+				"interface": "eth1"
+			}
+		},
+		"mercury": {
+			"Intnet1": {
+				"start_vlan": "100",
+				"end_vlan": "200",
+				"bridge": "br-eth1",
+				"interface": "eth1"
+			},
+			"Extnet": {
+				"bridge": "br-ex",
+				"interface": "eth2"
+			}
+		}
+    },
     "install": {
         "controller": [
+            "generics.havana_cloud_repo", 
+            "generics.apt-proxy", 
+            "generics.headers",
             "generics.host",
-            "generics.havana",
-            "generics.ntp",
             "mysql",
+            "mysql.client",
+            "mysql.openstack_dbschema",
             "queue.rabbit",
             "keystone",
+            "keystone.openstack_tenants",
+            "keystone.openstack_users",
+            "keystone.openstack_services",
             "glance",
             "nova",
-            "mysql.client",
-            "horizon",
+            "horizon"
+        ], 
+        "network": [
+            "generics.havana_cloud_repo", 
+            "generics.apt-proxy", 
+            "generics.headers",
+            "generics.host",
             "neutron",
             "neutron.openvswitch"
         ],
         "compute": [
+            "generics.havana_cloud_repo", 
+            "generics.apt-proxy", 
+            "generics.headers",
             "generics.host",
-            "generics.havana",
-            "generics.ntp",
-            "mysql.client",
             "nova.compute_kvm",
             "neutron.openvswitch"
         ]
     },
-    "salt-master": "<salt master ip address here>",
-    "cluster_type": "openstack",
-    "config-folder": "cluster1",
-    "keystone.token": "24811ee3f7f09915bef0",
-    "keystone.endpoint": "http://hawk:35357/v2.0",
-    "keystone": {
-        "token": "24811ee3f7f09915bef0",
-        "endpoint": "http://hawk:35357/v2.0",
-        "dbname": "keystone",
-        "tenants": {
-            "admin": {
-                "users": {
-                    "admin": {
-                        "password": "admin_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
-                    }
-                }
-            },
-            "service": {
-                "users": {
-                    "glance": {
-                        "password": "glance_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
-                    },
-                    "nova": {
-                        "password": "nova_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
-                    },
-                    "cinder": {
-                        "password": "cinder_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
-                    },
-                    "neutron": {
-                        "password": "neutron_pass",
-                        "email": "salt@csscorp.com",
-                        "role": "admin"
-                    }
-                }
-            }
-        },
-        "roles": [
-            "admin",
-            "Member"
-        ],
-        "services": {
-            "keystone": {
-                "service_type": "identity",
-                "description": "keystone identity service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:5000/v2.0",
-                    "internalurl": "http://{{ grains['id'] }}:5000/v2.0",
-                    "adminurl": "http://{{ grains['id'] }}:35357/v2.0"
-                }
-            },
-            "glance": {
-                "service_type": "image",
-                "description": "glance image service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:9292",
-                    "internalurl": "http://{{ grains['id'] }}:9292",
-                    "adminurl": "http://{{ grains['id'] }}:9292"
-                }
-            },
-            "nova": {
-                "service_type": "compute",
-                "description": "nova compute service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:8774/v2/%(tenant_id)s",
-                    "internalurl": "http://{{ grains['id'] }}:8774/v2/%(tenant_id)s",
-                    "adminurl": "http://{{ grains['id'] }}:8774/v2/%(tenant_id)s"
-                }
-            },
-            "cinder": {
-                "service_type": "volume",
-                "description": "cinder volume service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:8776/v1/%(tenant_id)s",
-                    "internalurl": "http://{{ grains['id'] }}:8776/v1/%(tenant_id)s",
-                    "adminurl": "http://{{ grains['id'] }}:8776/v1/%(tenant_id)s"
-                }
-            },
-            "neutron": {
-                "service_type": "network",
-                "description": "Openstack network service",
-                "endpoint": {
-                    "publicurl": "http://{{ grains['id'] }}:9696",
-                    "internalurl": "http://{{ grains['id'] }}:9696",
-                    "adminurl": "http://{{ grains['id'] }}:9696"
-                }
-            }
-        }
-    },
-    "mysql": {
-        "keystone": {
-            "username": "keystone",
-            "password": "keystone_pass",
-            "sync": "keystone-manage db_sync",
-            "service": "keystone"
-        },
-        "glance": {
-            "username": "glance",
-            "password": "glance_pass",
-            "sync": "glance-manage db_sync",
-            "service": "glance"
-        },
-        "cinder": {
-            "username": "cinder",
-            "password": "cinder_pass"
-        },
-        "nova": {
-            "username": "nova",
-            "password": "nova_pass",
-            "sync": "nova-manage db sync",
-            "service": "nova-api"
-        },
-        "neutron": {
-            "username": "neutron",
-            "password": "neutron_pass"
-        },
-        "dash": {
-            "username": "dash",
-            "password": "dash_pass"
-        }
-    },
-    "DM": {
-        "cpu": {
-            "threshold": 70
-        },
-        "memory": {
-            "threshold": 70
-        },
-        "swap": {
-            "threshold": 70
-        }
-    },
     "hosts": {
-        "hawk": "<hawk ip address here>",
-        "lammer": "<lammer ip address here>"
+		"mercury": "mercury_ip_here",
+		"venus": "venus_ip_here",
+		"saturn": "saturn_ip_here",
+		"salt": "sat_master_ip_here"
     }
 }
 </pre>
@@ -206,7 +113,7 @@ pillar_roots:
 
 This will add the havana environment to your saltstack. The 'file_roots' will have [state definitions](http://docs.saltstack.com/topics/tutorials/starting_states.html "Salt States") in a bunch of '.sls' files and the few special directories, while the 'pillar_roots' has your cluster definition. 
 
-At this stage I assume that you have two machines 'hawk' and 'lammer' (these are their hostnames as well as their minion id). The pillar definition file shown at the begining has a key 'cluster_type'. We will use this key to deliver commands to the two machines alone like so.
+At this stage I assume that you have two machines 'mercury' and 'venus' (these are their hostnames as well as their minion id). The pillar definition file shown at the begining has a key 'cluster_type'. We will use this key to deliver commands to the two machines alone like so.
 
 <pre>
 salt -C 'I@cluster_type:openstack' state.highstate
