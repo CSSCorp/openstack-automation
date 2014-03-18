@@ -259,6 +259,15 @@ Lets say we need add a new entity called queue_server which will run rabbitmq. T
     }
 </pre>
 
+Then edit your 'pillar/top.sls' and point jupiter to use 'openstack_cluster.sls'
+
+<pre>
+havana:
+  mercury: [openstack_cluster]
+  venus: [openstack_cluster]
+  jupiter: [openstack_cluster]
+</pre>
+
 Then sync up the cluster as shown below.
 
 <pre>
@@ -270,13 +279,23 @@ salt -C 'I@cluster_type:openstack' state.highstate
 Adding new compute node
 =======================
 
-Adding a new machine to a cluster is as easy as editing a json file. All you have to do is.
+Adding a new machine to a cluster is as easy as editing a json file. All you have to do is edit 'pillar/openstack_cluster.sls' as below.
 
 <pre>
 "compute": [
         "venus",
         "saturn"
     ]
+</pre>
+
+Then edit your 'pillar/top.sls' and point saturn to use 'openstack_cluster.sls'
+
+<pre>
+havana:
+  mercury: [openstack_cluster]
+  venus: [openstack_cluster]
+  jupiter: [openstack_cluster]
+  saturn: [openstack_cluster]
 </pre>
 
 Then sync up the cluster as shown below.
