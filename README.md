@@ -117,6 +117,7 @@ At this stage I assume that you have two machines 'mercury' and 'venus' (these a
 
 <pre>
 salt '*' saltutil.sync_all
+salt '*' saltutil.refresh_pillar
 salt -C 'I@cluster_type:openstack' state.highstate
 </pre>
 
@@ -126,7 +127,7 @@ This instructs all the minions those who have 'cluster_type=openstack' defined i
 
 Note
 ====
-The state generics.apt-proxy installs a file at /etc/apt/apt.conf.d/01proxy. This points to your salt master as [apt cache proxy](https://help.ubuntu.com/community/Apt-Cacher-Server "Apt Cache"). If you do not want this to happen delete the file '/etc/apt/apt.conf.d/01proxy' and remove the state generics.apt-proxy from your pillar config file.
+The state generics.apt-proxy installs a file at /etc/apt/apt.conf.d/01proxy. This points to your salt master as [apt cache proxy](https://help.ubuntu.com/community/Apt-Cacher-Server "Apt Cache"). If you do not want this to happen delete the file '/etc/apt/apt.conf.d/01proxy' and remove the formula "generics.apt-proxy" from your pillar config file.
 
 
 Cluster Definition
@@ -272,6 +273,7 @@ Then sync up the cluster as shown below.
 
 <pre>
 salt '*' saltutil.sync_all
+salt '*' saltutil.refresh_pillar
 salt -C 'I@cluster_type:openstack' state.highstate
 </pre>
 
@@ -302,6 +304,7 @@ Then sync up the cluster as shown below.
 
 <pre>
 salt '*' saltutil.sync_all
+salt '*' saltutil.refresh_pillar
 salt -C 'I@cluster_type:openstack' state.highstate
 </pre>
 
