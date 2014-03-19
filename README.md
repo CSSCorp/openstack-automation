@@ -364,7 +364,7 @@ If GRE mode networking is desired please alter the pillar file as below.
 OVS VXLAN mode networking
 =========================
 
-If GRE mode networking is desired please alter the pillar file as below.
+If VXLAN mode networking is desired please alter the pillar file as below.
 
 <pre>
     "neutron": {
