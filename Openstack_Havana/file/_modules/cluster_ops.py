@@ -77,11 +77,11 @@ def get_bridge_mappings():
 
 
 def create_init_bridges():
-        __salt__['cmd.run']('ovs-vsctl add-br ' + __pillar__['neutron']['intergration_bridge'])
+        __salt__['cmd.run']('ovs-vsctl --no-wait add-br ' + __pillar__['neutron']['intergration_bridge'])
         for physical_network in __pillar__['neutron'][__grains__['id']]:
-            __salt__['cmd.run']('ovs-vsctl add-br ' +
+            __salt__['cmd.run']('ovs-vsctl --no-wait add-br ' +
                                 __pillar__['neutron'][__grains__['id']][physical_network]['bridge'])
-            __salt__['cmd.run']('ovs-vsctl add-port  %s %s' %
+            __salt__['cmd.run']('ovs-vsctl --no-wait add-port  %s %s' %
                                 (__pillar__['neutron'][__grains__['id']][physical_network]['bridge'],
                                  __pillar__['neutron'][__grains__['id']][physical_network]['interface']))
             __salt__['cmd.run']('ip link set %s up' % __pillar__['neutron'][__grains__['id']][physical_network]['interface'])
