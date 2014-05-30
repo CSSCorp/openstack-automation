@@ -177,7 +177,6 @@
     },
     "install": {
         "controller": [
-            "generics.havana_cloud_repo", 
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
@@ -196,7 +195,6 @@
             "horizon"
         ], 
         "network": [
-            "generics.havana_cloud_repo", 
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
@@ -206,7 +204,6 @@
             "neutron.openvswitch"
         ],
         "compute": [
-            "generics.havana_cloud_repo", 
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
