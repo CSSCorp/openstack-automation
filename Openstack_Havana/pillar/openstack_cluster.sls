@@ -6,41 +6,29 @@
 		"network"
 	],
     "compute": [
-        "venus"
+        "mars",
+        "pluto"
     ],
     "controller": [
-        "mercury"
+        "sun"
     ], 
     "network": [
-		"mercury"
+		"sun"
     ],
     "cluster_name": "openstack_cluster",
-    "keystone.auth_url": "http://mercury:5000/v2.0/", 
-    "keystone.endpoint": "http://mercury:35357/v2.0", 
+    "keystone.auth_url": "http://sun:5000/v2.0/", 
+    "keystone.endpoint": "http://sun:35357/v2.0", 
     "keystone.token": "24811ee3d9a09915bef0",
     "keystone.user": "admin",
     "keystone.password": "admin_pass",
     "keystone.tenant": "admin",
     "cluster_type": "openstack", 
-    "pkg_proxy_url": "http://salt:3142",
-    "queue-engine": "queue.rabbit",
-    "cloud_repos": [
-		{
-			"reponame": "havana-cloud-bin",
-			"name": "deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/havana main",
-			"file": "/etc/apt/sources.list.d/cloudarchive-havana.list"
-		},
-		{
-			"reponame": "havana-cloud-src",
-			"name": "deb-src http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/havana main",
-			"file": "/etc/apt/sources.list.d/cloudarchive-havana-src.list"
-		}
-	],
+    "pkg_proxy_url": "http://mars:3142",
+    "queue-engine": "rabbit",
     "mysql": {
         "nova": {
             "username": "nova", 
             "password": "nova_pass", 
-            "sync": "nova-manage db sync", 
             "service": "nova-api"
         }, 
         "dash": {
@@ -50,7 +38,6 @@
         "keystone": {
             "username": "keystone", 
             "password": "keystone_pass", 
-            "sync": "keystone-manage db_sync", 
             "service": "keystone"
         }, 
         "cinder": {
@@ -60,7 +47,6 @@
         "glance": {
             "username": "glance", 
             "password": "glance_pass", 
-            "sync": "glance-manage db_sync", 
             "service": "glance"
         }, 
         "neutron": {
@@ -69,7 +55,7 @@
         }
     }, 
     "keystone": {
-        "endpoint": "http://mercury:35357/v2.0", 
+        "endpoint": "http://sun:35357/v2.0", 
         "token": "24811ee3d9a09915bef0", 
         "roles": [
             "admin", 
@@ -92,7 +78,7 @@
                     "internalurl": "http://{{ grains['id'] }}:5000/v2.0", 
                     "publicurl": "http://{{ grains['id'] }}:5000/v2.0"
                 }, 
-                "description": "keystone identity service"
+                "description": "Openstack Identity"
             }, 
             "neutron": {
                 "service_type": "network", 
@@ -118,7 +104,7 @@
                 "users": {
                     "admin": {
                         "password": "admin_pass", 
-                        "role": "admin", 
+                        "roles": "[\"admin\", \"_member_\"]", 
                         "email": "salt@csscorp.com"
                     }
                 }
@@ -127,22 +113,22 @@
                 "users": {
                     "cinder": {
                         "password": "cinder_pass", 
-                        "role": "admin", 
+                        "roles": "[\"admin\"]", 
                         "email": "salt@csscorp.com"
                     }, 
                     "glance": {
                         "password": "glance_pass", 
-                        "role": "admin", 
+                        "roles": "[\"admin\"]", 
                         "email": "salt@csscorp.com"
                     }, 
                     "neutron": {
                         "password": "neutron_pass", 
-                        "role": "admin", 
+                        "roles": "[\"admin\"]", 
                         "email": "salt@csscorp.com"
                     }, 
                     "nova": {
                         "password": "nova_pass", 
-                        "role": "admin", 
+                        "roles": "[\"admin\"]", 
                         "email": "salt@csscorp.com"
                     }
                 }
@@ -152,26 +138,40 @@
     }, 
     "neutron": {
 		"metadata_secret": "414c66b22b1e7a20cc35",
-		"intergration_bridge": "br-int",
-		"network_mode": "vlan",
-		"venus": {
-			"Intnet1": {
-				"start_vlan": "100",
-				"end_vlan": "200",
-				"bridge": "br-eth1",
-				"interface": "eth1"
-			}
-		},
-		"mercury": {
-			"Intnet1": {
-				"start_vlan": "100",
-				"end_vlan": "200",
-				"bridge": "br-eth1",
-				"interface": "eth1"
+		"tenant_network_types": ["vlan", "flat"],
+		"tunnel_start": "1",
+		"tunnel_end": "1000",
+		"type_drivers": {
+			"flat": {
+				"sun": {
+					"External": {
+						"bridge": "br-ex",
+						"interface": "eth3"
+					}
+				}
 			},
-			"Extnet": {
-				"bridge": "br-ex",
-				"interface": "eth2"
+			"vlan": {			
+				"pluto": {
+					"Intnet1": {
+						"vlan_range": ["100", "200"],
+						"bridge": "br-eth1",
+						"interface": "eth1"
+					}
+				},
+				"mars": {
+					"Intnet1": {
+						"vlan_range": ["100", "200"],
+						"bridge": "br-eth1",
+						"interface": "eth1"
+					}
+				},
+				"sun": {
+					"Intnet1": {
+						"vlan_range": ["100", "200"],
+						"bridge": "br-eth1",
+						"interface": "eth1"
+					}
+				}
 			}
 		}
     },
@@ -191,6 +191,8 @@
             "keystone.openstack_services",
             "glance",
             "nova",
+            "neutron",
+            "neutron.ml2",
             "horizon"
         ], 
         "network": [
@@ -198,7 +200,9 @@
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
-            "neutron",
+            "mysql.client",
+            "neutron.service",
+            "neutron.ml2",
             "neutron.openvswitch"
         ],
         "compute": [
@@ -206,13 +210,33 @@
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
+            "mysql.client",
             "nova.compute_kvm",
-            "neutron.openvswitch"
+            "neutron.openvswitch",
+            "neutron.ml2"
         ]
     },
     "hosts": {
-		"mercury": "10.8.27.10",
-		"venus": "10.8.27.37",
-		"salt": "10.8.27.28"
+		"sun": "10.8.127.54",
+		"mars": "10.8.127.51",
+		"salt": "10.8.27.28",
+		"pluto": "10.8.127.52"
+    },
+    "services": {
+		"keystone": {
+			"db_name": "keystone",
+			"db_sync": "keystone-manage db_sync"
+		},
+		"glance": {
+            "db_sync": "glance-manage db_sync", 
+			"db_name": "glance"
+		},
+		"nova": {
+			"db_name": "nova", 
+            "db_sync": "nova-manage db sync"
+		},
+		"neutron": {
+			"db_name": "neutron"
+		}
     }
 }

@@ -5,14 +5,7 @@
 			"run",
 			{
 				"name": "saltutil.sync_all"
-			},
-            {
-                "require": [
-                    {
-						"cmd": "keystone_sync"
-                    }
-                ]
-            }
+			}
 		]
     }
 {% for tenant_name in pillar['keystone']['tenants'] %}

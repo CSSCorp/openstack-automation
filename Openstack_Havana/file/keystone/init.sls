@@ -44,10 +44,10 @@
 				"name": "/etc/keystone/keystone.conf",
 				"sections": {
 					"DEFAULT": {
-						"admin_token": "{{ pillar['keystone']['token'] }}"
+						"admin_token": "{{ pillar['keystone.token'] }}"
 					}, 
 					"sql": {
-						"connection": "mysql://{{ pillar['mysql']['keystone']['username'] }}:{{ pillar['mysql']['keystone']['password'] }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/keystone"
+						"connection": "mysql://{{ pillar['mysql'][pillar['services']['keystone']['db_name']]['username'] }}:{{ pillar['mysql'][pillar['services']['keystone']['db_name']]['password'] }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ pillar['services']['keystone']['db_name'] }}"
 					}
 				}
 			},
@@ -64,7 +64,7 @@
 		"cmd": [
 			"run",
 			{
-				"name": "{{ pillar['mysql']['keystone']['sync'] }}"
+				"name": "{{ pillar['services']['keystone']['db_sync'] }}"
 			},
 			{
 				"require": [

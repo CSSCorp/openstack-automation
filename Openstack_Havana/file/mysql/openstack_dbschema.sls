@@ -5,14 +5,7 @@
 			"run",
 			{
 				"name": "saltutil.sync_all"
-			},
-            {
-                "require": [
-                    {
-                        "pkg": "python-mysqldb"
-                    }
-                ]
-            }
+			}
 		]
     }
 {% for database_name in pillar['mysql'] %}
@@ -24,9 +17,6 @@
             },
             {
                 "require": [
-					{
-						"service": "mysql-server"
-					},
                     {
                         "module": "mysql-refresh-repo"
                     }

@@ -28,20 +28,12 @@
             {
                 "roles": [
                     {
-                        "{{ tenant_name }}": [
-                            "{{ pillar['keystone']['tenants'][tenant_name]['users'][user_name]['role'] }}"
-                        ]
+                        "{{ tenant_name }}": {{ pillar['keystone']['tenants'][tenant_name]['users'][user_name]['roles'] }}
                     }
                 ]
             },
             {
                 "require": [
-                    {
-                        "keystone": "{{ tenant_name }}_tenant"
-                    },
-                    {
-                        "keystone": "{{ pillar['keystone']['tenants'][tenant_name]['users'][user_name]['role'] }}_role"
-                    },
                     {
                         "module": "keystone-user-refresh-repo"
                     }

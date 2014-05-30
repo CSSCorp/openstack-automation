@@ -18,6 +18,9 @@
                     },
                     {
                         "ini": "nova-compute"
+                    },
+                    {
+						"ini": "nova-conf"
                     }
                 ]
             }
@@ -43,15 +46,10 @@
 				"sections": {
 					"DEFAULT": {
 						{% if 'virt.is_hyper' in salt and salt['virt.is_hyper'] %}
-						"libvirt_type": "kvm",
+						"libvirt_type": "kvm"
 						{% else %}
-						"libvirt_type": "qemu",
+						"libvirt_type": "qemu"
 						{% endif %}
-						"compute_driver": "libvirt.LibvirtDriver",
-						"libvirt_use_virtio_for_bridges": "True", 
-						"libvirt_vif_type": "ethernet", 
-						"libvirt_ovs_bridge": "br-int", 
-						"libvirt_vif_driver": "nova.virt.libvirt.vif.LibvirtGenericVIFDriver"
 					}
 				}
 			},
@@ -91,34 +89,38 @@
 				"sections": {
 					"DEFAULT": {
 						"vnc_enabled": "True", 
-						"neutron_auth_strategy": "keystone", 
-						"neutron_admin_auth_url": "http://{{ salt['cluster_ops.get_candidate']('keystone') }}:35357/v2.0", 
-						"rabbit_host": "{{ salt['cluster_ops.get_candidate'](pillar['queue-engine']) }}", 
+						"rabbit_host": "{{ salt['cluster_ops.get_candidate']('queue.' + pillar['queue-engine']) }}", 
 						"my_ip": "{{ grains['id'] }}", 
-						"neutron_admin_username": "neutron", 
-						"neutron_admin_tenant_name": "service", 
-						"security_group_api": "neutron", 
 						"vncserver_listen": "0.0.0.0", 
-						"neutron_admin_password": "{{ pillar['keystone']['tenants']['service']['users']['neutron']['password'] }}", 
-						"glance_host": "{{ salt['cluster_ops.get_candidate']('glance') }}", 
-						"firewall_driver": "nova.virt.firewall.NoopFirewallDriver", 
-						"network_api_class": "nova.network.neutronv2.api.API", 
+						"glance_host": "{{ salt['cluster_ops.get_candidate']('glance') }}",
 						"vncserver_proxyclient_address": "{{ grains['id'] }}", 
-						"rpc_backend": "nova.rpc.impl_kombu", 
-						"neutron_url": "http://{{ salt['cluster_ops.get_candidate']('neutron') }}:9696", 
+						"rpc_backend": "nova.rpc.impl_kombu",  
 						"novncproxy_base_url": "http://{{ salt['cluster_ops.get_candidate']('nova') }}:6080/vnc_auto.html", 
-						"auth_strategy": "keystone"
+						"auth_strategy": "keystone",
+						"network_api_class": "nova.network.neutronv2.api.API",
+						"neutron_url": "http://{{ salt['cluster_ops.get_candidate']('neutron') }}:9696",
+						"neutron_auth_strategy": "keystone",
+						"neutron_admin_tenant_name": "service",
+						"neutron_admin_username": "neutron",
+						"neutron_admin_password": "{{ pillar['keystone']['tenants']['service']['users']['neutron']['password'] }}",
+						"neutron_admin_auth_url": "http://{{ salt['cluster_ops.get_candidate']('keystone') }}:35357/v2.0",
+						"linuxnet_interface_driver": "nova.network.linux_net.LinuxOVSInterfaceDriver",
+						"firewall_driver": "nova.virt.firewall.NoopFirewallDriver",
+						"security_group_api": "neutron",
+						"vif_plugging_is_fatal": "False",
+						"vif_plugging_timeout": "0"
 					}, 
 					"keystone_authtoken": {
-						"auth_protocol": "http", 
+						"auth_uri": "{{ salt['cluster_ops.get_candidate']('keystone') }}:5000",
+						"auth_port": "35357",
+						"auth_protocol": "http",
+						"admin_tenant_name": "service", 
 						"admin_user": "nova", 
 						"admin_password": "{{ pillar['keystone']['tenants']['service']['users']['nova']['password'] }}", 
-						"auth_host": "{{ salt['cluster_ops.get_candidate']('keystone') }}", 
-						"admin_tenant_name": "service", 
-						"auth_port": "35357"
+						"auth_host": "{{ salt['cluster_ops.get_candidate']('keystone') }}"
 					}, 
 					"database": {
-						"connection": "mysql://{{ pillar['mysql']['nova']['username'] }}:{{ pillar['mysql']['nova']['password'] }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/nova"
+						"connection": "mysql://{{ pillar['mysql'][pillar['services']['nova']['db_name']]['username'] }}:{{ pillar['mysql'][pillar['services']['nova']['db_name']]['password'] }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ pillar['services']['nova']['db_name'] }}"
 					}
 				}
 			},
@@ -131,43 +133,21 @@
 			}
         ]
     },
-    "nova-api-paste": {
+    "nova-instance-directory": {
         "file": [
-            "managed",
+            "directory",
             {
-                "name": "/etc/nova/api-paste.ini",
+                "name": "/var/lib/nova/instances/",
                 "user": "nova",
                 "group": "nova",
                 "mode": "644",
+                "recurse": ["user", "group", "mode"],
                 "require": [
                     {
                         "pkg": "nova-compute"
                     }
                 ]
             }
-        ],
-        "ini": [
-			"options_present",
-			{
-				"name": "/etc/nova/api-paste.ini",
-				"sections": {
-					"filter:authtoken": {
-						"auth_protocol": "http", 
-						"admin_user": "nova", 
-						"admin_password": "{{ pillar['keystone']['tenants']['service']['users']['nova']['password'] }}", 
-						"auth_host": "{{ salt['cluster_ops.get_candidate']('keystone') }}", 
-						"admin_tenant_name": "service", 
-						"auth_port": "35357"
-					}
-				}
-			},
-			{
-				"require": [
-					{
-						"file": "nova-api-paste"
-					}
-				]
-			}
         ]
     }
 }

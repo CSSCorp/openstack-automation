@@ -1,56 +1,63 @@
-#!jinja|ast
+#!jinja|json
 {
-    "mysql-server": {
-        "pkg": [
-            "installed"
+  "mysql-conf-file": {
+    "file": [
+      "managed",
+      {
+        "group": "root",
+        "mode": "644",
+        "name": "/etc/mysql/my.cnf",
+        "require": [
+          {
+            "pkg": "mysql-server"
+          }
         ],
-        "service": [
-            "running",
-            {
-                "name": "mysql"
-            },
-            {
-                "watch": [
-                    {
-                        "pkg": "mysql-server"
-                    },
-                    {
-                        "ini": "mysql-server"
-                    }
-                ]
-            }
-        ],
-        "file": [
-            "managed",
-            {
-                "name": "/etc/mysql/my.cnf",
-                "user": "root",
-                "group": "root",
-                "mode": "644",
-                "require": [
-                    {
-                        "pkg": "mysql-server"
-                    }
-                ]
-            }
-        ],
-        "ini": [
-			"options_present",
-			{
-				"name": "/etc/mysql/my.cnf",
-				"sections": {
-					"mysqld": {
-						"bind-address": "0.0.0.0"
-					}
-				}
-			},
-			{
-				"require": [
-					{
-						"file": "mysql-server"
-					}
-				]
-			}
+        "user": "root"
+      }
+    ],
+    "ini": [
+      "options_present",
+      {
+        "name": "/etc/mysql/my.cnf"
+      },
+      {
+        "require": [
+          {
+            "file": "mysql-conf-file"
+          }
         ]
-    }
+      },
+      {
+        "sections": {
+          "mysqld": {
+            "bind-address": "0.0.0.0",
+            "character-set-server": "utf8",
+            "collation-server": "utf8_general_ci",
+            "init-connect": "'SET NAMES utf8'"
+          }
+        }
+      }
+    ]
+  },
+  "mysql-server": {
+    "pkg": [
+      "installed"
+    ],
+    "service": [
+      "running",
+      {
+        "name": "mysql"
+      },
+      {
+        "watch": [
+          {
+            "pkg": "mysql-server"
+          },
+          {
+            "ini": "mysql-conf-file"
+          }
+        ]
+      }
+    ]
+  }
 }
