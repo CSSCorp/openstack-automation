@@ -1,3 +1,16 @@
+<<<<<<< HEAD
+=======
+#!jinja|json
+{
+    "keystone-service-refresh-repo": {
+		"module": [
+			"run",
+			{
+				"name": "saltutil.sync_all"
+			}
+		]
+    }
+>>>>>>> cd189cab2257ed583018c889d11b66839b1262d7
 {% for service_name in pillar['keystone']['services'] %}
 {{ service_name }}_service:
   keystone:

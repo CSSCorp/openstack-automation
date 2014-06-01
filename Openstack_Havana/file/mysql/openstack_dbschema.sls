@@ -1,8 +1,37 @@
+<<<<<<< HEAD
 {% for database_name in pillar['mysql'] %}
 {{ database_name }}-db:
   mysql_database:
     - present
     - name: {{ database_name }}
+=======
+#!jinja|ast
+{
+    "mysql-refresh-repo": {
+		"module": [
+			"run",
+			{
+				"name": "saltutil.sync_all"
+			}
+		]
+    }
+{% for database_name in pillar['mysql'] %}
+   ,"{{ database_name }}-db": {
+        "mysql_database": [
+            "present",
+            {
+                "name": "{{ database_name }}"
+            },
+            {
+                "require": [
+                    {
+                        "module": "mysql-refresh-repo"
+                    }
+                ]
+            }
+        ]
+    }
+>>>>>>> cd189cab2257ed583018c889d11b66839b1262d7
 {% for cluster_component in pillar['install'] %}
 {% for server in pillar[cluster_component] %}
 {{ server }}-{{ database_name }}-accounts:
