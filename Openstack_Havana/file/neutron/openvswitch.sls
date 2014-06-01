@@ -56,7 +56,8 @@
 						{% elif pillar['neutron']['network_mode'] == 'tunnel' %}
 						"enable_tunneling": "True", 
 						"tunnel_id_ranges": "{{ pillar['tunnel_start'] }}:{{ pillar['tunnel_end'] }}",
-						"tunnel_type": "{{ pillar['tunnel_type'] }}"
+						"tunnel_type": "{{ pillar['tunnel_type'] }}",
+						"local_ip": "{{ pillar['hosts'][grains['id']] }}"
 						{% endif %}
 					}, 
 					"securitygroup": {
