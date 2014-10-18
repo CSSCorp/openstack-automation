@@ -11,6 +11,7 @@ use section as DEFAULT_IMPLICIT if your ini file does not have any section
 for example /etc/sysctl.conf
 '''
 
+__virtualname__ = 'ini'
 
 def __virtual__():
     '''
