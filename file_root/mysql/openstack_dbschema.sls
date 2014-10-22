@@ -24,4 +24,3 @@
 {% endfor %}
 {% endfor %}
 {% endfor %}
-}

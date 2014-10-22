@@ -25,11 +25,6 @@ get_candidate to be modified to accomodate queue.* syntax
 
 
 
-
-modify generics.package_proxy_url to run only if package_proxy is specified in pillar
-
-
-
 keystone.user: "admin"
 keystone.password: "admin_pass"
 keystone.tenant: "admin"
@@ -38,6 +33,3 @@ keystone.auth_url: "http://brown:5000/v2.0/"
 Check if these are necessary for keystone state and module and add them if necessary
 
 
-
-
-configure hosts  module to run only if hosts are defined in pillar

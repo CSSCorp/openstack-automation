@@ -1,8 +1,9 @@
-mysql-client: 
+mysql-client-install: 
   pkg: 
     - installed
-python-mysqldb: 
+    - name: {{ salt['pillar.get']('packages:mysql-client', default='mysql-client') }}
+python-mysql-library-install: 
   pkg: 
     - installed
     - require: 
-        - pkg: mysql-client
+        - pkg: {{ salt['pillar.get']('packages:python-mysql-library', default='python-mysqldb') }}
