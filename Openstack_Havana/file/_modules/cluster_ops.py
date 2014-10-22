@@ -52,37 +52,37 @@ def get_candidate(name=None):
             return host
 
 
-def get_vlan_ranges():
-    network_vlan_ranges = ""
-    for physical_network in __pillar__['neutron'][__grains__['id']]:
-        start_vlan = __pillar__['neutron'][__grains__['id']][physical_network].get('start_vlan', None)
-        end_vlan = __pillar__['neutron'][__grains__['id']][physical_network].get('end_vlan', None)
-        if start_vlan and end_vlan:
-            network_vlan_ranges += "%s:%s:%s," % \
-                (physical_network,
-                 start_vlan,
-                 end_vlan)
-        else:
-            network_vlan_ranges += "%s," % physical_network
-    return network_vlan_ranges.rstrip(',')
+def get_vlan_ranges(network_type='flat'):
+    physical_iter = []
+    for physical_network in __pillar__['neutron']['type_drivers'][network_type].get(__grains__['id'], {}):
+		network_iter = [physical_network]
+		for vlan in __pillar__['neutron']['type_drivers'][network_type][__grains__['id']][physical_network].get('vlan_range', []):
+			network_iter.append(vlan)
+		physical_iter.append(':'.join(network_iter))
+    return ','.join(physical_iter)
 
 
-def get_bridge_mappings():
-    bridge_mappings = ""
-    for physical_network in __pillar__['neutron'][__grains__['id']]:
-        bridge_mappings += "%s:%s," % \
-            (physical_network,
-             __pillar__['neutron'][__grains__['id']][physical_network]['bridge'])
-    return bridge_mappings.rstrip(',')
+def get_bridge_mappings(network_type='flat'):
+    bridge_iter = []
+    for physical_network in __pillar__['neutron']['type_drivers'][network_type].get(__grains__['id'], {}):
+        network_iter = [physical_network, __pillar__['neutron']['type_drivers'][network_type][__grains__['id']][physical_network]['bridge']]
+        bridge_iter.append(':'.join(network_iter))
+    return ','.join(bridge_iter)
 
 
 def create_init_bridges():
-        __salt__['cmd.run']('ovs-vsctl --no-wait add-br ' + __pillar__['neutron']['intergration_bridge'])
-        for physical_network in __pillar__['neutron'][__grains__['id']]:
-            __salt__['cmd.run']('ovs-vsctl --no-wait add-br ' +
-                                __pillar__['neutron'][__grains__['id']][physical_network]['bridge'])
-            __salt__['cmd.run']('ovs-vsctl --no-wait add-port  %s %s' %
-                                (__pillar__['neutron'][__grains__['id']][physical_network]['bridge'],
-                                 __pillar__['neutron'][__grains__['id']][physical_network]['interface']))
-            __salt__['cmd.run']('ip link set %s up' % __pillar__['neutron'][__grains__['id']][physical_network]['interface'])
-            __salt__['cmd.run']('ip link set %s promisc on' % __pillar__['neutron'][__grains__['id']][physical_network]['interface'])
+	try:
+		__salt__['cmd.run']('ovs-vsctl --no-wait add-br ' + __pillar__['neutron']['intergration_bridge'])
+	except:
+		pass
+	for physical_network in __pillar__['neutron'].get(__grains__['id'], {}):
+		try:
+			__salt__['cmd.run']('ovs-vsctl --no-wait add-br ' +
+								__pillar__['neutron'][__grains__['id']][physical_network]['bridge'])
+			__salt__['cmd.run']('ovs-vsctl --no-wait add-port  %s %s' %
+								(__pillar__['neutron'][__grains__['id']][physical_network]['bridge'],
+								 __pillar__['neutron'][__grains__['id']][physical_network]['interface']))
+			__salt__['cmd.run']('ip link set %s up' % __pillar__['neutron'][__grains__['id']][physical_network]['interface'])
+			__salt__['cmd.run']('ip link set %s promisc on' % __pillar__['neutron'][__grains__['id']][physical_network]['interface'])
+		except:
+			pass

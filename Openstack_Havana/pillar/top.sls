@@ -1,4 +1,7 @@
-havana:
-  mercury: [openstack_cluster]
-  venus: [openstack_cluster]
-  saturn: [openstack_cluster]
+havana: 
+  mars: 
+    - openstack_cluster
+  pluto: 
+    - openstack_cluster
+  sun: 
+    - openstack_cluster

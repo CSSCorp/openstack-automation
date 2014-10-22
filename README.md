@@ -1,3 +1,4 @@
+
 openstack-automation
 ====================
 
@@ -9,11 +10,11 @@ Saltstack provides us an infrastructure management framework that makes our job 
 
 <pre>
 {
-	"cluster_entities": [
-		"compute",
-		"controller",
-		"network"
-	],
+    "cluster_entities": [
+	"compute",
+	"controller",
+	"network"
+    ],
     "compute": [
         "venus"
     ],
@@ -21,36 +22,42 @@ Saltstack provides us an infrastructure management framework that makes our job 
         "mercury"
     ], 
     "network": [
-		"mercury"
+	"mercury"
     ],
     "neutron": {
-		"metadata_secret": "414c66b22b1e7a20cc35",
-		"intergration_bridge": "br-int",
-		"network_mode": "vlan",
-		"venus": {
-			"Intnet1": {
-				"start_vlan": "100",
-				"end_vlan": "200",
-				"bridge": "br-eth1",
-				"interface": "eth1"
+	"metadata_secret": "414c66b22b1e7a20cc35",
+	"tenant_network_types": ["vlan", "flat"],
+	"tunnel_start": "1",
+	"tunnel_end": "1000",
+	"type_drivers": {
+		"flat": {
+			"mercury": {
+				"External": {
+					"bridge": "br-ex",
+					"interface": "eth3"
+				}
 			}
 		},
-		"mercury": {
-			"Intnet1": {
-				"start_vlan": "100",
-				"end_vlan": "200",
-				"bridge": "br-eth1",
-				"interface": "eth1"
+		"vlan": {			
+			"mercury": {
+				"Intnet1": {
+					"vlan_range": ["100", "200"],
+					"bridge": "br-eth1",
+					"interface": "eth1"
+				}
 			},
-			"Extnet": {
-				"bridge": "br-ex",
-				"interface": "eth2"
+			"venus": {
+				"Intnet1": {
+					"vlan_range": ["100", "200"],
+					"bridge": "br-eth1",
+					"interface": "eth1"
+				}
 			}
 		}
+	}
     },
     "install": {
         "controller": [
-            "generics.havana_cloud_repo", 
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
@@ -64,30 +71,34 @@ Saltstack provides us an infrastructure management framework that makes our job 
             "keystone.openstack_services",
             "glance",
             "nova",
+            "neutron",
+            "neutron.ml2",
             "horizon"
         ], 
         "network": [
-            "generics.havana_cloud_repo", 
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
-            "neutron",
+            "mysql.client",
+            "neutron.service",
+            "neutron.ml2",
             "neutron.openvswitch"
         ],
         "compute": [
-            "generics.havana_cloud_repo", 
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
+            "mysql.client",
             "nova.compute_kvm",
-            "neutron.openvswitch"
+            "neutron.openvswitch",
+            "neutron.ml2"
         ]
     },
     "hosts": {
-		"mercury": "mercury_ip_here",
-		"venus": "venus_ip_here",
-		"saturn": "saturn_ip_here",
-		"salt": "sat_master_ip_here"
+	"mercury": "mercury_ip_here",
+	"venus": "venus_ip_here",
+	"saturn": "saturn_ip_here",
+	"salt": "sat_master_ip_here"
     }
 }
 </pre>
@@ -137,10 +148,10 @@ To make things clear lets have a look at a part of the pillar configuration.
 
 <pre>
     "cluster_entities": [
-		"compute",
-		"controller",
-		"network"
-	],
+	"compute",
+	"controller",
+	"network"
+    ],
     "compute": [
         "venus"
     ],
@@ -152,7 +163,6 @@ To make things clear lets have a look at a part of the pillar configuration.
     ],
     "install": {
         "controller": [
-            "generics.havana_cloud_repo", 
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
@@ -166,23 +176,27 @@ To make things clear lets have a look at a part of the pillar configuration.
             "keystone.openstack_services",
             "glance",
             "nova",
+            "neutron",
+            "neutron.ml2",
             "horizon"
         ], 
         "network": [
-            "generics.havana_cloud_repo", 
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
-            "neutron",
+            "mysql.client",
+            "neutron.service",
+            "neutron.ml2",
             "neutron.openvswitch"
         ],
         "compute": [
-            "generics.havana_cloud_repo", 
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
+            "mysql.client",
             "nova.compute_kvm",
-            "neutron.openvswitch"
+            "neutron.openvswitch",
+            "neutron.ml2"
         ]
     }
 </pre>
@@ -208,7 +222,7 @@ Lets say we need add a new entity called queue_server which will run rabbitmq. T
 	"controller",
 	"network",
 	"queue_server"
-	],
+    ],
     "compute": [
         "venus"
     ],
@@ -223,36 +237,40 @@ Lets say we need add a new entity called queue_server which will run rabbitmq. T
     ],
     "install": {
         "controller": [
-            "generics.havana_cloud_repo", 
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
             "mysql",
             "mysql.client",
             "mysql.openstack_dbschema",
+            "queue.rabbit",
             "keystone",
             "keystone.openstack_tenants",
             "keystone.openstack_users",
             "keystone.openstack_services",
             "glance",
             "nova",
+            "neutron",
+            "neutron.ml2",
             "horizon"
         ], 
         "network": [
-            "generics.havana_cloud_repo", 
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
-            "neutron",
+            "mysql.client",
+            "neutron.service",
+            "neutron.ml2",
             "neutron.openvswitch"
         ],
         "compute": [
-            "generics.havana_cloud_repo", 
             "generics.apt-proxy", 
             "generics.headers",
             "generics.host",
+            "mysql.client",
             "nova.compute_kvm",
-            "neutron.openvswitch"
+            "neutron.openvswitch",
+            "neutron.ml2"
         ],
         "queue_server": [
             "queue.rabbit"
@@ -312,31 +330,45 @@ salt -C 'I@cluster_type:openstack' state.highstate
 OVS Vlan mode networking
 ========================
 
-The default configuration will install a vlan mode network. Have a close look at the configuration.
+The default configuration will install a vlan mode network. Have a close look at the configuration. You can now enable multiple networking types starting from the most prefered type. I have chosen 'vlan' and 'flat' as list elements under tenant_network_types. The configuration specific to each network_type chosen is provided under type_drivers.
 
 <pre>
     "neutron": {
 	"metadata_secret": "414c66b22b1e7a20cc35",
-	"intergration_bridge": "br-int",
-	"network_mode": "vlan",
-	"venus": {
-		"Intnet1": {
-			"start_vlan": "100",
-			"end_vlan": "200",
-			"bridge": "br-eth1",
-			"interface": "eth1"
-		}
-	},
-	"mercury": {
-		"Intnet1": {
-			"start_vlan": "100",
-			"end_vlan": "200",
-			"bridge": "br-eth1",
-			"interface": "eth1"
+	"tenant_network_types": ["vlan", "flat"],
+	"tunnel_start": "1",
+	"tunnel_end": "1000",
+	"type_drivers": {
+		"flat": {
+			"sun": {
+				"External": {
+					"bridge": "br-ex",
+					"interface": "eth3"
+				}
+			}
 		},
-		"Extnet": {
-			"bridge": "br-ex",
-			"interface": "eth2"
+		"vlan": {			
+			"pluto": {
+				"Intnet1": {
+					"vlan_range": ["100", "200"],
+					"bridge": "br-eth1",
+					"interface": "eth1"
+				}
+			},
+			"mars": {
+				"Intnet1": {
+					"vlan_range": ["100", "200"],
+					"bridge": "br-eth1",
+					"interface": "eth1"
+				}
+			},
+			"sun": {
+				"Intnet1": {
+					"vlan_range": ["100", "200"],
+					"bridge": "br-eth1",
+					"interface": "eth1"
+				}
+			}
 		}
 	}
     }
@@ -347,16 +379,12 @@ For each node "venus", "mercury" etc you specify the physical_networks, the star
 OVS GRE mode networking
 =======================
 
-If GRE mode networking is desired please alter the pillar file as below.
+If GRE mode networking is desired please add 'gre' configuration as below under type_drivers. Also add 'gre' to the tenant_network_types list.
 
 <pre>
-    "neutron": {
-	"metadata_secret": "414c66b22b1e7a20cc35",
-	"intergration_bridge": "br-int",
-	"network_mode": "tunnel",
+    "gre": {
 	"tunnel_start": "100",
-	"tunnel_end": "200",
-	"tunnel_type": "gre"
+	"tunnel_end": "200"
     }
 </pre>
 
@@ -364,16 +392,11 @@ If GRE mode networking is desired please alter the pillar file as below.
 OVS VXLAN mode networking
 =========================
 
-If VXLAN mode networking is desired please alter the pillar file as below.
-
+If VXLAN mode networking is desired please add 'vxlan' configuration as below under type_drivers. Also add 'vxlan' to the tenant_network_types list.
 <pre>
-    "neutron": {
-	"metadata_secret": "414c66b22b1e7a20cc35",
-	"intergration_bridge": "br-int",
-	"network_mode": "tunnel",
+    "vxlan": {
 	"tunnel_start": "100",
-	"tunnel_end": "200",
-	"tunnel_type": "vxlan"
+	"tunnel_end": "200"
     }
 </pre>
 
