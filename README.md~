@@ -291,13 +291,10 @@ neutron:
         Physnet1:
           bridge: "br-eth1"
           interface: "eth1"
-          vlan_range: "100:200"
         Physnet2:
           bridge: "br-eth2"
           interface: "eth2"
-          vlan_range: "200:300"
       compute2.juno:
           bridge: "br-eth1"
           interface: "eth1"
-          vlan_range: "100:200"
 </pre>
