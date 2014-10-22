@@ -1,13 +1,31 @@
-cinder_api_pkg:
+lvm_pkg_install:
   pkg:
     - installed
-    - name: "cinder-api"
+    - name: lvm2
 
+lvm_physical_volume:
+  lvm:
+    - pv_present
+    - name: "/dev/sda4"
+    - require:
+      - pkg: lvm_pkg_install
 
-cinder_scheduler_pkg:
+lvm_logical_volume:
+  lvm:
+    - vg_present
+    - name: "cinder-volumes"
+    - devices:
+      - "/dev/sda4"
+    - require:
+      - lvm: lvm_physical_volume
+
+cinder_volume_package:
   pkg:
     - installed
-    - name: "cinder-scheduler"
+    - name: cinder-volume
+    - require:
+      - pkg: lvm_pkg_install
+
 
 cinder_volume_config_file:
   file:
@@ -17,10 +35,9 @@ cinder_volume_config_file:
     - group: cinder
     - mode: 644
     - require: 
-      - pkg: cinder_api_pkg
-      - pkg: cinder_scheduler_pkg
+      - pkg: cinder_volume_package
 
-cinder_config_options:
+cinder_volume_config_options:
   ini:
     - options_present
     - name: "/etc/cinder/cinder.conf"
@@ -43,24 +60,16 @@ cinder_config_options:
     - require:
       - file: cinder_volume_config_file
 
-cinder_sync:
-  cmd:
-    - run
-    - name: {{ pillar['services']['cinder']['db_sync'] }}
-    - require:
-      - service: "cinder-api"
-      - service: "cinder-scheduler"
-
-cinder-api-service:
+cinder_volume_service:
   service:
     - running
-    - name: "cinder-api"
+    - name: cinder-volume
     - watch:
-      - ini: cinder_config_options
+      - ini: cinder_volume_config_options
 
-cinder-scheduler-service:
+cinder_iscsi_target_service:
   service:
     - running
-    - name: "cinder-scheduler"
+    - name: tgt
     - watch:
-      - ini: cinder_config_options
+      - ini: cinder_volume_config_options
