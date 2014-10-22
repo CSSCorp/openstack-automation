@@ -1,5 +1,7 @@
 juno: 
   "*.juno": 
-    - juno_cluster
+    - cluster_resources
+    - openstack_cluster
   "os:{{ grains['os_family'] }}":
+    - match: grain
     - "{{ grains['os_family'] }}"
