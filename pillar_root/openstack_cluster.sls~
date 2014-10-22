@@ -2,25 +2,16 @@ cluster_entities:
   - "compute"
   - "controller"
   - "network"
-  - "storage-api"
   - "storage"
-  - "image"
 compute: 
-  - "green"
-  - "blue"
-  - "orange"
-  - "cyan"
-  - "red"
+  - "compute1.juno"
+  - "compute2.juno"
 controller: 
-  - "brown"
-image:
-  - "brown"
+  - "controller.juno"
 network: 
-  - "pink"
-storage-api:
-  - "pink"
+  - "network.juno"
 storage:
-  - "green"
+  - "storage1.juno"
 cluster_name: "openstack_cluster"
 keystone.auth_url: "http://brown:5000/v2.0/"
 keystone.endpoint: "http://brown:35357/v2.0"

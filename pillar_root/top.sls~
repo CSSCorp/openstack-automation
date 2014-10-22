@@ -1,0 +1,5 @@
+juno: 
+  "*.juno": 
+    - juno_cluster
+  "os:{{ grains['os_family'] }}":
+    - "{{ grains['os_family'] }}"
