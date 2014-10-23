@@ -1,40 +1,46 @@
-keystone: 
+keystone-pkg-install: 
   pkg: 
     - installed
-    - require: 
-        - mysql_grants: {{ grains['id'] }}-keystone-accounts
+    - name: {{ salt['pillar.get']('packages:keystone', default='keystone') }}
+
+keystone-service-running:
   service: 
     - running
+    - name: {{ salt['pillar.get']('services:keystone', default='keystone') }}
     - watch: 
-        - pkg: keystone
-        - ini: keystone
+        - pkg: keystone-pkg-install
+        - ini: keystone-conf-file
+
+keystone-conf-file:
     file: 
       - managed
-      - name: /etc/keystone/keystone.conf
+      - name: {{ salt['pillar.get']('conf_files:keystone', default='/etc/keystone/keystone.conf') }}
       - user: root
       - group: root
       - mode: 644
       - require: 
-          - pkg: keystone
+          - pkg: keystone-pkg-install
     ini: 
       - options_present
-      - name: /etc/keystone/keystone.conf
+      - name: {{ salt['pillar.get']('conf_files:keystone', default='/etc/keystone/keystone.conf') }}
       - sections: 
           DEFAULT: 
-            admin_token: {{ pillar['keystone.token'] }}
+            admin_token: {{ salt['pillar.get']('keystone:admin_token', default='ADMIN') }}
           sql: 
-            connection: mysql://{{ pillar['mysql'][pillar['services']['keystone']['db_name']]['username'] }}:{{ pillar['mysql'][pillar['services']['keystone']['db_name']]['password'] }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ pillar['services']['keystone']['db_name'] }}
+            connection: mysql://{{ pillar['mysql'][salt['pillar.get']('services:keystone:db_name', default='keystone')]['username'] }}:{{ pillar['mysql'][salt['pillar.get']('services:keystone:db_name', default='keystone')]['password'] }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('services:keystone:db_name', default='keystone') }}
       - require: 
-          - file: keystone
-  keystone_sync: 
-    cmd: 
-      - run
-      - name: {{ pillar['services']['keystone']['db_sync'] }}
-      - require: 
-          - service: keystone
-  keystone_sqlite_delete: 
-    file: 
-      - absent
-      - name: /var/lib/keystone/keystone.sqlite
-      - require: 
-          - pkg: keystone
+          - file: keystone-conf-file
+
+keystone-db-sync: 
+  cmd: 
+    - run
+    - name: {{ pillar['services']['keystone']['db_sync'] }}
+    - require: 
+      - service: keystone-service-running
+
+keystone_sqlite_delete: 
+  file: 
+    - absent
+    - name: /var/lib/keystone/keystone.sqlite
+    - require: 
+      - pkg: keystone-pkg-install
