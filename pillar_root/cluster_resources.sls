@@ -4,15 +4,13 @@ cluster_entities:
   - "network"
   - "storage"
 compute: 
-  - "compute1.juno"
-  - "compute2.juno"
+  - "openstack.juno"
 controller: 
-  - "controller.juno"
+  - "openstack.juno"
 network: 
-  - "network.juno"
+  - "openstack.juno"
 storage:
-  - "storage1.juno"
-  - "storage2.juno"
+  - "openstack.juno"
 sls: 
   controller: 
     - "generics.host"
