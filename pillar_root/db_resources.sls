@@ -21,7 +21,7 @@ mysql:
   neutron: 
     username: "neutron"
     password: "neutron_pass"
-services: 
+openstack-services-sync: 
   keystone: 
     db_name: "keystone"
     db_sync: "keystone-manage db_sync"
