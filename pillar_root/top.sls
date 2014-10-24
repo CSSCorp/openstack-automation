@@ -4,6 +4,6 @@ juno:
     - db_resources
     - access_resources
     - openstack_cluster
-  "os:{{ grains['os_family'] }}":
+  "os:{{ grains['os] }}":
     - match: grain
-    - "{{ grains['os_family'] }}"
+    - "{{ grains['os'] }}"
