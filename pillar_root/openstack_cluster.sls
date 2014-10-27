@@ -1,5 +1,5 @@
 keystone.endpoint: "{{ salt['pillar.get']('keystone:services:keystone:endpoint:admin_url') }}"
-keystone.token: "{{ pillar['keystone']['admin_token'] }}"
+keystone.token: "{{ __pillar__['keystone']['admin_token'] }}"
 pkg_proxy_url: "http://mars:3142"
 cluster_type: juno
 hosts: 
