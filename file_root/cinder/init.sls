@@ -46,7 +46,7 @@ cinder_config_options:
 cinder_sync:
   cmd:
     - run
-    - name: {{ pillar['services']['cinder']['db_sync'] }}
+    - name: {{ pillar['openstack-services-sync']['cinder']['db_sync'] }}
     - require:
       - service: "cinder-api"
       - service: "cinder-scheduler"

@@ -1,4 +1,12 @@
+review glance half way through
 
+
+enable distro support
+define packages , services and config file locations in Ubuntu.sls
+replace packages
+replace services names
+replace config file locations
+replace require conditions
 
 
 keystone.user: "admin"
@@ -16,9 +24,6 @@ Check if these are necessary for keystone state and module and add them if neces
 make changes to support 
 
 openstack-services-sync: 
-  keystone: 
-    db_name: "keystone"
-    db_sync: "keystone-manage db_sync"
   glance: 
     db_sync: "glance-manage db_sync"
     db_name: "glance"
