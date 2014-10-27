@@ -2,7 +2,7 @@
 '''
 Module for handling Cluster management in salt
 '''
-
+import re
 
 def __virtual__():
     '''
@@ -48,6 +48,9 @@ def list_hosts():
 
 def get_candidate(name=None):
     for host in list_hosts():
+        for sls in list_sls(machine=host):
+            if re.match(name, sls):
+                return host
         if name in list_sls(machine=host):
             return host
 
