@@ -25,7 +25,7 @@ keystone-conf-file:
       - name: {{ salt['pillar.get']('conf_files:keystone', default='/etc/keystone/keystone.conf') }}
       - sections: 
           DEFAULT: 
-            admin_token: {{ salt['pillar.get']('keystone:admin_token', default='ADMIN') }}
+            admin_token: {{ salt['pillar.get']('keystone.admin_token', default='ADMIN') }}
           sql: 
             connection: mysql://{{ pillar['mysql'][salt['pillar.get']('services:keystone:db_name', default='keystone')]['username'] }}:{{ pillar['mysql'][salt['pillar.get']('services:keystone:db_name', default='keystone')]['password'] }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('services:keystone:db_name', default='keystone') }}
       - require: 
@@ -34,7 +34,7 @@ keystone-conf-file:
 keystone-db-sync: 
   cmd: 
     - run
-    - name: {{ pillar['services']['keystone']['db_sync'] }}
+    - name: {{ pillar['openstack-services-sync']['keystone']['db_sync'] }}
     - require: 
       - service: keystone-service-running
 

@@ -1,14 +1,8 @@
-keystone.endpoint: "{{ salt['pillar.get']('keystone:services:keystone:endpoint:admin_url') }}"
-keystone.token: "{{ __pillar__['keystone']['admin_token'] }}"
+keystone.endpoint: "http://192.168.20.4:35357/v2.0"
+keystone.token: "24811ee3d9a09915bef0"
 pkg_proxy_url: "http://mars:3142"
 cluster_type: juno
 hosts: 
-  red: 10.8.27.11
-  green: 10.8.27.12
-  blue: 10.8.27.7
-  orange: 10.8.27.16
-  brown: 10.8.27.17
-  cyan: 10.8.27.22
-  pink: 10.8.27.85
+  openstack.juno: 192.168.20.4
 
 
