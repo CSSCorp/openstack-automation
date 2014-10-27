@@ -17,7 +17,7 @@ def list_sls(machine=None):
     '''
     host_sls = []
     for role in list_roles(machine):
-        for sls in __pillar__.get('install', {}).get(role, []):
+        for sls in __pillar__.get('sls', {}).get(role, []):
             if sls not in host_sls:
                 host_sls.append(sls)
     return host_sls
