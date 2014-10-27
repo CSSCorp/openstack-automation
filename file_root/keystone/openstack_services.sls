@@ -9,9 +9,9 @@
   keystone:
     - endpoint_present
     - name: {{ service_name }}
-    - publicurl: {{ pillar['keystone']['services'][service_name]['endpoint']['publicurl'] }}
-    - adminurl: {{ pillar['keystone']['services'][service_name]['endpoint']['adminurl'] }}
-    - internalurl: {{ pillar['keystone']['services'][service_name]['endpoint']['internalurl'] }}
+    - publicurl: {{ pillar['keystone']['services'][service_name]['endpoint']['publicurl'] % salt['cluster_ops.get_candidate'](pillar['keystone']['services'][service_name]['endpoint']['endpoint_host_sls']) }}
+    - adminurl: {{ pillar['keystone']['services'][service_name]['endpoint']['adminurl'] % salt['cluster_ops.get_candidate'](pillar['keystone']['services'][service_name]['endpoint']['endpoint_host_sls']) }}
+    - internalurl: {{ pillar['keystone']['services'][service_name]['endpoint']['internalurl'] % salt['cluster_ops.get_candidate'](pillar['keystone']['services'][service_name]['endpoint']['endpoint_host_sls']) }}
     - require:
       - keystone: {{ service_name }}_service
 {% endfor %}
