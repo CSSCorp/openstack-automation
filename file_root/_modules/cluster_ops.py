@@ -47,12 +47,26 @@ def list_hosts():
 
 
 def get_candidate(name=None):
+    """
+    Return the host runing the particular service
+    """
     for host in list_hosts():
         for sls in list_sls(machine=host):
             if re.match(name, sls):
                 return host
-        if name in list_sls(machine=host):
-            return host
+
+
+def get_install_flavor(name=None):
+    """
+    Return the particular flavor of a service
+    queue.* would return rabbit if queue.rabbit is in list of sls
+    """
+    name = name.replace('*', '(.*)')
+    for host in list_hosts():
+        for sls in list_sls(machine=host):
+            match = re.match(name, sls)
+            if match:
+                return match.group(1)
 
 
 def get_vlan_ranges(network_type='flat'):

@@ -32,7 +32,7 @@ keystone-conf-file:
           - file: keystone-conf-file
 
 {% if 'db_sync' in salt['pillar.get']('databases:keystone', default=()) %}
-glance_sync: 
+keystone_sync: 
   cmd: 
     - run
     - name: {{ salt['pillar.get']('databases:keystone:db_sync') }}
