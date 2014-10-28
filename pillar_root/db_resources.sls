@@ -1,38 +1,29 @@
-mysql: 
+databases: 
   nova: 
+    db_name: "nova"
     username: "nova"
     password: "nova_pass"
     service: "nova-api"
-  dash: 
-    username: "dash"
-    password: "dash_pass"
+    db_sync: "nova-manage db sync"
   keystone: 
+    db_name: "keystone"
     username: "keystone"
     password: "keystone_pass"
     service: "keystone"
+    db_sync: "keystone-manage db_sync"
   cinder: 
+    db_name: "cinder"
     username: "cinder"
     password: "cinder_pass"
     service: "cinder"
+    db_sync: "cinder-manage db sync"
   glance: 
+    db_name: "glance"
     username: "glance"
     password: "glance_pass"
     service: "glance"
-  neutron: 
-    username: "neutron"
-    password: "neutron_pass"
-openstack-services-sync: 
-  keystone: 
-    db_name: "keystone"
-    db_sync: "keystone-manage db_sync"
-  glance: 
     db_sync: "glance-manage db_sync"
-    db_name: "glance"
-  nova: 
-    db_name: "nova"
-    db_sync: "nova-manage db sync"
   neutron: 
     db_name: "neutron"
-  cinder:
-    db_sync: "cinder-manage db sync"
-    db_name: "cinder"
+    username: "neutron"
+    password: "neutron_pass"

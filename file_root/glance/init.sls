@@ -36,7 +36,7 @@ glance-api-conf:
     - name: {{ salt['pillar.get']('conf_files:glance_api', default="/etc/glance/glance-api.conf") }}
     - sections: 
         database: 
-          connection: mysql://{{ pillar['mysql'][pillar['services']['glance']['db_name']]['username'] }}:{{ pillar['mysql'][pillar['services']['glance']['db_name']]['password'] }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ pillar['services']['glance']['db_name'] }}
+          connection: mysql://{{ salt['pillar.get']('databases:glance:username', default='glance') }}:{{ salt['pillar.get']('databases:glance:password', default='glance_pass') }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('databases:glance:db_name', default='glance') }}
         DEFAULT: 
           rpc_backend: {{ pillar['queue-engine'] }}
           rabbit_host: {{ salt['cluster_ops.get_candidate']('queue.' + pillar['queue-engine']) }}
@@ -67,7 +67,7 @@ glance-registry-conf:
     - name: {{ salt['pillar.get']('conf_files:glance_registry', default="/etc/glance/glance-registry.conf") }}
     - sections: 
         database: 
-          connection: mysql://{{ pillar['mysql'][pillar['services']['glance']['db_name']]['username'] }}:{{ pillar['mysql'][pillar['services']['glance']['db_name']]['password'] }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ pillar['services']['glance']['db_name'] }}
+          connection: mysql://{{ salt['pillar.get']('databases:glance:username', default='glance') }}:{{ salt['pillar.get']('databases:glance:password', default='glance_pass') }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('databases:glance:db_name', default='glance') }}
         DEFAULT: 
           rpc_backend: {{ pillar['queue-engine'] }}
           rabbit_host: {{ salt['cluster_ops.get_candidate']('queue.' + pillar['queue-engine']) }}
@@ -84,12 +84,14 @@ glance-registry-conf:
     - require: 
         - file: glance-registry-conf
 
+{% if 'db_sync' in salt['pillar.get']('databases:glance', default=()) %}
 glance_sync: 
   cmd: 
     - run
-    - name: {{ pillar['openstack-services-sync']['glance']['db_sync'] }}
+    - name: {{ salt['pillar.get']('databases:glance:db_sync') }}
     - require: 
         - service: glance
+{% endif %}
 
 glance_sqlite_delete: 
   file: 

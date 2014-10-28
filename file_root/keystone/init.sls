@@ -27,16 +27,18 @@ keystone-conf-file:
           DEFAULT: 
             admin_token: {{ salt['pillar.get']('keystone.admin_token', default='ADMIN') }}
           sql: 
-            connection: mysql://{{ pillar['mysql'][salt['pillar.get']('services:keystone:db_name', default='keystone')]['username'] }}:{{ pillar['mysql'][salt['pillar.get']('services:keystone:db_name', default='keystone')]['password'] }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('services:keystone:db_name', default='keystone') }}
+            connection: mysql://{{ salt['pillar.get']('databases:keystone:username', default='keystone') }}:{{ salt['pillar.get']('databases:keystone:password', default='keystone_pass') }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('databases:keystone:db_name', default='keystone') }}
       - require: 
           - file: keystone-conf-file
 
-keystone-db-sync: 
+{% if 'db_sync' in salt['pillar.get']('databases:keystone', default=()) %}
+glance_sync: 
   cmd: 
     - run
-    - name: {{ pillar['openstack-services-sync']['keystone']['db_sync'] }}
+    - name: {{ salt['pillar.get']('databases:keystone:db_sync') }}
     - require: 
-      - service: keystone-service-running
+        - service: keystone
+{% endif %}
 
 keystone_sqlite_delete: 
   file: 

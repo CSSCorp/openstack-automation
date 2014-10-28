@@ -1,4 +1,5 @@
-{% for database_name in pillar['mysql'] %}
+{% for openstack_service in pillar['databases'] %}
+{% for database_name in pillar['databases'][openstack_service] %}
 {{ database_name }}-db:
   mysql_database:
     - present
@@ -7,8 +8,8 @@
 {{ server }}-{{ database_name }}-accounts:
   mysql_user:
     - present
-    - name: {{ pillar['mysql'][database_name]['username'] }}
-    - password: {{ pillar['mysql'][database_name]['password'] }}
+    - name: {{ pillar['databases'][openstack_service][database_name]['username'] }}
+    - password: {{ pillar['databases'][openstack_service][database_name]['password'] }}
     - host: {{ server }}
     - require:
       - mysql_database: {{ database_name }}-db
@@ -16,9 +17,10 @@
     - present
     - grant: all
     - database: {{ database_name }}
-    - user: {{ pillar['mysql'][database_name]['username'] }}
-    - password: {{ pillar['mysql'][database_name]['password'] }}
+    - user: {{ pillar['databases'][openstack_service][database_name]['username'] }}
+    - password: {{ pillar['databases'][openstack_service][database_name]['password'] }}
     - require:
       - mysql_user: {{ server }}-{{ database_name }}-accounts
+{% endfor %}
 {% endfor %}
 {% endfor %}
