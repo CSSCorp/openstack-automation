@@ -39,7 +39,7 @@ glance-api-conf:
           connection: mysql://{{ salt['pillar.get']('databases:glance:username', default='glance') }}:{{ salt['pillar.get']('databases:glance:password', default='glance_pass') }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('databases:glance:db_name', default='glance') }}
         DEFAULT: 
           rpc_backend: {{ pillar['queue-engine'] }}
-          rabbit_host: {{ salt['cluster_ops.get_candidate']('queue.' + pillar['queue-engine']) }}
+          rabbit_host: {{ salt['cluster_ops.get_candidate']('queue.*') }}
         keystone_authtoken: 
           auth_uri: http://{{ salt['cluster_ops.get_candidate']('keystone') }}:5000
           auth_port: 35357
