@@ -13,6 +13,8 @@ packages:
   apache_wsgi_module: libapache2-mod-wsgi
   memcached: memcached
   dashboard: openstack-dashboard
+  neutron_server: neutron-server
+  neutron_ml2: neutron-plugin-ml2
 services:
   mysql: mysql
   rabbitmq: rabbitmq
@@ -25,6 +27,7 @@ services:
   iscsi_target: tgt
   apache: apache2
   memcached: memcached
+  neutron_server: neutron-server
 conf_files:
   mysql: "/etc/mysql/my.cnf"
   keystone: "/etc/keystone/keystone.conf"
@@ -33,4 +36,5 @@ conf_files:
   cinder: "/etc/cinder/cinder.conf"
   apache_dashboard_enabled_conf: "/etc/apache2/conf-enabled/openstack-dashboard.conf"
   apache_dashboard_conf: "/etc/apache2/conf-available/openstack-dashboard.conf"
-  
+  neutron: "/etc/neutron/neutron.conf"
+  neutron_ml2: "/etc/neutron/plugins/ml2/ml2_conf.ini"
