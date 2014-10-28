@@ -1,4 +1,4 @@
-glance-pkg-install: 
+glance-pkg-install:
   pkg: 
     - installed
     - name: {{ salt['pillar.get']('packages:glance', default='glance') }}
