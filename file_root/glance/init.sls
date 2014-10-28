@@ -8,7 +8,7 @@ glace_registry_running:
   service: 
     - running
     - name: {{ salt['pillar.get']('services:glance_registry') }}
-      - watch
+      - watch: 
           - pkg: glance-pkg-install
           - ini: glance-api-conf
           - ini: glance-registry-conf
