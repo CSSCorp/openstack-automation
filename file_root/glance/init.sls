@@ -1,13 +1,13 @@
 glance-pkg-install:
   pkg: 
     - installed
-    - name: {{ salt['pillar.get']('packages:glance', default='glance') }}
+    - name: "{{ salt['pillar.get']('packages:glance', default='glance') }}"
 
 
 glace_registry_running:
   service: 
     - running
-    - name: {{ salt['pillar.get']('services:glance_registry') }}
+    - name: "{{ salt['pillar.get']('services:glance_registry') }}"
     - watch: 
       - pkg: glance-pkg-install
       - ini: glance-api-conf
@@ -16,7 +16,7 @@ glace_registry_running:
 glance_api_running:
   service:
     - running
-    - name: {{ salt['pillar.get']('services:glance_api') }}
+    - name: "{{ salt['pillar.get']('services:glance_api') }}"
     - watch: 
       - pkg: glance-pkg-install
       - ini: glance-api-conf
@@ -25,7 +25,7 @@ glance_api_running:
 glance-api-conf: 
   file: 
     - managed
-    - name: {{ salt['pillar.get']('conf_files:glance_api', default="/etc/glance/glance-api.conf") }}
+    - name: "{{ salt['pillar.get']('conf_files:glance_api', default="/etc/glance/glance-api.conf") }}"
     - mode: 644
     - user: glance
     - group: glance
@@ -33,21 +33,21 @@ glance-api-conf:
         - pkg: glance-pkg-install
   ini: 
     - options_present
-    - name: {{ salt['pillar.get']('conf_files:glance_api', default="/etc/glance/glance-api.conf") }}
+    - name: "{{ salt['pillar.get']('conf_files:glance_api', default="/etc/glance/glance-api.conf") }}"
     - sections: 
         database: 
-          connection: mysql://{{ salt['pillar.get']('databases:glance:username', default='glance') }}:{{ salt['pillar.get']('databases:glance:password', default='glance_pass') }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('databases:glance:db_name', default='glance') }}
+          connection: "mysql://{{ salt['pillar.get']('databases:glance:username', default='glance') }}:{{ salt['pillar.get']('databases:glance:password', default='glance_pass') }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('databases:glance:db_name', default='glance') }}"
         DEFAULT: 
-          rpc_backend: {{ salt['cluster_ops.get_install_flavor']('queue.*') }}
-          rabbit_host: {{ salt['cluster_ops.get_candidate']('queue.*') }}
+          rpc_backend: "{{ salt['cluster_ops.get_install_flavor']('queue.*') }}"
+          rabbit_host: "{{ salt['cluster_ops.get_candidate']('queue.*') }}"
         keystone_authtoken: 
-          auth_uri: http://{{ salt['cluster_ops.get_candidate']('keystone') }}:5000
+          auth_uri: "http://{{ salt['cluster_ops.get_candidate']('keystone') }}:5000"
           auth_port: 35357
           auth_protocol: http
           admin_tenant_name: service
           admin_user: glance
-          admin_password: {{ pillar['keystone']['tenants']['service']['users']['glance']['password'] }}
-          auth_host: {{ salt['cluster_ops.get_candidate']('keystone') }}
+          admin_password: "{{ pillar['keystone']['tenants']['service']['users']['glance']['password'] }}"
+          auth_host: "{{ salt['cluster_ops.get_candidate']('keystone') }}"
         paste_deploy: 
           flavor: keystone
     - require: 
@@ -56,7 +56,7 @@ glance-api-conf:
 glance-registry-conf: 
   file: 
     - managed
-    - name: {{ salt['pillar.get']('conf_files:glance_registry', default="/etc/glance/glance-registry.conf") }}
+    - name: "{{ salt['pillar.get']('conf_files:glance_registry', default="/etc/glance/glance-registry.conf") }}"
     - user: glance
     - group: glance
     - mode: 644
@@ -64,21 +64,21 @@ glance-registry-conf:
         - pkg: glance-pkg-install
   ini: 
     - options_present
-    - name: {{ salt['pillar.get']('conf_files:glance_registry', default="/etc/glance/glance-registry.conf") }}
+    - name: "{{ salt['pillar.get']('conf_files:glance_registry', default="/etc/glance/glance-registry.conf") }}"
     - sections: 
         database: 
-          connection: mysql://{{ salt['pillar.get']('databases:glance:username', default='glance') }}:{{ salt['pillar.get']('databases:glance:password', default='glance_pass') }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('databases:glance:db_name', default='glance') }}
+          connection: "mysql://{{ salt['pillar.get']('databases:glance:username', default='glance') }}:{{ salt['pillar.get']('databases:glance:password', default='glance_pass') }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('databases:glance:db_name', default='glance') }}"
         DEFAULT: 
-          rpc_backend: {{ salt['cluster_ops.get_install_flavor']('queue.*') }}
-          rabbit_host: {{ salt['cluster_ops.get_candidate']('queue.*') }}
+          rpc_backend: "{{ salt['cluster_ops.get_install_flavor']('queue.*') }}"
+          rabbit_host: "{{ salt['cluster_ops.get_candidate']('queue.*') }}"
         keystone_authtoken: 
-          auth_uri: http://{{ salt['cluster_ops.get_candidate']('keystone') }}:5000
+          auth_uri: "http://{{ salt['cluster_ops.get_candidate']('keystone') }}:5000"
           auth_port: 35357
           auth_protocol: http
           admin_tenant_name: service
           admin_user: glance
-          admin_password: {{ pillar['keystone']['tenants']['service']['users']['glance']['password'] }}
-          auth_host: {{ salt['cluster_ops.get_candidate']('keystone') }}
+          admin_password: "{{ pillar['keystone']['tenants']['service']['users']['glance']['password'] }}"
+          auth_host: "{{ salt['cluster_ops.get_candidate']('keystone') }}"
         paste_deploy: 
           flavor: keystone
     - require: 
@@ -88,7 +88,7 @@ glance-registry-conf:
 glance_sync: 
   cmd: 
     - run
-    - name: {{ salt['pillar.get']('databases:glance:db_sync') }}
+    - name: "{{ salt['pillar.get']('databases:glance:db_sync') }}"
     - require: 
         - service: glance
 {% endif %}
