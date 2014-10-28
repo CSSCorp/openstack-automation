@@ -17,7 +17,7 @@ keystone.auth_url: "http://brown:5000/v2.0/"
 Check if these are necessary for keystone state and module and add them if necessary
 
 
-
+make changes to queue.* support
 
 
 
