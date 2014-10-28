@@ -27,9 +27,9 @@ cinder_config_file:
           rpc_backend: rabbit
           rabbit_host: "{{ salt['cluster_ops.get_install_flavor']('queue.*') }}"
           rabbit_port: 5672
-          glance_host: "{{ salt['cluster_ops.get_candidate']('glance') }}"
+          cinder_host: "{{ salt['cluster_ops.get_candidate']('glance') }}"
         database:
-          connection: "mysql://{{ pillar['mysql'][pillar['services']['cinder']['db_name']]['username'] }}:{{ pillar['mysql'][pillar['services']['cinder']['db_name']]['password'] }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ pillar['services']['cinder']['db_name'] }}"
+          connection: "mysql://{{ salt['pillar.get']('databases:cinder:username', default='cinder') }}:{{ salt['pillar.get']('databases:cinder:password', default='cinder_pass') }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('databases:cinder:db_name', default='cinder') }}"
         keystone_authtoken:
           auth_uri: "{{ salt['cluster_ops.get_candidate']('keystone') }}:5000"
           auth_port: 35357
@@ -42,7 +42,7 @@ cinder_config_file:
       - file: cinder_config_file
 
 
-{% 'db_sync' in salt['pillar.get']('databases:cinder', default=()) %}
+{% if 'db_sync' in salt['pillar.get']('databases:cinder', default=()) %}
 cinder_sync:
   cmd:
     - run
