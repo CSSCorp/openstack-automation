@@ -1,4 +1,4 @@
-review glance half way through
+
 
 
 enable distro support
