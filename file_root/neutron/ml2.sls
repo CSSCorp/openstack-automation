@@ -18,7 +18,7 @@ ml2_config_file:
     - sections:
       ml2:
         type_drivers: "{{ ','.join(pillar['neutron']['type_drivers']) }}"
-        tenant_network_types: "{{ ','.join(pillar['neutron']['tenant_network_types']) }}"
+        tenant_network_types: "{{ ','.join(pillar['neutron']['type_drivers']) }}"
         mechanism_drivers: openvswitch
 {% if 'flat' in pillar['neutron']['type_drivers'] %}
         ml2_type_flat:
