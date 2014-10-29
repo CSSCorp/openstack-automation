@@ -16,6 +16,7 @@ neutron:
       physnets: 
         Internal1: 
           bridge: "br-eth1"
+          vlan_range: "100:200"
           hosts:
             openstack.juno: "eth2"
     gre:

@@ -37,11 +37,8 @@ ml2_config_file:
           vni_ranges: "{{ pillar['neutron']['type_drivers']['gre']['tunnel_start'] }}:{{ pillar['neutron']['type_drivers']['gre']['tunnel_end'] }}"
 {% endif %}
         ovs:
-{% if 'flat' in pillar['neutron']['type_drivers'] %}
+{% if 'flat' in pillar['neutron']['type_drivers'] or 'vlan' in pillar['neutron']['type_drivers'] %}
           bridge_mappings: "{{  salt['cluster_ops.get_bridge_mappings']()  }}"
-{% endif %}
-{% if 'vlan' in pillar['neutron']['type_drivers'] %}
-          bridge_mappings: "{{  salt['cluster_ops.get_bridge_mappings']('vlan')  }}"
 {% endif %}
 {% if 'gre' in pillar['neutron']['type_drivers'] %}
           tunnel_type: gre
