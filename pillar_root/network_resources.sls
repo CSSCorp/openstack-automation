@@ -6,10 +6,20 @@ neutron:
     - "flat"
   type_drivers: 
     flat: 
-      network.juno: 
+      physnets: 
+        External: 
+          bridge: "br-ex"
+          hosts:
+            openstack.juno: "eth3"
+      openstack.juno: 
         External: 
           bridge: "br-ex"
           interface: "eth3"
     gre:
       tunnel_start: "1"
       tunnel_end: "1000"
+
+
+
+
+
