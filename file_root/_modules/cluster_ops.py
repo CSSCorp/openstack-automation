@@ -85,12 +85,11 @@ def get_vlan_ranges(network_type='flat'):
 
 def get_bridge_mappings():
     return ','.join((':'.join((physnet, __pillar__['neutron']['type_drivers'][network_type]['physnets'][physnet]['bridge'])) for network_type in ('flat', 'vlan') for physnet in __salt__['pillar.get']('neutron:type_drivers:%s:physnets' % network_type, default=()) if __grains__['id'] in __pillar__['neutron']['type_drivers'][network_type]['physnets'][physnet]['hosts']))
-    bridge_iter = []
-    for physical_network in __pillar__['neutron']['type_drivers'][network_type].get(__grains__['id'], {}):
-        network_iter = [physical_network, __pillar__['neutron']['type_drivers'][network_type][__grains__['id']][physical_network]['bridge']]
-        bridge_iter.append(':'.join(network_iter))
-    return ','.join(bridge_iter)
-
+    mappings = []
+    for network_type in ('flat', 'vlan'):
+        for physnet in __salt__['pillar.get']('neutron:type_drivers:%s:physnets' % network_type, default=()):
+            if __grains__['id'] in __pillar__['neutron']['type_drivers'][network_type]['physnets'][physnet]['hosts']:
+                mappings.append(':'.join((physnet, __pillar__['neutron']['type_drivers'][network_type]['physnets'][physnet]['bridge'])))
 
 def create_init_bridges():
 	try:

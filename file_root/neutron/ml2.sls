@@ -3,6 +3,17 @@ neutron_ml2:
     - installed
     - name: "{{ salt['pillar.get']('packages:neutron_ml2', default='neutron-plugin-ml2') }}"
 
+{% set mappings = [] %}
+{% for network_type in ('flat', 'vlan') %}
+{% for physnet in salt['pillar.get']('neutron:type_drivers:%s:physnets' % network_type, default=()) %}
+{% if grains['id'] in pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['hosts'] %}
+{% do mappings.append(':'.join((physnet, pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['bridge'])) %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+
+
+
 ml2_config_file:
   file:
     - managed
@@ -38,7 +49,7 @@ ml2_config_file:
 {% endif %}
         ovs:
 {% if 'flat' in pillar['neutron']['type_drivers'] or 'vlan' in pillar['neutron']['type_drivers'] %}
-          bridge_mappings: "{{  salt['cluster_ops.get_bridge_mappings']()  }}"
+          bridge_mappings: "{{  ','.join(mappings)  }}"
 {% endif %}
 {% if 'gre' in pillar['neutron']['type_drivers'] %}
           tunnel_type: gre
