@@ -7,7 +7,7 @@ neutron_ml2:
 {% for network_type in ('flat', 'vlan') %}
 {% for physnet in salt['pillar.get']('neutron:type_drivers:%s:physnets' % network_type, default=()) %}
 {% if grains['id'] in pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['hosts'] %}
-{% do mappings.append(':'.join((physnet, pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['bridge'])) %}
+{% do mappings.append(':'.join((physnet, pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['bridge']))) %}
 {% endif %}
 {% endfor %}
 {% endfor %}
