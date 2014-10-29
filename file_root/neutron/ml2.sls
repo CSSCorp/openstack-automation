@@ -11,7 +11,18 @@ neutron_ml2:
 {% endif %}
 {% endfor %}
 {% endfor %}
-
+{% set vlan_networks = [] %}
+{% for physnet in salt['pillar.get']('neutron:type_drivers:vlan:physnets', default=()) %}
+{% if grains['id'] in pillar['neutron']['type_drivers']['vlan']['physnets'][physnet]['hosts'] %}
+{% do vlan_networks.append(':'.join((physnet, pillar['neutron']['type_drivers']['vlan']['physnets'][physnet]['vlan_range']))) %}
+{% endif %}
+{% endfor %}
+{% set flat_networks = [] %}
+{% for physnet in salt['pillar.get']('neutron:type_drivers:flat:physnets', default=()) %}
+{% if grains['id'] in pillar['neutron']['type_drivers']['flat']['physnets'][physnet]['hosts'] %}
+{% do flat_networks.append(physnet) %}
+{% endif %}
+{% endfor %}
 
 
 ml2_config_file:
@@ -33,11 +44,11 @@ ml2_config_file:
         mechanism_drivers: openvswitch
 {% if 'flat' in pillar['neutron']['type_drivers'] %}
         ml2_type_flat:
-          flat_networks: "{{ salt['cluster_ops.get_vlan_ranges']() }}"
+          flat_networks: "{{ ','.join(flat_networks) }}"
 {% endif %}
 {% if 'vlan' in pillar['neutron']['type_drivers'] %}
         ml2_type_vlan: 
-          network_vlan_ranges: "{{ salt['cluster_ops.get_vlan_ranges']('vlan') }}"
+          network_vlan_ranges: "{{ ','.join(vlan_networks) }}"
 {% endif %}
 {% if 'gre' in pillar['neutron']['type_drivers'] %}
         ml2_type_gre: 
