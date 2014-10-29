@@ -70,6 +70,10 @@ def get_install_flavor(name=None):
 
 
 def get_vlan_ranges(network_type='flat'):
+    if network_type == 'flat':
+        return ','.join((physnet for physnet in __salt__['pillar.get']('neutron:type_drivers:flat:physnets', default=()) if __grains__['id'] in __pillar__['neutron']['type_drivers']['flat']['physnets'][physnet]))
+    else:
+        return ','.join((':'.join((physnet, __pillar__['neutron']['type_drivers']['flat']['physnets'][physnet]['vlan_range'])) for physnet in __salt__['pillar.get']('neutron:type_drivers:flat:physnets', default=()) if __grains__['id'] in __pillar__['neutron']['type_drivers']['flat']['physnets'][physnet]))
     physical_iter = []
     for physical_network in __pillar__['neutron']['type_drivers'][network_type].get(__grains__['id'], {}):
 		network_iter = [physical_network]

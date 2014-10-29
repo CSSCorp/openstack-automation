@@ -4,6 +4,7 @@ neutron:
   tenant_network_types: 
     - "gre"
     - "flat"
+    - "vlan"
   type_drivers: 
     flat: 
       physnets: 
@@ -11,10 +12,12 @@ neutron:
           bridge: "br-ex"
           hosts:
             openstack.juno: "eth3"
-      openstack.juno: 
-        External: 
-          bridge: "br-ex"
-          interface: "eth3"
+    vlan: 
+      physnets: 
+        Internal1: 
+          bridge: "br-eth1"
+          hosts:
+            openstack.juno: "eth2"
     gre:
       tunnel_start: "1"
       tunnel_end: "1000"
