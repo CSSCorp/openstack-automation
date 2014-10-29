@@ -22,7 +22,7 @@ ml2_config_file:
         mechanism_drivers: openvswitch
 {% if 'flat' in pillar['neutron']['type_drivers'] %}
         ml2_type_flat:
-          flat_networks: "{{ ','.join([physnet for physnet in salt['pillar.get']('neutron:type_drivers:flat:physnets', default=()) if grains['id'] in pillar['neutron']['type_drivers']['flat']['physnets'][physnet]]) }}"
+          flat_networks: "{{ salt['cluster_ops.get_vlan_ranges']() }}"
 {% endif %}
 {% if 'vlan' in pillar['neutron']['type_drivers'] %}
         ml2_type_vlan: 
