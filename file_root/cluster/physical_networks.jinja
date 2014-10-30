@@ -25,3 +25,14 @@
 {% endif %}
 {% endfor %}
 
+
+{% set bridges = {salt['pillar.get']('neutron:intergration_bridge', default='br-int'): None} %}
+{% for network_type in ('flat', 'vlan') %}
+{% for physnet in salt['pillar.get']('neutron:type_drivers:%s:physnets' % network_type, default=()) %}
+{% if grains['id'] in pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['hosts'] %}
+{% do bridges.update({pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['bridge']: 
+                      pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['hosts'][grains['id']}) %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+

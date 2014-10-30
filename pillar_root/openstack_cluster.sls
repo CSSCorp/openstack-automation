@@ -1,4 +1,10 @@
 
+#queue backend 
+queue_engine: rabbit
+
+#db_backend
+db_engine: mysql
+
 #Point to the url where keystone would be installed
 keystone.endpoint: "http://192.168.20.4:35357/v2.0"
 keystone.token: "24811ee3d9a09915bef0"
