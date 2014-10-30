@@ -1,6 +1,7 @@
+{% from "cluster/resources.jinja" import formulas with context %}
 juno:
   "*.juno":
     - generics.*
-{% for sls in salt['cluster_ops.list_sls']() %}
-    - {{ sls }}
+{% for formula in formulas %}
+    - {{ formula }}
 {% endfor %}

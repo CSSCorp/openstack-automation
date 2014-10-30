@@ -1,0 +1,30 @@
+
+
+{% set roles = [] %}
+{% for cluster_entity in salt['pillar.get']('cluster_entities', default=()) %}
+{% if grains['id'] in salt['pillar.get'](cluster_entity, default=()) %}
+{% do roles.append(cluster_entity) %}
+{% endif %}
+{% endfor %}
+
+
+
+{% set formulas = [] %}
+{% for role in roles %}
+{% for formula in salt['pillar.get']('sls:%s' % role, default=()) %}
+{% if formula not in sls %}
+{% do formulas.append(formula) %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+
+
+
+{% set hosts = [] %}
+{% for cluster_entity in salt['pillar.get']('cluster_entities', default=()) %}
+{% for host in salt['pillar.get'](cluster_entity, default=()) %}
+{% if host not in hosts %}
+{% do hosts.append(host) %}
+{% endif %}
+{% endfor %}
+{% endfor %}

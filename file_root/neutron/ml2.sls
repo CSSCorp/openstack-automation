@@ -1,6 +1,6 @@
-{% from "neutron/physical_networks.jinja" import mappings with context %}
-{% from "neutron/physical_networks.jinja" import vlan_networks with context %}
-{% from "neutron/physical_networks.jinja" import flat_networks with context %}
+{% from "cluster/physical_networks.jinja" import mappings with context %}
+{% from "cluster/physical_networks.jinja" import vlan_networks with context %}
+{% from "cluster/physical_networks.jinja" import flat_networks with context %}
 
 neutron_ml2:
   pkg:
