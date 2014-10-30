@@ -88,6 +88,6 @@ bridge-{{ bridge }}-create:
     - name: "ovs-vsctl add-port {{ bridge }} {{ bridges[bridge] }}"
     - unless: "ovs-vsctl list-ports {{ bridge }} | grep {{ bridges[bridge] }}"
     - require: 
-      - service: openvswitch-switch-running
+      - cmd: "bridge-{{ bridge }}-create"
 {% endif %}
 {% endfor %}
