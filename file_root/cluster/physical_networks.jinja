@@ -31,7 +31,7 @@
 {% for physnet in salt['pillar.get']('neutron:type_drivers:%s:physnets' % network_type, default=()) %}
 {% if grains['id'] in pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['hosts'] %}
 {% do bridges.update({pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['bridge']: 
-                      pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['hosts'][grains['id']}) %}
+                      pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['hosts'][grains['id']]}) %}
 {% endif %}
 {% endfor %}
 {% endfor %}
