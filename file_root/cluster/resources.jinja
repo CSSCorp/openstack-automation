@@ -12,7 +12,7 @@
 {% set formulas = [] %}
 {% for role in roles %}
 {% for formula in salt['pillar.get']('sls:%s' % role, default=()) %}
-{% if formula not in sls %}
+{% if formula not in formulas %}
 {% do formulas.append(formula) %}
 {% endif %}
 {% endfor %}
