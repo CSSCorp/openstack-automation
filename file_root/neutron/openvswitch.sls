@@ -1,4 +1,4 @@
-{% from "cluster/resources" import get_candidate with context %}
+{% from "cluster/resources.jinja" import get_candidate with context %}
 neutron-plugin-openvswitch-agent: 
   pkg: 
     - installed
