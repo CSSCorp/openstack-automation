@@ -1,34 +1,42 @@
 {% from "cluster/resources.jinja" import get_candidate with context %}
-neutron-plugin-openvswitch-agent: 
+neutron-l2-agent-install: 
   pkg: 
     - installed
+    - name: {{ salt['pillar.get']('packages:neutron_l2_agent', default='neutron-plugin-openvswitch-agent') }}
     - require: 
       - module: create_init_bridges
+
+neutron-l2-agent-running:
   service: 
     - running
+    - name: {{ salt['pillar.get']('services:neutron_l2_agent', default='neutron-plugin-openvswitch-agent') }}
     - watch: 
-      - pkg: neutron-plugin-openvswitch-agent
-      - ini: neutron-ovs-conf
+      - pkg: neutron-l2-agent-install
+      - file: l2-agent-neutron-config-file
+      - file: l2-agent-config-file
+
+l2-agent-config-file:
   file: 
     - managed
-    - name: /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini
+    - name: {{ salt['pillar.get']('conf_files:neutron_l2_agent', default='/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini') }}
     - group: neutron
     - user: neutron
     - mode: 644
     - require: 
-      - pkg: neutron-plugin-openvswitch-agent
-neutron-ovs-conf: 
+      - pkg: neutron-l2-agent-install
+
+l2-agent-neutron-config-file: 
   file: 
     - managed
-    - name: /etc/neutron/neutron.conf
+    - name: {{ salt['pillar.get']('conf_files:neutron_l2_agent', default='/etc/neutron/neutron.conf') }}
     - group: neutron
     - user: neutron
     - mode: 644
     - require: 
-      - pkg: neutron-plugin-openvswitch-agent
+      - ini: l2-agent-neutron-config-file
   ini: 
     - options_present
-    - name: /etc/neutron/neutron.conf
+    - name: {{ salt['pillar.get']('conf_files:neutron_l2_agent', default='/etc/neutron/neutron.conf') }}
     - sections: 
         DEFAULT: 
           rabbit_host: {{ get_candidate('queue.rabbit') }}
@@ -49,14 +57,21 @@ neutron-ovs-conf:
           admin_tenant_name: service
           auth_port: 35357
     - require: 
-        - file: neutron-ovs-conf
-openvswitch-switch: 
+      - pkg: neutron-l2-agent-install
+
+
+openvswitch-switch-install: 
   pkg: 
     - installed
+    - name: {{ salt['pillar.get']('packages:openvswitch', default='openvswitch-switch') }}
+
+openvswitch-switch-running:
   service: 
     - running
+    - name: {{ salt['pillar.get']('services:openvswitch', default='openvswitch-switch') }}
     - require: 
-      - pkg: openvswitch-switch
+      - pkg: openvswitch-switch-install
+
 create_init_bridges: 
   module: 
     - run

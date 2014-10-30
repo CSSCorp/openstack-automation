@@ -15,6 +15,8 @@ packages:
   dashboard: openstack-dashboard
   neutron_server: neutron-server
   neutron_ml2: neutron-plugin-ml2
+  neutron_l2_agent: neutron-plugin-openvswitch-agent
+  openvswitch: openvswitch-switch
 services:
   mysql: mysql
   rabbitmq: rabbitmq
@@ -28,6 +30,8 @@ services:
   apache: apache2
   memcached: memcached
   neutron_server: neutron-server
+  neutron_l2_agent: neutron-plugin-openvswitch-agent
+  openvswitch: openvswitch-switch
 conf_files:
   mysql: "/etc/mysql/my.cnf"
   keystone: "/etc/keystone/keystone.conf"
@@ -38,3 +42,4 @@ conf_files:
   apache_dashboard_conf: "/etc/apache2/conf-available/openstack-dashboard.conf"
   neutron: "/etc/neutron/neutron.conf"
   neutron_ml2: "/etc/neutron/plugins/ml2/ml2_conf.ini"
+  neutron_l2_agent: "/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini"
