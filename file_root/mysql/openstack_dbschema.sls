@@ -1,10 +1,11 @@
+{% from "cluster/resources.jinja" import hosts with context %}
 {% for openstack_service in pillar['databases'] %}
 {% for database_name in pillar['databases'][openstack_service] %}
 {{ database_name }}-db:
   mysql_database:
     - present
     - name: {{ database_name }}
-{% for server in salt['cluster_ops.list_hosts']() %}
+{% for server in hosts %}
 {{ server }}-{{ database_name }}-accounts:
   mysql_user:
     - present

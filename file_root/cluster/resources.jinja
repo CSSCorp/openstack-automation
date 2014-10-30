@@ -8,7 +8,6 @@
 {% endfor %}
 
 
-
 {% set formulas = [] %}
 {% for role in roles %}
 {% for formula in salt['pillar.get']('sls:%s' % role, default=()) %}
@@ -28,3 +27,16 @@
 {% endif %}
 {% endfor %}
 {% endfor %}
+
+
+{% macro get_candidate(sls) -%}
+{% for host in hosts %}
+{% for cluster_entity in salt['pillar.get']('cluster_entities', default=()) %}
+{% if host in pillar[cluster_entity] %}
+{% if sls in pillar['sls'][cluster_entity] %}
+{{ sls }}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{%- endmacro %}

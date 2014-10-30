@@ -13,7 +13,6 @@ storage:
   - "openstack.juno"
 sls: 
   controller: 
-    - "generics.host"
     - "mysql"
     - "mysql.client"
     - "mysql.openstack_dbschema"
@@ -27,14 +26,12 @@ sls:
     - "glance"
     - "cinder"
   network: 
-    - "generics.host"
     - "mysql.client"
     - "neutron"
     - "neutron.service"
     - "neutron.openvswitch"
     - "neutron.ml2"
   compute: 
-    - "generics.host"
     - "mysql.client"
     - "nova.compute_kvm"
     - "neutron.openvswitch"
