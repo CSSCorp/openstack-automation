@@ -1,29 +1,37 @@
-neutron-dhcp-agent: 
+neutron-dhcp-agent-install: 
   pkg: 
     - installed
+    - name: "{{ salt['pillar.get']('packages:neutron-dhcp-agent', default='neutron-dhcp-agent') }}"
+
+neutron-dhcp-agent-running:
   service: 
     - running
+    - name: "{{ salt['pillar.get']('services:neutron-dhcp-agent', default='neutron-dhcp-agent') }}"
     - watch: 
-      - pkg: neutron-dhcp-agent
-      - ini: neutron-dhcp-agent
+      - pkg: neutron-dhcp-agent-install
+      - ini: neutron-dhcp-agent-config
+
+neutron-dhcp-agent-config
   file: 
     - managed
-    - name: /etc/neutron/dhcp_agent.ini
+    - name: "{{ salt['pillar.get']('conf_files:neutron-dhcp-agent', default='/etc/neutron/dhcp_agent.ini') }}"
     - user: neutron
     - group: neutron
     - mode: 644
     - require: 
-      - pkg: neutron-dhcp-agent
+      - ini: neutron-dhcp-agent-config
   ini: 
     - options_present
-    - name: /etc/neutron/dhcp_agent.ini
+    - name: "{{ salt['pillar.get']('conf_files:neutron-dhcp-agent', default='/etc/neutron/dhcp_agent.ini') }}"
     - sections: 
         DEFAULT: 
           dhcp_driver: neutron.agent.linux.dhcp.Dnsmasq
           interface_driver: neutron.agent.linux.interface.OVSInterfaceDriver
           use_namespaces: True
     - require: 
-      - file: neutron-dhcp-agent
+      - pkg: neutron-dhcp-agent-install
+
+
 neutron-metadata-agent: 
   pkg: 
     - installed
@@ -54,6 +62,7 @@ neutron-metadata-agent:
           nova_metadata_ip: {{ salt['cluster_ops.get_candidate']('nova') }}
     - require: 
       - file: neutron-metadata-agent
+
 neutron-l3-agent: 
   pkg: 
     - installed
@@ -97,6 +106,7 @@ networking-service:
     - name: networking
     - watch: 
       - file: enable_forwarding
+
 neutron-service-conf: 
   ini: 
     - options_present

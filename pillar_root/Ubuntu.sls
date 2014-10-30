@@ -17,6 +17,7 @@ packages:
   neutron_ml2: neutron-plugin-ml2
   neutron_l2_agent: neutron-plugin-openvswitch-agent
   openvswitch: openvswitch-switch
+  neutron-dhcp-agent: neutron-dhcp-agent
 services:
   mysql: mysql
   rabbitmq: rabbitmq
@@ -32,6 +33,7 @@ services:
   neutron_server: neutron-server
   neutron_l2_agent: neutron-plugin-openvswitch-agent
   openvswitch: openvswitch-switch
+  neutron-dhcp-agent: neutron-dhcp-agent
 conf_files:
   mysql: "/etc/mysql/my.cnf"
   keystone: "/etc/keystone/keystone.conf"
@@ -43,3 +45,4 @@ conf_files:
   neutron: "/etc/neutron/neutron.conf"
   neutron_ml2: "/etc/neutron/plugins/ml2/ml2_conf.ini"
   neutron_l2_agent: "/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini"
+  neutron-dhcp-agent: "/etc/neutron/dhcp_agent.ini"

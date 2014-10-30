@@ -53,8 +53,8 @@ l2-agent-neutron-config-file:
           auth_protocol: http
           admin_user: neutron
           admin_password: "{{ pillar['keystone']['tenants']['service']['users']['neutron']['password'] }}"
-          auth_host: "{{ salt['cluster_ops.get_candidate']('keystone') }}"
-          auth_uri: "http://{{ salt['cluster_ops.get_candidate']('keystone') }}:5000"
+          auth_host: "{{ get_candidate('keystone') }}"
+          auth_uri: "http://{{ get_candidate('keystone') }}:5000"
           admin_tenant_name: service
           auth_port: 35357
     - require: 
