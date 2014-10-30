@@ -1,29 +1,9 @@
+{% from neutron.physical_networks.jinja import mappings, vlan_networks, flat_networks %}
+
 neutron_ml2:
   pkg:
     - installed
     - name: "{{ salt['pillar.get']('packages:neutron_ml2', default='neutron-plugin-ml2') }}"
-
-{% set mappings = [] %}
-{% for network_type in ('flat', 'vlan') %}
-{% for physnet in salt['pillar.get']('neutron:type_drivers:%s:physnets' % network_type, default=()) %}
-{% if grains['id'] in pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['hosts'] %}
-{% do mappings.append(':'.join((physnet, pillar['neutron']['type_drivers'][network_type]['physnets'][physnet]['bridge']))) %}
-{% endif %}
-{% endfor %}
-{% endfor %}
-{% set vlan_networks = [] %}
-{% for physnet in salt['pillar.get']('neutron:type_drivers:vlan:physnets', default=()) %}
-{% if grains['id'] in pillar['neutron']['type_drivers']['vlan']['physnets'][physnet]['hosts'] %}
-{% do vlan_networks.append(':'.join((physnet, pillar['neutron']['type_drivers']['vlan']['physnets'][physnet]['vlan_range']))) %}
-{% endif %}
-{% endfor %}
-{% set flat_networks = [] %}
-{% for physnet in salt['pillar.get']('neutron:type_drivers:flat:physnets', default=()) %}
-{% if grains['id'] in pillar['neutron']['type_drivers']['flat']['physnets'][physnet]['hosts'] %}
-{% do flat_networks.append(physnet) %}
-{% endif %}
-{% endfor %}
-
 
 ml2_config_file:
   file:
