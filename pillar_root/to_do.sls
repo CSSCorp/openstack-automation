@@ -35,3 +35,15 @@ openstack-services-sync:
   cinder:
     db_sync: "cinder-manage db sync"
     db_name: "cinder"
+
+
+
+
+jinja_trim_blocks: True
+#
+# If this is set to True leading spaces and tabs are stripped from the start
+# of a line to a block. Defaults to False, corresponds to the Jinja
+# environment init variable "lstrip_blocks".
+jinja_lstrip_blocks: True
+
+include in documentation

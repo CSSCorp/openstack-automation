@@ -31,7 +31,7 @@ neutron-ovs-conf:
     - name: /etc/neutron/neutron.conf
     - sections: 
         DEFAULT: 
-          rabbit_host: {% -%}{{ get_candidate('queue.rabbit') }}{%- %}
+          rabbit_host: {{ get_candidate('queue.rabbit') }}
           neutron_metadata_proxy_shared_secret: {{ pillar['neutron']['metadata_secret'] }}
           service_neutron_metadata_proxy: true
           auth_strategy: keystone
