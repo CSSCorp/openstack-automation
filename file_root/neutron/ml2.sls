@@ -1,4 +1,4 @@
-{% from neutron.physical_networks.jinja import mappings, vlan_networks, flat_networks %}
+{% from "neutron/physical_networks.jinja" import mappings, vlan_networks, flat_networks %}
 
 neutron_ml2:
   pkg:
