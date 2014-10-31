@@ -93,7 +93,7 @@ nova-conf:
           admin_password: {{ pillar['keystone']['tenants']['service']['users']['nova']['password'] }}
           auth_host: {{ get_candidate('keystone') }}
         database: 
-          connection: "mysql://{{ pillar['mysql'][pillar['services']['nova']['db_name']]['username'] }}:{{ pillar['mysql'][pillar['services']['nova']['db_name']]['password'] }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ pillar['services']['nova']['db_name'] }}"
+          connection: "mysql://{{ salt['pillar.get']('databases:nova:username', default='nova') }}:{{ salt['pillar.get']('databases:nova:password', default='nova_pass') }}@{{ get_candidate('mysql') }}/{{ salt['pillar.get']('databases:nova:db_name', default='nova') }}"
      - require: 
       - pkg: nova-compute-install
       - pkg: nova-compute-kvm-install
