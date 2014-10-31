@@ -1,3 +1,5 @@
+{% from "cluster/resources.jinja" import get_candidate with context %}
+
 nova-compute-kvm-install: 
   pkg: 
     - installed
@@ -62,7 +64,7 @@ nova-conf:
     - sections: 
         DEFAULT: 
           vnc_enabled: True
-          rabbit_host: "{{ get_candidate('queue.%s' % salt['pillar.get']('queue_engine', default='rabbit') }}"
+          rabbit_host: "{{ get_candidate('queue.%s' % salt['pillar.get']('queue_engine', default='rabbit')) }}"
           my_ip: {{ grains['id'] }}
           vncserver_listen: 0.0.0.0
           glance_host: {{ get_candidate('glance') }}

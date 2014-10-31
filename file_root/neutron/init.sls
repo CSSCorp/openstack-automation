@@ -28,7 +28,7 @@ neutron-conf-file:
     - name: "{{ salt['pillar.get']('conf_files:neutron', default='/etc/neutron/neutron.conf') }}"
     - sections: 
         DEFAULT: 
-          rabbit_host: "{{ salt['cluster_ops.get_install_flavor']('queue.*') }}"
+          rabbit_host: "{{ get_candidate('queue.%s' % salt['pillar.get']('queue_engine', default='rabbit')) }}"
           auth_strategy: keystone
           rpc_backend: neutron.openstack.common.rpc.impl_kombu
           core_plugin: neutron.plugins.ml2.plugin.Ml2Plugin

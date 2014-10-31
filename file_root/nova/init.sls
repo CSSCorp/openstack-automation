@@ -1,3 +1,5 @@
+{% from "cluster/resources.jinja" import get_candidate with context %}
+
 nova-api-install:
   pkg:
     - installed
@@ -124,7 +126,7 @@ nova-conf:
     - sections: 
 	      DEFAULT: 
 	        auth_strategy: "keystone"
-	        rabbit_host: "{{ get_candidate('queue.%s' % salt['pillar.get']('queue_engine', default='rabbit') }}"
+	        rabbit_host: "{{ get_candidate('queue.%s' % salt['pillar.get']('queue_engine', default='rabbit')) }}"
 	        my_ip: "{{ grains['id'] }}"
 	        vncserver_listen: "{{ get_candidate('nova') }}"
 	        vncserver_proxyclient_address: "{{ get_candidate('nova') }}"
