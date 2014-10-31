@@ -38,7 +38,7 @@ nova-compute-conf:
 {% if 'virt.is_hyper' in salt and salt['virt.is_hyper'] %}
         libvirt_type: kvm
 {% else %}
-  libvirt_type: qemu
+        libvirt_type: qemu
 {% endif %}
     - require: 
       - pkg: nova-compute-install
