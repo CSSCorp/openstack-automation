@@ -15,7 +15,7 @@ neutron-dhcp-agent-running:
       - ini: neutron-service-neutron-conf
       - file: neutron-service-neutron-conf
 
-neutron-dhcp-agent-config
+neutron-dhcp-agent-config:
   file: 
     - managed
     - name: "{{ salt['pillar.get']('conf_files:neutron_dhcp_agent', default='/etc/neutron/dhcp_agent.ini') }}"
