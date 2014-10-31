@@ -94,7 +94,7 @@ nova-conf:
           auth_host: {{ get_candidate('keystone') }}
         database: 
           connection: "mysql://{{ salt['pillar.get']('databases:nova:username', default='nova') }}:{{ salt['pillar.get']('databases:nova:password', default='nova_pass') }}@{{ get_candidate('mysql') }}/{{ salt['pillar.get']('databases:nova:db_name', default='nova') }}"
-     - require: 
+    - require: 
       - pkg: nova-compute-install
       - pkg: nova-compute-kvm-install
 
