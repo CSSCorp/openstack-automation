@@ -29,6 +29,7 @@ packages:
   nova_compute: nova-compute
   nova_compute_kvm: nova-compute-kvm
   python_guestfs: python-guestfs
+
 services:
   mysql: mysql
   rabbitmq: rabbitmq
