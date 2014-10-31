@@ -130,7 +130,7 @@ nova-conf:
 	        my_ip: "{{ grains['id'] }}"
 	        vncserver_listen: "{{ get_candidate('nova') }}"
 	        vncserver_proxyclient_address: "{{ get_candidate('nova') }}"
-	        rpc_backend: "{{ pillar['queue-engine'] }}"
+	        rpc_backend: "{{ pillar['queue_engine'] }}"
 	        network_api_class: "nova.network.neutronv2.api.API"
 	        neutron_url: "http://{{ get_candidate('neutron') }}:9696"
 	        neutron_auth_strategy: "keystone"
