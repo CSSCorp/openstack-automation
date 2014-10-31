@@ -6,7 +6,7 @@ nova-api-install:
     - name: "{{ salt['pillar.get']('packages:nova_api', default='nova-api') }}"
 
 nova-api-running:
-  service
+  service:
     - running
     - name: "{{ salt['pillar.get']('services:nova_api', default='nova-api') }}"
     - watch
