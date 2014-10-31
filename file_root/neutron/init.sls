@@ -1,3 +1,5 @@
+{% from "cluster/resources.jinja" import get_candidate with context %}
+
 neutron-server-install: 
   pkg: 
     - installed

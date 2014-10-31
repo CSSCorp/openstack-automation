@@ -1,3 +1,4 @@
+{% from "cluster/resources.jinja" import get_candidate with context %}
 neutron-dhcp-agent-install: 
   pkg: 
     - installed
