@@ -57,7 +57,7 @@ nova-conf:
     - password: nova
     - mode: 644
     - require: 
-       ini: nova-conf
+      - ini: nova-conf
   ini: 
     - options_present
     - name: {{ salt['pillar.get']('conf_files:nova', default='/etc/nova/nova.conf') }}
