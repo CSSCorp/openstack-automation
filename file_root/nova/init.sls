@@ -9,7 +9,7 @@ nova-api-running:
   service:
     - running
     - name: "{{ salt['pillar.get']('services:nova_api', default='nova-api') }}"
-    - watch
+    - watch:
       - pkg: nova-api-install
       - ini: nova-conf
       - file: nova-conf
@@ -23,7 +23,7 @@ nova-conductor-running:
   service:
     - running
     - name: "{{ salt['pillar.get']('services:nova_conductor', default='nova-conductor') }}"
-    - watch
+    - watch:
       - pkg: nova-conductor-install
       - ini: nova-conf
       - file: nova-conf
