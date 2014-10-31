@@ -20,6 +20,15 @@ packages:
   neutron_dhcp_agent: neutron-dhcp-agent
   neutron_l3_agent: neutron-l3-agent
   neutron_metadata_agent: neutron-metadata-agent
+  nova_api: nova-api
+  nova_conductor: nova-conductor
+  nova_scheduler: nova-scheduler
+  nova_cert: nova-cert
+  nova_consoleauth: nova-consoleauth
+  nova_novncproxy: nova-novncproxy
+  nova_compute: nova-compute
+  nova_compute_kvm: nova-compute-kvm
+  python_guestfs: python-guestfs
 services:
   mysql: mysql
   rabbitmq: rabbitmq
@@ -38,6 +47,14 @@ services:
   neutron_dhcp_agent: neutron-dhcp-agent
   neutron_l3_agent: neutron-l3-agent
   neutron_metadata_agent: neutron-metadata-agent
+  nova_api: nova-api
+  nova_conductor: nova-conductor
+  nova_scheduler: nova-scheduler
+  nova_cert: nova-cert
+  nova_consoleauth: nova-consoleauth
+  nova_novncproxy: nova-novncproxy
+  nova_compute: nova-compute
+
 conf_files:
   mysql: "/etc/mysql/my.cnf"
   keystone: "/etc/keystone/keystone.conf"
@@ -53,3 +70,5 @@ conf_files:
   neutron_l3_agent: "/etc/neutron/l3_agent.ini"
   neutron_metadata_agent: "/etc/neutron/metadata_agent.ini"
   syslinux: "/etc/sysctl.conf"
+  nova: "/etc/nova/nova.conf"
+  nova_compute: "/etc/nova/nova-compute.conf"
