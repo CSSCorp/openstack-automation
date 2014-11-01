@@ -1,3 +1,5 @@
+{% from "cluster/resources.jinja" import get_candidate with context %}
+
 cinder_api_pkg:
   pkg:
     - installed

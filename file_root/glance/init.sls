@@ -1,3 +1,4 @@
+{% from "cluster/resources.jinja" import get_candidate with context %}
 glance-pkg-install:
   pkg: 
     - installed

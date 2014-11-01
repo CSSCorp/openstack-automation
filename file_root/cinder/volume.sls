@@ -1,3 +1,4 @@
+{% from "cluster/resources.jinja" import get_candidate with context %}
 lvm_pkg_install:
   pkg:
     - installed
