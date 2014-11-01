@@ -1,4 +1,4 @@
-{{ from "cluster/resources.jinja" import get_candidate }}
+{% from "cluster/resources.jinja" import get_candidate with context %}
 keystone-pkg-install: 
   pkg: 
     - installed

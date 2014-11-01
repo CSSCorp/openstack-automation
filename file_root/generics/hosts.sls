@@ -1,4 +1,4 @@
-{% for server in salt['piller.get']('hosts', default={}) %}
+{% for server in salt['pillar.get']('hosts', default={}) %}
 {{ server }}:
   host
     - present

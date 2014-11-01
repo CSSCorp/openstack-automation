@@ -9,8 +9,8 @@
 {{ server }}-{{ database_name }}-accounts:
   mysql_user:
     - present
-    - name: {{ pillar['databases'][openstack_service][database_name]['username'] }}
-    - password: {{ pillar['databases'][openstack_service][database_name]['password'] }}
+    - name: {{ pillar['databases'][openstack_service]['username'] }}
+    - password: {{ pillar['databases'][openstack_service]['password'] }}
     - host: {{ server }}
     - require:
       - mysql_database: {{ database_name }}-db
@@ -18,8 +18,8 @@
     - present
     - grant: all
     - database: {{ database_name }}
-    - user: {{ pillar['databases'][openstack_service][database_name]['username'] }}
-    - password: {{ pillar['databases'][openstack_service][database_name]['password'] }}
+    - user: {{ pillar['databases'][openstack_service]['username'] }}
+    - password: {{ pillar['databases'][openstack_service]['password'] }}
     - require:
       - mysql_user: {{ server }}-{{ database_name }}-accounts
 {% endfor %}
