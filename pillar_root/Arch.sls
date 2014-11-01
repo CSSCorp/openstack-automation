@@ -14,7 +14,7 @@ packages:
   memcached: memcached
   dashboard: openstack-dashboard
   neutron_server: neutron-server
-  neutron_ml2: neutron-common
+  neutron_ml2: neutron-plugin-ml2
   neutron_l2_agent: neutron-plugin-openvswitch-agent
   openvswitch: openvswitch-switch
   neutron_dhcp_agent: neutron-dhcp-agent

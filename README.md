@@ -32,7 +32,6 @@ What we saw above is the [pillar](http://docs.saltstack.com/topics/pillar/ "Salt
 Please go through [salt walkthrough](http://docs.saltstack.com/en/latest/topics/tutorials/walkthrough.html "walkthrough") to understand how salt works. When you are ready to install openstack modify the [salt-master configuration](http://docs.saltstack.com/en/latest/ref/configuration/master.html "salt-master configuration") file at "/etc/salt/master" to hold the below contents.
 
 <pre>
-
 fileserver_backend:
   - roots
   - git
@@ -41,7 +40,8 @@ gitfs_remotes:
   - root: file_root
 ext_pillar:
   - git: juno https://github.com/Akilesh1597/salt-openstack.git root=pillar_root
-
+jinja_trim_blocks: True
+jinja_lstrip_blocks: True
 </pre>
 This will create a new [environment](http://docs.saltstack.com/ref/file_server/index.html#environments "Salt Environments") called "juno" in your state tree. The 'file_roots' directory of the github repo will have [state definitions](http://docs.saltstack.com/topics/tutorials/starting_states.html "Salt States") in a bunch of '.sls' files and the few special directories, while the 'pillar_root' directory has your cluster definition files. 
 
