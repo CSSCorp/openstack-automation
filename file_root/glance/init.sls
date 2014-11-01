@@ -36,18 +36,18 @@ glance-api-conf:
     - name: "{{ salt['pillar.get']('conf_files:glance_api', default="/etc/glance/glance-api.conf") }}"
     - sections: 
         database: 
-          connection: "mysql://{{ salt['pillar.get']('databases:glance:username', default='glance') }}:{{ salt['pillar.get']('databases:glance:password', default='glance_pass') }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('databases:glance:db_name', default='glance') }}"
+          connection: "mysql://{{ salt['pillar.get']('databases:glance:username', default='glance') }}:{{ salt['pillar.get']('databases:glance:password', default='glance_pass') }}@{{ get_candidate('mysql') }}/{{ salt['pillar.get']('databases:glance:db_name', default='glance') }}"
         DEFAULT: 
-          rpc_backend: "{{ salt['cluster_ops.get_install_flavor']('queue.*') }}"
-          rabbit_host: "{{ salt['cluster_ops.get_candidate']('queue.*') }}"
+          rpc_backend: "{{ salt['pillar.get']('queue_engine', default='rabbit') }}"
+          rabbit_host: "{{ get_candidate('queue.%s' % salt['pillar.get']('queue_engine', default='rabbit')) }}"
         keystone_authtoken: 
-          auth_uri: "http://{{ salt['cluster_ops.get_candidate']('keystone') }}:5000"
+          auth_uri: "http://{{ get_candidate('keystone') }}:5000"
           auth_port: 35357
           auth_protocol: http
           admin_tenant_name: service
           admin_user: glance
           admin_password: "{{ pillar['keystone']['tenants']['service']['users']['glance']['password'] }}"
-          auth_host: "{{ salt['cluster_ops.get_candidate']('keystone') }}"
+          auth_host: "{{ get_candidate('keystone') }}"
         paste_deploy: 
           flavor: keystone
     - require: 
@@ -67,18 +67,18 @@ glance-registry-conf:
     - name: "{{ salt['pillar.get']('conf_files:glance_registry', default="/etc/glance/glance-registry.conf") }}"
     - sections: 
         database: 
-          connection: "mysql://{{ salt['pillar.get']('databases:glance:username', default='glance') }}:{{ salt['pillar.get']('databases:glance:password', default='glance_pass') }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('databases:glance:db_name', default='glance') }}"
+          connection: "mysql://{{ salt['pillar.get']('databases:glance:username', default='glance') }}:{{ salt['pillar.get']('databases:glance:password', default='glance_pass') }}@{{ get_candidate('mysql') }}/{{ salt['pillar.get']('databases:glance:db_name', default='glance') }}"
         DEFAULT: 
-          rpc_backend: "{{ salt['cluster_ops.get_install_flavor']('queue.*') }}"
-          rabbit_host: "{{ salt['cluster_ops.get_candidate']('queue.*') }}"
+          rpc_backend: "{{ salt['pillar.get']('queue_engine', default='rabbit') }}"
+          rabbit_host: "{{ get_candidate('queue.%s' % salt['pillar.get']('queue_engine', default='rabbit')) }}"
         keystone_authtoken: 
-          auth_uri: "http://{{ salt['cluster_ops.get_candidate']('keystone') }}:5000"
+          auth_uri: "http://{{ get_candidate('keystone') }}:5000"
           auth_port: 35357
           auth_protocol: http
           admin_tenant_name: service
           admin_user: glance
           admin_password: "{{ pillar['keystone']['tenants']['service']['users']['glance']['password'] }}"
-          auth_host: "{{ salt['cluster_ops.get_candidate']('keystone') }}"
+          auth_host: "{{ get_candidate('keystone') }}"
         paste_deploy: 
           flavor: keystone
     - require: 

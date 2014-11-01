@@ -25,19 +25,19 @@ cinder_config_file:
     - sections:
         DEFAULT:
           rpc_backend: rabbit
-          rabbit_host: "{{ salt['cluster_ops.get_install_flavor']('queue.*') }}"
+          rabbit_host: "{{ salt['pillar.get']('queue_engine', default='rabbit') }}"
           rabbit_port: 5672
-          cinder_host: "{{ salt['cluster_ops.get_candidate']('glance') }}"
+          cinder_host: "{{ get_candidate('glance') }}"
         database:
-          connection: "mysql://{{ salt['pillar.get']('databases:cinder:username', default='cinder') }}:{{ salt['pillar.get']('databases:cinder:password', default='cinder_pass') }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('databases:cinder:db_name', default='cinder') }}"
+          connection: "mysql://{{ salt['pillar.get']('databases:cinder:username', default='cinder') }}:{{ salt['pillar.get']('databases:cinder:password', default='cinder_pass') }}@{{ get_candidate('mysql') }}/{{ salt['pillar.get']('databases:cinder:db_name', default='cinder') }}"
         keystone_authtoken:
-          auth_uri: "{{ salt['cluster_ops.get_candidate']('keystone') }}:5000"
+          auth_uri: "{{ get_candidate('keystone') }}:5000"
           auth_port: 35357
           auth_protocol: http
           admin_tenant_name: service
           admin_user: cinder
           admin_password: "{{ pillar['keystone']['tenants']['service']['users']['cinder']['password'] }}"
-          auth_host: "{{ salt['cluster_ops.get_candidate']('keystone') }}"
+          auth_host: "{{ get_candidate('keystone') }}"
     - require:
       - file: cinder_config_file
 
