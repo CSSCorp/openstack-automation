@@ -1,4 +1,4 @@
-{{ from "cluster/resources.jinja" import get_candidate }}
+{% from "cluster/resources.jinja" import get_candidate with context %}
 
 {% for service_name in pillar['keystone']['services'] %}
 {{ service_name }}_service:
