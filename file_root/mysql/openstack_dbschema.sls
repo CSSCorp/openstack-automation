@@ -1,25 +1,25 @@
 {% from "cluster/resources.jinja" import hosts with context %}
 {% for openstack_service in pillar['databases'] %}
-{{ database_name }}-db:
+{{ openstack_service }}-db:
   mysql_database:
     - present
-    - name: {{ database_name }}
+    - name: {{ pillar['databases'][openstack_service]['db_name'] }}
 {% for server in hosts %}
-{{ server }}-{{ database_name }}-accounts:
+{{ server }}-{{ openstack_service }}-accounts:
   mysql_user:
     - present
     - name: {{ pillar['databases'][openstack_service]['username'] }}
     - password: {{ pillar['databases'][openstack_service]['password'] }}
     - host: {{ server }}
     - require:
-      - mysql_database: {{ database_name }}-db
+      - mysql_database: {{ openstack_service }}-db
   mysql_grants:
     - present
     - grant: all
-    - database: {{ database_name }}
+    - database: {{ pillar['databases'][openstack_service]['db_name'] }}
     - user: {{ pillar['databases'][openstack_service]['username'] }}
     - password: {{ pillar['databases'][openstack_service]['password'] }}
     - require:
-      - mysql_user: {{ server }}-{{ database_name }}-accounts
+      - mysql_user: {{ server }}-{{ openstack_service }}-accounts
 {% endfor %}
 {% endfor %}
