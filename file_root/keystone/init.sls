@@ -1,3 +1,4 @@
+{{ from "cluster/resources.jinja" import get_candidate }}
 keystone-pkg-install: 
   pkg: 
     - installed
@@ -27,7 +28,7 @@ keystone-conf-file:
           DEFAULT: 
             admin_token: {{ salt['pillar.get']('keystone.admin_token', default='ADMIN') }}
           sql: 
-            connection: mysql://{{ salt['pillar.get']('databases:keystone:username', default='keystone') }}:{{ salt['pillar.get']('databases:keystone:password', default='keystone_pass') }}@{{ salt['cluster_ops.get_candidate']('mysql') }}/{{ salt['pillar.get']('databases:keystone:db_name', default='keystone') }}
+            connection: mysql://{{ salt['pillar.get']('databases:keystone:username', default='keystone') }}:{{ salt['pillar.get']('databases:keystone:password', default='keystone_pass') }}@{{ get_candidate('mysql') }}/{{ salt['pillar.get']('databases:keystone:db_name', default='keystone') }}
       - require: 
           - file: keystone-conf-file
 

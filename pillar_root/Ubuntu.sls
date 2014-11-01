@@ -1,4 +1,5 @@
 packages:
+  linux-headers: linux-headers-{{ grains['kernelrelease'] }}
   mysql-client: mysql-client
   python-mysql-library: python-mysqldb
   mysql-server: mysql-server

@@ -203,7 +203,6 @@ Adding new compute node
 Adding a new machine to a cluster is as easy as editing a json file. All you have to do is edit 'pillar/openstack_cluster.sls' as below.
 
 <pre>
-
 compute: 
   - "compute1.juno"
   - "compute2.juno"
@@ -228,7 +227,7 @@ Defines the openstack authentication parameters, which include keystone tenants,
 
 openstack_cluster
 =================
-Defines some general configuration for the cluster to be deployed. For example "pkg_proxy_url" defines the proxy server to be used to download packages. Do not define this parameter if you do not use any proxy. The hosts section defines the list of hosts on which the installation is to be carried on and their ip addresses. The presence of this section ensures that these hosts are configured in the "known hosts" file on the servers.
+Defines some general configuration for the cluster to be deployed. For example "pkg_proxy_url" defines the proxy server to be used to download packages. Do not define this parameter if you do not use any proxy. The hosts section defines the list of hosts on which the installation is to be carried on and their ip addresses. The presence of this section ensures that these hosts are configured in the "known hosts" file on the servers. Finally you also define the "queue" and "database" backend.
 
 
 network_resources
@@ -239,15 +238,13 @@ Defines configuration that define the openstack ["Data" and "External" networks]
 neutron: 
   intergration_bridge: br-int
   metadata_secret: "414c66b22b1e7a20cc35"
-  tenant_network_types: 
-    - "gre"
-    - "flat"
   type_drivers: 
     flat: 
-      network.juno: 
+      physnets: 
         External: 
           bridge: "br-ex"
-          interface: "eth3"
+          hosts:
+            network.juno: "eth3"
     gre:
       tunnel_start: "1"
       tunnel_end: "1000"
@@ -258,15 +255,13 @@ Choosing the vxlan mode is not difficult either.
 neutron: 
   intergration_bridge: br-int
   metadata_secret: "414c66b22b1e7a20cc35"
-  tenant_network_types: 
-    - "vxlan"
-    - "flat"
   type_drivers: 
     flat: 
-      network.juno: 
+      physnets: 
         External: 
           bridge: "br-ex"
-          interface: "eth3"
+          hosts:
+            network.juno: "eth3"
     vxlan:
       tunnel_start: "1"
       tunnel_end: "1000"
@@ -278,26 +273,26 @@ For vlan mode tenant networks, you need to add 'vlan' under 'tenant_network_type
 neutron: 
   intergration_bridge: br-int
   metadata_secret: "414c66b22b1e7a20cc35"
-  tenant_network_types: 
-    - "vlan"
-    - "flat"
   type_drivers: 
     flat: 
-      network.juno: 
+      physnets: 
         External: 
           bridge: "br-ex"
-          interface: "eth3"
-      compute1.juno:
-        Physnet1:
+          hosts:
+            network.juno: "eth3"
+    vlan: 
+      physnets: 
+        Internal1: 
           bridge: "br-eth1"
-          interface: "eth1"
           vlan_range: "100:200"
-        Physnet2:
+          hosts:
+            network.juno: "eth2"
+            compute1.juno: "eth2"
+            compute2.juno: "eth2"
+        Internal2:
           bridge: "br-eth2"
-          interface: "eth2"
           vlan_range: "200:300"
-      compute2.juno:
-          bridge: "br-eth1"
-          interface: "eth1"
-          vlan_range: "100:200"
+          hosts:
+            network.juno: "eth4"
+            compute3.juno: "eth2"
 </pre>

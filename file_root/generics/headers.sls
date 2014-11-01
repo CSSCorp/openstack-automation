@@ -1,6 +1,5 @@
-{% if grains['os'] == 'Ubuntu' %}
 linux-headers-install:
   pkg:
     - installed
-    - name: linux-headers-{{ grains['kernelrelease'] }}
-{% endif %}
+    - name: {{ salt['pillar.get']('packages:linux-headers') }}
+
