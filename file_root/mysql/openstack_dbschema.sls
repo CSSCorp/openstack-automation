@@ -1,6 +1,5 @@
 {% from "cluster/resources.jinja" import hosts with context %}
 {% for openstack_service in pillar['databases'] %}
-{% for database_name in pillar['databases'][openstack_service] %}
 {{ database_name }}-db:
   mysql_database:
     - present
@@ -22,6 +21,5 @@
     - password: {{ pillar['databases'][openstack_service]['password'] }}
     - require:
       - mysql_user: {{ server }}-{{ database_name }}-accounts
-{% endfor %}
 {% endfor %}
 {% endfor %}

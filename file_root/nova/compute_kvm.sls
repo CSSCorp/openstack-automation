@@ -16,8 +16,8 @@ nova-compute-running:
     - name: {{ salt['pillar.get']('services:nova_compute', default='nova-compute') }}
     - watch: 
       - pkg: nova-compute-install
-      - file: nova-conf
-      - ini: nova-conf
+      - file: nova-conf-compute
+      - ini: nova-conf-compute
       - file: nova-compute-conf
       - ini: nova-compute-conf
 
@@ -49,7 +49,7 @@ python-guestfs-install:
     - installed
     - name: {{ salt['pillar.get']('packages:python_guestfs', default='python-guestfs') }}
 
-nova-conf: 
+nova-conf-compute: 
   file: 
     - managed
     - name: {{ salt['pillar.get']('conf_files:nova', default='/etc/nova/nova.conf') }}
@@ -57,7 +57,7 @@ nova-conf:
     - password: nova
     - mode: 644
     - require: 
-      - ini: nova-conf
+      - ini: nova-conf-compute
   ini: 
     - options_present
     - name: {{ salt['pillar.get']('conf_files:nova', default='/etc/nova/nova.conf') }}

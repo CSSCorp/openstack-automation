@@ -95,7 +95,7 @@ nova-novncproxy-running:
       - file: nova-conf
 
 {% if 'db_sync' in salt['pillar.get']('databases:nova', default=()) %}
-glance_sync: 
+nova_sync: 
   cmd: 
     - run
     - name: "{{ salt['pillar.get']('databases:nova:db_sync') }}"

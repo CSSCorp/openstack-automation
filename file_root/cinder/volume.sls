@@ -27,7 +27,7 @@ cinder_volume_package:
     - require:
       - pkg: lvm_pkg_install
 
-cinder_config_file:
+cinder_config_file_volume:
   file:
     - managed
     - name: "{{ salt['pillar.get']('conf_files:cinder', default='/etc/cinder/cinder.conf') }}"
@@ -35,7 +35,7 @@ cinder_config_file:
     - group: cinder
     - mode: 644
     - require: 
-      - pkg: cinder_volume_package
+      - ini: cinder_config_file_volume
   ini:
     - options_present
     - name: "{{ salt['pillar.get']('conf_files:cinder', default='/etc/cinder/cinder.conf') }}"
@@ -56,18 +56,20 @@ cinder_config_file:
           admin_password: "{{ pillar['keystone']['tenants']['service']['users']['cinder']['password'] }}"
           auth_host: "{{ get_candidate('keystone') }}"
     - require:
-      - file: cinder_config_file
+      - pkg: cinder_volume_package
 
 cinder_volume_service:
   service:
     - running
     - name: "{{ salt['pillar.get']('services:cinder_volume', default='cinder-volume') }}"
     - watch:
-      - ini: cinder_config_file
+      - ini: cinder_config_file_volume
+      - file: cinder_config_file_volume
 
 cinder_iscsi_target_service:
   service:
     - running
     - name: "{{ salt['pillar.get']('services:iscsi_target', default='tgt') }}"
     - watch:
-      - ini: cinder_config_file
+      - ini: cinder_config_file_volume
+      - file: cinder_config_file_volume

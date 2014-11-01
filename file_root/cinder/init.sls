@@ -19,8 +19,7 @@ cinder_config_file:
     - group: cinder
     - mode: 644
     - require: 
-      - pkg: cinder_api_pkg
-      - pkg: cinder_scheduler_pkg
+      - ini: cinder_config_file
   ini:
     - options_present
     - name: "{{ salt['pillar.get']('conf_files:cinder', default='/etc/cinder/cinder.conf') }}"
@@ -41,7 +40,8 @@ cinder_config_file:
           admin_password: "{{ pillar['keystone']['tenants']['service']['users']['cinder']['password'] }}"
           auth_host: "{{ get_candidate('keystone') }}"
     - require:
-      - file: cinder_config_file
+      - pkg: cinder_api_pkg
+      - pkg: cinder_scheduler_pkg
 
 
 {% if 'db_sync' in salt['pillar.get']('databases:cinder', default=()) %}
@@ -61,6 +61,7 @@ cinder-api-service:
     - name: "{{ salt['pillar.get']('services:cinder_api', default='cinder-api') }}"
     - watch:
       - ini: cinder_config_file
+      - file: cinder_config_file
 
 cinder-scheduler-service:
   service:
@@ -68,3 +69,4 @@ cinder-scheduler-service:
     - name: "{{ salt['pillar.get']('services:cinder_scheduler', default='cinder-scheduler') }}"
     - watch:
       - ini: cinder_config_file
+      - file: cinder_config_file
