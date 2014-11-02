@@ -73,12 +73,17 @@ nova-consoleauth-running:
 python-novaclient:
   pkg:
     - installed
+    - name: "{{ salt['pillar.get']('packages:nova_pythonclient', default='python-novaclient') }}"
+
 nova-ajax-console-proxy:
   pkg:
     - installed
+    - name: "{{ salt['pillar.get']('packages:nova_ajax_console_proxy', default='nova-ajax-console-proxy') }}"
+
 novnc:
   pkg:
     - installed
+    - name: "{{ salt['pillar.get']('packages:novnc', default='novnc') }}"
 
 nova-novncproxy-install:
   pkg:

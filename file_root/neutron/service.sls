@@ -136,7 +136,7 @@ networking-service:
 neutron-service-neutron-conf:
   file: 
     - managed
-    - name: "{{ salt['pillar.get']('conf_files:neutron_l3_agent', default='/etc/neutron/l3_agent.ini') }}"
+    - name: "{{ salt['pillar.get']('conf_files:neutron', default='/etc/neutron/neutron.conf') }}"
     - user: neutron
     - group: neutron
     - mode: 644
@@ -150,8 +150,8 @@ neutron-service-neutron-conf:
           rabbit_host: "{{ get_candidate('queue.%s' % salt['pillar.get']('queue_engine', default='rabbit')) }}"
           auth_strategy: keystone
           rpc_backend: neutron.openstack.common.rpc.impl_kombu
-          core_plugin: ml2
-          service_plugins: router
+          core_plugin: neutron.plugins.ml2.plugin.Ml2Plugin
+          service_plugins: neutron.services.l3_router.l3_router_plugin.L3RouterPlugin
           allow_overlapping_ips: True
           verbose: True
         keystone_authtoken: 

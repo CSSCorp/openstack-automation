@@ -29,7 +29,7 @@ l2-agent-config-file:
 l2-agent-neutron-config-file: 
   file: 
     - managed
-    - name: "{{ salt['pillar.get']('conf_files:neutron_l2_agent', default='/etc/neutron/neutron.conf') }}"
+    - name: "{{ salt['pillar.get']('conf_files:neutron', default='/etc/neutron/neutron.conf') }}"
     - group: neutron
     - user: neutron
     - mode: 644
@@ -37,7 +37,7 @@ l2-agent-neutron-config-file:
       - ini: l2-agent-neutron-config-file
   ini: 
     - options_present
-    - name: "{{ salt['pillar.get']('conf_files:neutron_l2_agent', default='/etc/neutron/neutron.conf') }}"
+    - name: "{{ salt['pillar.get']('conf_files:neutron', default='/etc/neutron/neutron.conf') }}"
     - sections: 
         DEFAULT: 
           rabbit_host: "{{ get_candidate('queue.%s' % salt['pillar.get']('queue_engine', default='rabbit')) }}"

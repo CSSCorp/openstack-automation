@@ -1,5 +1,5 @@
 packages:
-  linux-headers: linux-headers-{{ grains['kernelrelease'] }}
+  linux-headers: linux-headers-{{ grains['kernelrelease'][:-5] }}
   mysql-client: mysql-client
   python-mysql-library: python-mysqldb
   mysql-server: mysql-server
@@ -30,6 +30,9 @@ packages:
   nova_compute: nova-compute
   nova_compute_kvm: nova-compute-kvm
   python_guestfs: python-guestfs
+  nova_pythonclient: python-novaclient
+  nova_ajax_console_proxy: nova-ajax-console-proxy
+  novnc: novnc
 
 services:
   mysql: mysql

@@ -41,8 +41,8 @@ cinder_config_file_volume:
     - name: "{{ salt['pillar.get']('conf_files:cinder', default='/etc/cinder/cinder.conf') }}"
     - sections:
         DEFAULT:
-          rpc_backend: rabbit
-          rabbit_host: "{{ salt['pillar.get']('queue_engine', default='rabbit') }}"
+          rpc_backend: "{{ salt['pillar.get']('queue_engine', default='rabbit') }}"
+          rabbit_host: "{{ get_candidate('queue.%s' % salt['pillar.get']('queue_engine', default='rabbit')) }}"
           rabbit_port: 5672
           glance_host: "{{ get_candidate('glance') }}"
         database:
