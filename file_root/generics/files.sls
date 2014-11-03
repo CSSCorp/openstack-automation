@@ -3,6 +3,6 @@
   file:
     - managed
 {% for file_option in pillar['files'][file_required] %}
-    - {{ file_option }}: {{ pillar['files'][file_required][file_option]
+    - {{ file_option }}: {{ pillar['files'][file_required][file_option] }}
 {% endfor %}
 {% endfor %}
