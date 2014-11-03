@@ -1,9 +1,4 @@
 
-enable distro support
-define packages , services and config file locations in Ubuntu.sls
-replace packages
-replace services names
-replace config file locations
 replace require conditions
 
 
