@@ -6,7 +6,7 @@ pkgrepo:
     Juno-Cloud:
       name: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/juno main"
       file: "/etc/apt/sources.list.d/cloudarchive-juno.list"
-  post_repo_addition:
+  post_repo_additions:
     - "python-argparse"
     - "iproute"
     - "python-crypto"

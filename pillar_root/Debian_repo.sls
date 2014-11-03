@@ -10,7 +10,7 @@ pkgrepo:
       name: "deb http://archive.gplhost.com/debian juno-backports main"
       file: "/etc/apt/sources.list.d/gplhost-juno.list"
       human_name: "GPLHost Juno Backports packages"
-  post_repo_addition:
+  post_repo_additions:
     - "python-argparse"
     - "iproute"
     - "python-crypto"
