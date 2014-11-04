@@ -31,7 +31,7 @@ packages:
   nova_compute_kvm: nova-compute-kvm
   python_guestfs: python-guestfs
   nova_pythonclient: python-novaclient
-  nova_ajax_console_proxy: nova-ajax-console-proxy
+  nova_ajax_console_proxy: novnc
   novnc: novnc
 
 services:
