@@ -6,7 +6,5 @@ juno:
     - network_resources
     - openstack_cluster
     - deploy_files
-  "os:{{ grains['os'] }}":
-    - match: grain
-    - "{{ grains['os'] }}"
-    - "{{ grains['os'] }}_repo"
+    - {{ grains['os'] }}
+    - {{ grains['os'] }}_repo

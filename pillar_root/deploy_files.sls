@@ -3,6 +3,6 @@ files:
   gpl_host_pinning:
     name: /etc/apt/preferences.d/gplhost
     contents: |
-      "Package: *
-      Pin: origin archive.gplhost.com
+      "Package: *\n
+      Pin: origin archive.gplhost.com\n
       Pin-Priority: 999"
