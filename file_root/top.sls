@@ -5,3 +5,4 @@ juno:
 {% for formula in formulas %}
     - {{ formula }}
 {% endfor %}
+    - postinstall.misc_options

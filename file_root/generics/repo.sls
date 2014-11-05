@@ -25,7 +25,7 @@
 {% for package in salt['pillar.get']('pkgrepo:post_repo_additions', default=()) %}
 {{ package }}-install:
   pkg:
-    - installed
+    - latest
     - name: {{ package }}
 {% if salt['pillar.get']('pkgrepo:repos', default=()) %}
     - require:

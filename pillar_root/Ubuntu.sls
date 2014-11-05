@@ -62,6 +62,7 @@ services:
 
 conf_files:
   mysql: "/etc/mysql/my.cnf"
+  rabbitmq: "/etc/rabbitmq/rabbitmq-env.conf"
   keystone: "/etc/keystone/keystone.conf"
   glance_api: "/etc/glance/glance-api.conf"
   glance_registry: "/etc/glance/glance-registry.conf"
