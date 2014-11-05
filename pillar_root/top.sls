@@ -8,3 +8,4 @@ juno:
     - deploy_files
     - {{ grains['os'] }}
     - {{ grains['os'] }}_repo
+    - misc_openstack_options
