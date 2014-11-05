@@ -1,4 +1,9 @@
-This project is under development. Please do not use this. Check this section soon for a stable release.
+1. All branches except the master shall be removed
+2. Pull request to this branch should not have any changes made in pillar_root sub directory
+3. 'yaml' will be default format for sls files. This is done as maintaining sls files across format is causing mismatches and errors
+4. Support for cinder added but yet to be tested
+5. Repo will be modified in a way to enable users to use the repo directly as salt gitfs backend
+6. Support will be added to pillar file to make the project distro agnostic. New pillar files Ubuntu.sls adds configuration specific to ubuntu. The file has to be ported for each distro.
 
 openstack-automation
 ====================
