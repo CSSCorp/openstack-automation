@@ -1,6 +1,5 @@
 {% from "cluster/resources.jinja" import get_candidate with context %}
 {% from "cluster/physical_networks.jinja" import bridges with context %}
-{% from "cluster/physical_networks.jinja" import get_interface_name with context %}
 neutron-l2-agent-install: 
   pkg: 
     - installed
@@ -82,13 +81,19 @@ bridge-{{ bridge }}-create:
     - unless: "ovs-vsctl br-exists {{ bridge }}"
     - require: 
       - service: openvswitch-switch-running
-{% if get_interface_name(bridges[bridge]) %}
+{% if bridges[bridge] %}
 {{ bridge }}-interface-add:
   cmd:
     - run
-    - name: "ovs-vsctl add-port {{ bridge }} {{ get_interface_name(bridges[bridge]) }}"
-    - unless: "ovs-vsctl list-ports {{ bridge }} | grep {{ get_interface_name(bridges[bridge]) }}"
+    - name: "ovs-vsctl add-port {{ bridge }} {{ bridges[bridge] }}"
+    - unless: "ovs-vsctl list-ports {{ bridge }} | grep {{ bridges[bridge] }}"
     - require: 
       - cmd: "bridge-{{ bridge }}-create"
+  network:
+    - managed
+    - name: "{{ bridges[bridge] }}"
+    - enabled: True
+    - require:
+      - cmd: {{ bridge }}-interface-add
 {% endif %}
 {% endfor %}

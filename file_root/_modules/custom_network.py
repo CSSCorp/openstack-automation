@@ -7,6 +7,13 @@ Created on Thu Nov  6 19:11:56 2014
 import re
 import subprocess
 
+
+def get_interface_name(index):
+    ifaces = linux_interfaces()
+    for ifname in ifaces:
+        if index == ifaces[ifname]['index']:
+            return ifname
+
 def linux_interfaces():
     '''
     Obtain interface information for *NIX/BSD variants

@@ -7,15 +7,14 @@ neutron:
         External: 
           bridge: "br-ex"
           hosts:
-            #host id : ifindex
-            openstack.icehouse: 2
+            openstack.icehouse: "eth3"
     vlan: 
       physnets: 
         Internal1: 
           bridge: "br-eth1"
           vlan_range: "100:200"
           hosts:
-            openstack.icehouse: 1
+            openstack.icehouse: "eth2"
     gre:
       tunnel_start: "1"
       tunnel_end: "1000"
