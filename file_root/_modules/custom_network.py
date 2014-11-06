@@ -30,7 +30,7 @@ def _interfaces_ip(out):
     '''
     ret = dict()
 
-    groups = re.compile('\r?\n\\d').split(out)
+    groups = re.compile('\r?\n').split(out)
     for group in groups:
         iface = None
         data = dict()
