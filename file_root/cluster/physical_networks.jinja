@@ -36,3 +36,23 @@
 {% endfor %}
 {% endfor %}
 
+
+{% macro get_interface_name(ifindex) -%}
+{% set index = 0 %}
+{% for interface in salt['network.interfaces']() %}
+{% if index == ifindex %}
+{{ interface }}{% endif %}
+{% do index+=1 %}
+{% endfor %}
+{%- endmacro %}
+
+
+{% macro get_interface_ip(ifindex) -%}
+{% set index = 0 %}
+{% for interface in salt['network.interfaces']() %}
+{% if index == ifindex %}
+{{ salt['network.ipaddrs'](interface) }}{% endif %}
+{% do index+=1 %}
+{% endfor %}
+{%- endmacro %}
+
