@@ -6,14 +6,13 @@ Created on Thu Nov  6 19:11:56 2014
 """
 import re
 import subprocess
-import salt.utils.which
 
 def linux_interfaces():
     '''
     Obtain interface information for *NIX/BSD variants
     '''
     ifaces = dict()
-    ip_path = salt.utils.which('ip')
+    ip_path = 'ip'
     if ip_path:
         cmd1 = subprocess.Popen(
             '{0} link show'.format(ip_path),
