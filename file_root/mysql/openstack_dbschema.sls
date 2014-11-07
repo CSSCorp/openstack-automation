@@ -16,9 +16,10 @@
   mysql_grants:
     - present
     - grant: all
-    - database: {{ pillar['databases'][openstack_service]['db_name'] }}
+    - database: "{{ pillar['databases'][openstack_service]['db_name'] }}.*"
     - user: {{ pillar['databases'][openstack_service]['username'] }}
     - password: {{ pillar['databases'][openstack_service]['password'] }}
+    - host: {{ server }}
     - require:
       - mysql_user: {{ server }}-{{ openstack_service }}-accounts
 {% endfor %}
