@@ -137,7 +137,7 @@ veth-add-{{ bridges[bridge] }}-br-proxy:
     - unless: "ovs-vsctl list-ports {{ bridge }} | grep {{ bridges[bridge] }}"
     - require: 
       - cmd: "bridge-{{ bridge }}-create"
-{{ bridge[bridge] }}-interface-bring-up:
+{{ bridges[bridge] }}-interface-bring-up:
   cmd:
     - run
     - name: "ip link set {{ bridges[bridge] }} up promisc on"
