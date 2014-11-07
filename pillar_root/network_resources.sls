@@ -1,6 +1,9 @@
 neutron: 
   intergration_bridge: br-int
   metadata_secret: "414c66b22b1e7a20cc35"
+  # uncomment to bridge all interfaces to primary interface
+  # single_nic : primary_nic_name
+  # single_nic: "eth0"
   type_drivers: 
     flat: 
       physnets: 
@@ -18,8 +21,3 @@ neutron:
     gre:
       tunnel_start: "1"
       tunnel_end: "1000"
-
-
-
-
-

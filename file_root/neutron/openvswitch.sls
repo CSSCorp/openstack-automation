@@ -82,6 +82,20 @@ bridge-{{ bridge }}-create:
     - require: 
       - service: openvswitch-switch-running
 {% if bridges[bridge] %}
+{% if salt['pillar.get']('neutron:single_nic') %}
+{% if bridges[bridge] not in salt['network.interfaces']() %}
+veth-add-{{ bridges[bridge] }}:
+  cmd:
+    - run
+    - name: "ip link add {{ bridges[bridge] }} type veth peer name {{ bridges[bridge] }}-br-proxy"
+  network:
+    - managed
+    - name: "{{ bridges[bridge] }}-br-proxy"
+    - enabled: True
+    - require:
+      - cmd: veth-add-{{ bridges[bridge] }}
+{% endif %}
+{% endif %}
 {{ bridge }}-interface-add:
   cmd:
     - run
