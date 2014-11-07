@@ -1,6 +1,4 @@
 
-replace require conditions
-
 
 keystone.user: "admin"
 keystone.password: "admin_pass"
@@ -25,14 +23,7 @@ add documentation
 repo.sls , repo addition , pre repo addition  and post repo addition
 
 
-create support for adding miscelanous config file changes
-
-it should restart corresponding service, 
-
-but it should not disturb the ini.options_present state in the components regular sls file
-
 ssl version of dashboard
 
-open rabbitmq port
 
 

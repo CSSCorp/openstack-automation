@@ -4,8 +4,13 @@ neutron-l2-agent-install:
   pkg: 
     - installed
     - name: "{{ salt['pillar.get']('packages:neutron_l2_agent', default='neutron-plugin-openvswitch-agent') }}"
+{% if bridges %}
     - require: 
-      - module: create_init_bridges
+{% for bridge in bridges %}
+      - module: bridge-{{ bridge }}-create
+{% endfor %}
+{% endif %}
+
 
 neutron-l2-agent-running:
   service: 
