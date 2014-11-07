@@ -88,6 +88,12 @@ proxy-bridge-create-{{ bridge }}:
     - run
     - name: "ovs-vsctl add-br br-proxy"
     - unless "ovs-vsctl br-exists br-proxy"
+primary-nic-bring-up-{{ bridge }}:
+  cmd:
+    - run
+    - name: "ip link set {{ salt['pillar.get']('neutron:single_nic') }} up promisc on"
+    - require:
+      - cmd: proxy-bridge-create-{{ bridge }}
 {% if bridges[bridge] not in salt['network.interfaces']() %}
 remove-fake-{{ bridges[bridge] }}-interfaces:
   cmd:
@@ -110,12 +116,6 @@ veth-add-{{ bridges[bridge] }}:
     - require:
       - cmd: remove-fake-{{ bridges[bridge] }}-interfaces
       - cmd: remove-fake-{{ bridges[bridge] }}-br-proxy-interfaces
-veth-bring-up-{{ bridges[bridge] }}:
-  cmd:
-    - run
-    - name: "ip link set {{ bridges[bridge] }} up promisc on"
-    - require:
-      - cmd: veth-add-{{ bridges[bridge] }}
 veth-bring-up-{{ bridges[bridge] }}-br-proxy:
   cmd:
     - run
@@ -137,10 +137,10 @@ veth-add-{{ bridges[bridge] }}-br-proxy:
     - unless: "ovs-vsctl list-ports {{ bridge }} | grep {{ bridges[bridge] }}"
     - require: 
       - cmd: "bridge-{{ bridge }}-create"
-  network:
-    - managed
-    - name: "{{ bridges[bridge] }}"
-    - enabled: True
+{{ bridge[bridge] }}-interface-bring-up:
+  cmd:
+    - run
+    - name: "ip link set {{ bridges[bridge] }} up promisc on"
     - require:
       - cmd: {{ bridge }}-interface-add
 {% endif %}
