@@ -3,7 +3,7 @@ neutron:
   metadata_secret: "414c66b22b1e7a20cc35"
   # uncomment to bridge all interfaces to primary interface
   # single_nic : primary_nic_name
-  # single_nic: "eth0"
+  single_nic: "eth0"
   type_drivers: 
     flat: 
       physnets: 
