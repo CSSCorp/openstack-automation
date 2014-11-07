@@ -83,15 +83,49 @@ bridge-{{ bridge }}-create:
       - service: openvswitch-switch-running
 {% if bridges[bridge] %}
 {% if salt['pillar.get']('neutron:single_nic') %}
+proxy-bridge-create:
+  cmd:
+    - run
+    - name: "ovs-vsctl add-br br-proxy"
+    - unless "ovs-vsctl br-exists br-proxy"
 {% if bridges[bridge] not in salt['network.interfaces']() %}
+remove-fake-{{ bridges[bridge] }}-interfaces:
+  cmd:
+    - run
+    - name: "ovs-vsctl del-port {{ bridges[bridge] }}"
+    - onlyif: "ovs-vsctl list-ports {{ bridge }} | grep {{ bridges[bridge] }}"
+    - require:
+      - cmd: bridge-{{ bridge }}-create
+remove-fake-{{ bridges[bridge] }}-br-proxy-interfaces:
+  cmd:
+    - run
+    - name: "ovs-vsctl del-port {{ bridges[bridge] }}-br-proxy"
+    - onlyif: "ovs-vsctl list-ports {{ bridge }} | grep {{ bridges[bridge] }}-br-proxy"
+    - require:
+      - cmd: bridge-{{ bridge }}-create
 veth-add-{{ bridges[bridge] }}:
   cmd:
     - run
     - name: "ip link add {{ bridges[bridge] }} type veth peer name {{ bridges[bridge] }}-br-proxy"
-  network:
-    - managed
-    - name: "{{ bridges[bridge] }}-br-proxy"
-    - enabled: True
+    - require:
+      - cmd: remove-fake-{{ bridges[bridge] }}-interfaces
+      - cmd: remove-fake-{{ bridges[bridge] }}-br-proxy-interfaces
+veth-bring-up-{{ bridges[bridge] }}:
+  cmd:
+    - run
+    - name: "ip link set {{ bridges[bridge] }} up promisc on"
+    - require:
+      - cmd: veth-add-{{ bridges[bridge] }}
+veth-bring-up-{{ bridges[bridge] }}-br-proxy:
+  cmd:
+    - run
+    - name: "ip link set {{ bridges[bridge] }}-br-proxy up promisc on"
+    - require:
+      - cmd: veth-add-{{ bridges[bridge] }}
+veth-add-{{ bridges[bridge] }}-br-proxy:
+  cmd:
+    - run
+    - name: "ovs-vsctl add-port br-proxy {{ bridges[bridge] }}-br-proxy"
     - require:
       - cmd: veth-add-{{ bridges[bridge] }}
 {% endif %}

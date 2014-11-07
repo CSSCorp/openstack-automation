@@ -4,6 +4,9 @@ neutron:
   # uncomment to bridge all interfaces to primary interface
   # single_nic : primary_nic_name
   single_nic: "eth0"
+  # make sure you add eth0 to br-proxy
+  # and configure br-proxy with eth0's address
+  # after highstate run
   type_drivers: 
     flat: 
       physnets: 
