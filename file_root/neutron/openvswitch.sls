@@ -7,7 +7,7 @@ neutron-l2-agent-install:
 {% if bridges %}
     - require: 
 {% for bridge in bridges %}
-      - module: bridge-{{ bridge }}-create
+      - cmd: bridge-{{ bridge }}-create
 {% endfor %}
 {% endif %}
 

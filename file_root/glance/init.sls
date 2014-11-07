@@ -5,7 +5,7 @@ glance-pkg-install:
     - name: "{{ salt['pillar.get']('packages:glance', default='glance') }}"
 
 
-glace_registry_running:
+glance_registry_running:
   service: 
     - running
     - name: "{{ salt['pillar.get']('services:glance_registry') }}"

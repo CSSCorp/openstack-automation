@@ -7,4 +7,4 @@ rabbitmq-service-running:
     - running
     - name: {{ salt['pillar.get']('services:rabbitmq', default='rabbitmq') }}
     - watch:
-      - pkg: rabbit-server-install
+      - pkg: rabbitmq-server-install
