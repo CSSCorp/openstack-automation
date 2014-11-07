@@ -87,7 +87,7 @@ proxy-bridge-create-{{ bridge }}:
   cmd:
     - run
     - name: "ovs-vsctl add-br br-proxy"
-    - unless "ovs-vsctl br-exists br-proxy"
+    - unless: "ovs-vsctl br-exists br-proxy"
 primary-nic-bring-up-{{ bridge }}:
   cmd:
     - run
