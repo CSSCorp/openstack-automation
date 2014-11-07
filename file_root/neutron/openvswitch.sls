@@ -83,7 +83,7 @@ bridge-{{ bridge }}-create:
       - service: openvswitch-switch-running
 {% if bridges[bridge] %}
 {% if salt['pillar.get']('neutron:single_nic') %}
-proxy-bridge-create:
+proxy-bridge-create-{{ bridge }}:
   cmd:
     - run
     - name: "ovs-vsctl add-br br-proxy"
