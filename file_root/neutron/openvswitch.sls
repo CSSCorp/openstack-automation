@@ -19,17 +19,7 @@ neutron-l2-agent-running:
     - watch: 
       - pkg: neutron-l2-agent-install
       - file: l2-agent-neutron-config-file
-      - file: l2-agent-config-file
 
-l2-agent-config-file:
-  file: 
-    - managed
-    - name: "{{ salt['pillar.get']('conf_files:neutron_l2_agent', default='/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini') }}"
-    - group: neutron
-    - user: neutron
-    - mode: 644
-    - require: 
-      - pkg: neutron-l2-agent-install
 
 l2-agent-neutron-config-file: 
   file: 
