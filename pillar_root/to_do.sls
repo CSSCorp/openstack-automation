@@ -26,4 +26,6 @@ repo.sls , repo addition , pre repo addition  and post repo addition
 ssl version of dashboard
 
 
+check why keystone module not using endpoint and token
 
+check why mysql tables created with charset latin1
