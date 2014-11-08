@@ -1,4 +1,5 @@
 keystone: 
+  admin_token: "24811ee3d9a09915bef0"
   roles: 
     - "admin"
     - "Member"
