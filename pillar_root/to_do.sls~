@@ -1,6 +1,9 @@
 
+<<<<<<< HEAD
 replace require conditions
 
+=======
+>>>>>>> 3c91147d9e82f59689a5132839073894b94ddfb7
 
 keystone.user: "admin"
 keystone.password: "admin_pass"
@@ -25,6 +28,7 @@ add documentation
 repo.sls , repo addition , pre repo addition  and post repo addition
 
 
+<<<<<<< HEAD
 create support for adding miscelanous config file changes
 
 it should restart corresponding service, 
@@ -33,4 +37,14 @@ but it should not disturb the ini.options_present state in the components regula
 
 ssl version of dashboard
 
+open rabbitmq port
 
+
+=======
+ssl version of dashboard
+
+
+check why keystone module not using endpoint and token
+
+check why mysql tables created with charset latin1
+>>>>>>> 3c91147d9e82f59689a5132839073894b94ddfb7

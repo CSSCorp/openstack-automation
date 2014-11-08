@@ -22,7 +22,11 @@ neutron-dhcp-agent-config-mtu:
     - name: "{{ salt['pillar.get']('conf_files:neutron_dhcp_agent', default='/etc/neutron/dhcp_agent.ini') }}"
     - sections: 
         DEFAULT: 
+<<<<<<< HEAD
           dnsmasq_config_file = "/etc/neutron/dnsmasq-neutron.conf"
+=======
+          dnsmasq_config_file: "/etc/neutron/dnsmasq-neutron.conf"
+>>>>>>> 3c91147d9e82f59689a5132839073894b94ddfb7
 
 dnsmasq-conf:
   file:
@@ -32,7 +36,7 @@ dnsmasq-conf:
     - group: neutron
     - mode: 644
     - require: 
-      - ini: neutron-dhcp-agent-config-mtu
+      - ini: dnsmasq-conf
   ini: 
     - options_present
     - name: "/etc/neutron/dnsmasq-neutron.conf"
