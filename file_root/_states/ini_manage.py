@@ -1,38 +1,44 @@
 # -*- coding: utf-8 -*-
 '''
-:maintainer: <ageeleshwar.kandavelu@csscorp.com>
+Manage ini files
+================
+
+:maintainer: <akilesh1597@gmail.com>
 :maturity: new
 :depends: re
 :platform: all
-
-Module for managing ini files through salt states
 
 use section as DEFAULT_IMPLICIT if your ini file does not have any section
 for example /etc/sysctl.conf
 '''
 
 
+__virtualname__ = 'ini'
+
+
 def __virtual__():
     '''
     Only load if the mysql module is available
     '''
-    return 'ini' if 'ini.set_option' in __salt__ else False
+    return __virtualname__ if 'ini.set_option' in __salt__ else False
 
 
 def options_present(name, sections=None):
     '''
-    /home/saltminion/api-paste.ini:
-      ini_manage:
-        - options_present
-        - sections:
-            test:
-              testkey: 'testval'
-              secondoption: 'secondvalue'
-            test1:
-              testkey1: 'testval121'
+    .. code-block:: yaml
+
+        /home/saltminion/api-paste.ini:
+          ini.options_present:
+            - sections:
+                test:
+                  testkey: 'testval'
+                  secondoption: 'secondvalue'
+                test1:
+                  testkey1: 'testval121'
 
     options present in file and not specified in sections
     dict will be untouched
+
     changes dict will contain the list of changes made
     '''
     ret = {'name': name,
@@ -67,18 +73,20 @@ def options_present(name, sections=None):
 
 def options_absent(name, sections=None):
     '''
-    /home/saltminion/api-paste.ini:
-      ini_manage:
-        - options_absent
-        - sections:
-            test:
-              - testkey
-              - secondoption
-            test1:
-              - testkey1
+    .. code-block:: yaml
+
+        /home/saltminion/api-paste.ini:
+          ini.options_present:
+            - sections:
+                test:
+                  - testkey
+                  - secondoption
+                test1:
+                  - testkey1
 
     options present in file and not specified in sections
     dict will be untouched
+
     changes dict will contain the list of changes made
     '''
     ret = {'name': name,
@@ -99,7 +107,7 @@ def options_absent(name, sections=None):
                                                           key)
             if not current_value:
                 continue
-            if not section in ret['changes']:
+            if section not in ret['changes']:
                 ret['changes'].update({section: {}})
             ret['changes'][section].update({key: {'before': current_value,
                                                   'after': None}})
@@ -109,15 +117,16 @@ def options_absent(name, sections=None):
 
 def sections_present(name, sections=None):
     '''
-    /home/saltminion/api-paste.ini:
-      ini_manage:
-        - sections_present
-        - sections:
-            test:
-              testkey: testval
-              secondoption: secondvalue
-            test1:
-              testkey1: 'testval121'
+    .. code-block:: yaml
+
+        /home/saltminion/api-paste.ini:
+          ini.sections_present:
+            - sections:
+                test:
+                  testkey: testval
+                  secondoption: secondvalue
+                test1:
+                  testkey1: 'testval121'
 
     options present in file and not specified in sections will be deleted
     changes dict will contain the sections that changed
@@ -153,12 +162,13 @@ def sections_present(name, sections=None):
 
 def sections_absent(name, sections=None):
     '''
-    /home/saltminion/api-paste.ini:
-      ini_manage:
-        - sections_absent
-        - sections:
-            - test
-            - test1
+    .. code-block:: yaml
+
+        /home/saltminion/api-paste.ini:
+          ini.sections_absent:
+            - sections:
+                - test
+                - test1
 
     options present in file and not specified in sections will be deleted
     changes dict will contain the sections that changed
@@ -192,8 +202,8 @@ class _DictDiffer(object):
     def __init__(self, current_dict, past_dict):
         self.current_dict = current_dict
         self.past_dict = past_dict
-        self.set_current = set(current_dict.keys())
-        self.set_past = set(past_dict.keys())
+        self.set_current = set(current_dict)
+        self.set_past = set(past_dict)
         self.intersect = self.set_current.intersection(self.set_past)
 
     def added(self):

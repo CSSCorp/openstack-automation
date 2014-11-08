@@ -36,7 +36,11 @@ packages:
 
 services:
   mysql: mysql
+<<<<<<< HEAD
   rabbitmq: rabbitmq
+=======
+  rabbitmq: rabbitmq-server
+>>>>>>> 3c91147d9e82f59689a5132839073894b94ddfb7
   keystone: keystone
   glance_api: glance-api
   glance_registry: glance-registry
@@ -62,6 +66,7 @@ services:
 
 conf_files:
   mysql: "/etc/mysql/my.cnf"
+  rabbitmq: "/etc/rabbitmq/rabbitmq-env.conf"
   keystone: "/etc/keystone/keystone.conf"
   glance_api: "/etc/glance/glance-api.conf"
   glance_registry: "/etc/glance/glance-registry.conf"

@@ -27,7 +27,7 @@ keystone-conf-file:
       - sections: 
           DEFAULT: 
             admin_token: {{ salt['pillar.get']('keystone.admin_token', default='ADMIN') }}
-          sql: 
+          database: 
             connection: mysql://{{ salt['pillar.get']('databases:keystone:username', default='keystone') }}:{{ salt['pillar.get']('databases:keystone:password', default='keystone_pass') }}@{{ get_candidate('mysql') }}/{{ salt['pillar.get']('databases:keystone:db_name', default='keystone') }}
       - require: 
           - file: keystone-conf-file
