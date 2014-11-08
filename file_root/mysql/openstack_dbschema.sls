@@ -4,6 +4,7 @@
   mysql_database:
     - present
     - name: {{ pillar['databases'][openstack_service]['db_name'] }}
+    - character_set: 'utf8'
 {% for server in hosts %}
 {{ server }}-{{ openstack_service }}-accounts:
   mysql_user:
