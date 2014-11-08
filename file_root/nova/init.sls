@@ -105,7 +105,7 @@ nova_sync:
     - run
     - name: "{{ salt['pillar.get']('databases:nova:db_sync') }}"
     - require: 
-        - service: glance
+        - service: nova-api-running
 {% endif %}
 
 nova_sqlite_delete:

@@ -5,7 +5,7 @@ glance-pkg-install:
     - name: "{{ salt['pillar.get']('packages:glance', default='glance') }}"
 
 
-glace_registry_running:
+glance_registry_running:
   service: 
     - running
     - name: "{{ salt['pillar.get']('services:glance_registry') }}"
@@ -91,7 +91,8 @@ glance_sync:
     - run
     - name: "{{ salt['pillar.get']('databases:glance:db_sync') }}"
     - require: 
-        - service: glance
+        - service: glance_registry_running
+        - service: glance_api_running
 {% endif %}
 
 glance_sqlite_delete: 
