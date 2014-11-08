@@ -36,7 +36,7 @@ packages:
 
 services:
   mysql: mysql
-  rabbitmq: rabbitmq
+  rabbitmq: rabbitmq-server
   keystone: keystone
   glance_api: glance-api
   glance_registry: glance-registry
