@@ -1,6 +1,6 @@
 What is New
 ===========
-1. Branches icehouse and icehouse will alone exist and continue forward
+1. Branches icehouse and juno will alone exist and continue forward
 2. Repo modified to be used as git fileserver backend. User may use 'git_pillar' pointed to 'pillar_root' sub directory or download the files to use in 'roots' backend.
 3. Pull request to the project has some regulations, documented towards the end of the README.
 4. 'yaml' will be default format for sls files. This is done as maintaining sls files across format is causing mismatches and errors. Further 'json' does not go well with 'jinja' templating(formulas end up less readable).
@@ -19,8 +19,8 @@ What is New
 |db_resources		| Databases, Users, Passwords and Grants		|
 |deploy_files		| Arbitrary files to be deployed on all minions		|
 |misc_openstack_options	| Arbitrary openstack options and affected services	|
-|<DISTRO>.sls		| Distro specific package data				|
-|<DISTRO>_repo.sls	| Distro specific repository data			|
+|[DISTRO].sls		| Distro specific package data				|
+|[DISTRO]_repo.sls	| Distro specific repository data			|
 ---------------------------------------------------------------------------------
 </pre>
 
@@ -327,9 +327,9 @@ The 'cinder.volume' formula will find any free disk space available on the minio
 
 Packages, Services, Config files and Repositories
 =================================================
-The 'pillar_root' sub directory contains a <distro>.sls file that contains package names, service names, and config file paths for each of OpenStack's component. This file is supposed to be replicated for all the distros that you plan to use on your minions. 
+The 'pillar_root' sub directory contains a [DISTRO].sls file that contains package names, service names, and config file paths for each of OpenStack's component. This file is supposed to be replicated for all the distros that you plan to use on your minions. 
 
-The <distro>_repo.sls that has repository details specific to each distro that house the OpenStack packages. The parameters defined in the file should be the ones that are accepted by saltstack's pkgrepo module.
+The [DISTRO]_repo.sls that has repository details specific to each distro that house the OpenStack packages. The parameters defined in the file should be the ones that are accepted by saltstack's pkgrepo module.
 
 
 Contributing
