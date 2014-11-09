@@ -1,4 +1,4 @@
-cluster_entities: 
+roles: 
   - "compute"
   - "controller"
   - "network"
