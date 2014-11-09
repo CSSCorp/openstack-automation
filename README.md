@@ -9,6 +9,7 @@ What is New
 7. Support for all linux distros added. Check 'Packages, Services, Config files and Repositories section' of README.
 8. Partial support for 'single server single nic' installations. Check section 'Single Interface Scenario' for details.
 9. Pillar data has been segregated in multiple files according to its purpose.
+<pre>
 ---------------------------------------------------------------------------------
 |Pillar File		| Purpose						|
 ---------------------------------------------------------------------------------
@@ -21,6 +22,7 @@ What is New
 |<DISTRO>.sls		| Distro specific package data				|
 |<DISTRO>_repo.sls	| Distro specific repository data			|
 ---------------------------------------------------------------------------------
+</pre>
 
 openstack-automation
 ====================
