@@ -5,6 +5,7 @@ The [project](https://github.com/Akilesh1597/salt-openstack/ "Openstack-Automati
 Saltstack provides us an infrastructure management framework that makes our job easier. Saltstack supports most of tasks that you would want to perform while installing OpenStack and more. 
 
 A few reasons why this is cool
+
 1. Don't just install OpenStack but also keep your installation formulae versioned, so you can always go back to the last working set.
 2. Salt formulae are not meant to just install. They can also serve to document the steps and the settings involved.
 3. OpenStack has a release cycle of 6 months and every six months you just have to tinker with a few text files to stay in the game.
