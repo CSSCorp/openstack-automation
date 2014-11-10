@@ -8,7 +8,7 @@
     - service_type: {{ pillar['keystone']['services'][service_name]['service_type'] }}
     - description: {{ pillar['keystone']['services'][service_name]['description'] }}
     - connection_token: {{ salt['pillar.get']('keystone:admin_token', default='ADMIN') }}
-    - connection_endpoint: {{ salt['pillar.get']('keystone:services:keystone:endpoint:internalurl', default='http://{0}:35357/v2.0').format(get_candidate(salt['pillar.get']('keystone:services:keystone:endpoint:endpoint_host_sls', default='keystone'))) }}
+    - connection_endpoint: {{ salt['pillar.get']('keystone:services:keystone:endpoint:adminurl', default='http://{0}:35357/v2.0').format(get_candidate(salt['pillar.get']('keystone:services:keystone:endpoint:endpoint_host_sls', default='keystone'))) }}
 {{ service_name }}_endpoint:
   keystone:
     - endpoint_present
@@ -17,7 +17,7 @@
     - adminurl: {{ pillar['keystone']['services'][service_name]['endpoint']['adminurl'].format(get_candidate(pillar['keystone']['services'][service_name]['endpoint']['endpoint_host_sls'])) }}
     - internalurl: {{ pillar['keystone']['services'][service_name]['endpoint']['internalurl'].format(get_candidate(pillar['keystone']['services'][service_name]['endpoint']['endpoint_host_sls'])) }}
     - connection_token: {{ salt['pillar.get']('keystone:admin_token', default='ADMIN') }}
-    - connection_endpoint: {{ salt['pillar.get']('keystone:services:keystone:endpoint:internalurl', default='http://{0}:35357/v2.0').format(get_candidate(salt['pillar.get']('keystone:services:keystone:endpoint:endpoint_host_sls', default='keystone'))) }}
+    - connection_endpoint: {{ salt['pillar.get']('keystone:services:keystone:endpoint:adminurl', default='http://{0}:35357/v2.0').format(get_candidate(salt['pillar.get']('keystone:services:keystone:endpoint:endpoint_host_sls', default='keystone'))) }}
     - require:
       - keystone: {{ service_name }}_service
 {% endfor %}
