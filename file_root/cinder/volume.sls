@@ -25,8 +25,13 @@ lvm_logical_volume:
       - "{{ device_id }}"
 {% endfor %}
 {% endif %}
+{% if volumes %}
     - require:
-      - lvm: lvm_physical_volume
+{% for device_id in volumes %}
+      - lvm: pv_create_{{ device_id }}
+{% endfor %}
+{% endif %}
+      
 
 cinder_volume_package:
   pkg:
