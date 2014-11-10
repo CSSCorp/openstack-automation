@@ -5,18 +5,18 @@ __virtualname__ = 'partition_free_disks'
 def __virtual__():
     return __virtualname__
 
-def free_disks(min_disk_size='10G'):
+def free_disks(min_disk_size='10'):
     """
     Check if partition with 'name' exists
     Check if partition with 'name' is not mounted anywhere
     If not create a partition on the specified disk
     """
     available_disks = []
-    for free_space in _find_free_spaces(min_disk_size):
-        if __salt__['partition.mkpart'](free_space['device'], 'primary',
-                                    start=None, end=None):
-            available_disks.append(free_space)
-    return []
+    for free_space in find_free_spaces(min_disk_size):
+        __salt__['partition.mkpart'](free_space['device'], 'primary',
+                                     start=free_space['start'],
+                                     end=free_space['end'])
+        available_disks.append(free_space['device']+free_space['id'])
     return available_disks
 
 
@@ -37,23 +37,32 @@ def get_block_device():
     return devs
 
 
-def _find_free_space(device):
-    part_data = __salt__['partition.part_list'](device, unit='s')
-    disk_final_sector_int = _sector_to_int(part_data['info']['size'])
-    last_part_sector_int = _last_sector_in_partition(part_data)
-    if (disk_final_sector_int-last_part_sector_int) > 16000000:
-        return (_sector_to_int(last_part_sector_int), _sector_to_int(disk_final_sector_int-1))
+def find_free_spaces(min_disk_size):
+    free_spaces = []
+    for block_device in get_block_device():
+        device_name = '/dev/%s' % block_device
+        part_data = __salt__['partition.part_list'](device_name, unit='s')
+        sector_size = _sector_to_int(part_data['info']['logical sector'])
+        disk_final_sector_int = _sector_to_int(part_data['info']['size'])
+        last_device_id, last_allocated_sector_int = _last_allocated_sector(part_data['partitions'])
+        if ((disk_final_sector_int-last_allocated_sector_int)*sector_size)/1073741824 > min_disk_size:
+            free_spaces.append({'device': device_name,
+                                'id': str(last_device_id+1),
+                                'start': _int_to_sector(last_allocated_sector_int+1),
+                                'end': _int_to_sector(disk_final_sector_int-1)})
 
-def _last_sector_in_partition(part_data):
-    last_part_sector = 1
-    for partition_id, partition_data in part_data['partitions'].iteritems():
+def _last_allocated_sector(part_data):
+    last_allocated_sector = 2048
+    for partition_id, partition_data in part_data.iteritems():
         sector_end_in_int = _sector_to_int(partition_data['end'])
-        if sector_end_in_int > last_part_sector:
-            last_part_sector = sector_end_in_int
-    return last_part_sector
+        if sector_end_in_int > last_allocated_sector:
+            last_allocated_sector = sector_end_in_int
+    return int(partition_id), last_allocated_sector
         
 def _sector_to_int(sector):
-    return int(sector[:-1])
+    if sector[-1] == 's':
+        return int(sector[:-1])
+    return int(sector)
 
 def _int_to_sector(int_sector):
     return str(int_sector) + 's'
