@@ -3,7 +3,7 @@
 __virtualname__ = 'partition_free_disks'
 
 def __virtual__():
-    if ('partiontion.mkpart' in __salt__) & ('lvm.present' in __salt__):
+    if ('partition.mkpart' in __salt__) & ('lvm.present' in __salt__):
         return __virtualname__
     return None
 
