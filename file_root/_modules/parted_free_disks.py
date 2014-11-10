@@ -13,7 +13,7 @@ def free_disks(min_disk_size='10'):
     """
     available_disks = []
     for free_space in find_free_spaces(min_disk_size):
-        __salt__['partition.mkpart'](free_space['device'], 'primary',
+        __salt__['partition.mkpart'](free_space['device'], 'primary', 'fat32'
                                      start=free_space['start'],
                                      end=free_space['end'])
         available_disks.append(free_space['device']+free_space['id'])
