@@ -3,7 +3,7 @@
 __virtualname__ = 'partition_free_disks'
 
 def __virtual__():
-    if 'partiontion.mkpart' in salt & 'lvm.present' in salt:
+    if 'partiontion.mkpart' in __salt__ & 'lvm.present' in __salt__:
         return __virtualname__
     return None
 
@@ -15,7 +15,7 @@ def free_disks(min_disk_size='10G'):
     """
     available_disks = []
     for free_space in _find_free_spaces(min_disk_size):
-        if salt['partition.mkpart'](free_space['device'], 'primary',
+        if __salt__['partition.mkpart'](free_space['device'], 'primary',
                                     start=None, end=None):
             available_disks.append(free_space)
     return []
@@ -40,7 +40,7 @@ def get_block_device():
 
 
 def _find_free_space(device):
-    part_data = salt['partition.part_list'](device, unit='s')
+    part_data = __salt__['partition.part_list'](device, unit='s')
     disk_final_sector_int = _sector_to_int(part_data['info']['size'])
     last_part_sector_int = _last_sector_in_partition(part_data)
     if (disk_final_sector_int-last_part_sector_int) > 16000000:
