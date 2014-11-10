@@ -50,6 +50,7 @@ def find_free_spaces(min_disk_size):
                                 'id': str(last_device_id+1),
                                 'start': _int_to_sector(last_allocated_sector_int+1),
                                 'end': _int_to_sector(disk_final_sector_int-1)})
+    return free_spaces
 
 def _last_allocated_sector(part_data):
     last_allocated_sector = 2048
