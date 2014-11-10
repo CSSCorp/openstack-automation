@@ -49,9 +49,9 @@ def _find_free_space(device):
 def _last_sector_in_partition(part_data):
     last_part_sector = 1
     for partition_id, partition_data in part_data['partitions'].iteritems():
-        sector_end_in_int = _sector_to_int(partition_data['end']
+        sector_end_in_int = _sector_to_int(partition_data['end'])
         if sector_end_in_int > last_part_sector:
-	    last_part_sector = sector_end_in_int
+            last_part_sector = sector_end_in_int
     return last_part_sector
         
 def _sector_to_int(sector):
