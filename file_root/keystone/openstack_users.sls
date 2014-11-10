@@ -1,3 +1,5 @@
+{% from "cluster/resources.jinja" import get_candidate with context %}
+
 {% for tenant_name in pillar['keystone']['tenants'] %}
 {% for user_name in pillar['keystone']['tenants'][tenant_name]['users'] %}
 {{ user_name }}_user:
