@@ -1,22 +1,45 @@
 
 
-__virtualname__ = 'partition_lvm'
+__virtualname__ = 'partition_free_disks'
 
 def __virtual__():
     if 'partiontion.mkpart' in salt & 'lvm.present' in salt:
         return __virtualname__
     return None
 
-def part_present(name, disk=None):
+def free_disks(min_disk_size='10G'):
     """
     Check if partition with 'name' exists
     Check if partition with 'name' is not mounted anywhere
     If not create a partition on the specified disk
     """
-	
+    available_disks = []
+    for free_space in _find_free_spaces(min_disk_size):
+        if salt['partition.mkpart'](free_space['device'], 'primary',
+                                    start=None, end=None):
+            available_disks.append(free_space)
+    return []
+    return available_disks
 
 
-def find_free_space(device):
+def get_block_device():
+    '''
+    Retrieve a list of disk devices
+
+    .. versionadded:: 2014.7.0
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' partition.get_block_device
+    '''
+    cmd = 'lsblk -n -io KNAME -d -e 1,7,11 -l'
+    devs = __salt__['cmd.run'](cmd).splitlines()
+    return devs
+
+
+def _find_free_space(device):
     part_data = salt['partition.part_list'](device, unit='s')
     disk_final_sector_int = _sector_to_int(part_data['info']['size'])
     last_part_sector_int = _last_sector_in_partition(part_data)
