@@ -12,7 +12,7 @@
     - roles:
       - {{ tenant_name }}:  {{ pillar['keystone']['tenants'][tenant_name]['users'][user_name]['roles'] }}
     - connection_token: {{ salt['pillar.get']('keystone:admin_token', default='ADMIN') }}
-    - connection_endpoint: {{ salt['pillar.get']('keystone:services:keystone:endpoint:internalurl', default='http://{0}:35357/v2.0').format(get_candidate(salt['pillar.get']('keystone:services:keystone:endpoint:endpoint_host_sls', default='keystone'))) }}
+    - connection_endpoint: {{ salt['pillar.get']('keystone:services:keystone:endpoint:adminurl', default='http://{0}:35357/v2.0').format(get_candidate(salt['pillar.get']('keystone:services:keystone:endpoint:endpoint_host_sls', default='keystone'))) }}
 {% endfor %}
 {% endfor %}
 
