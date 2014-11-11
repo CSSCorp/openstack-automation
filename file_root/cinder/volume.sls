@@ -15,20 +15,16 @@ pv_create_{{ disk_id }}:
       - pkg: lvm_pkg_install
 {% endfor %}
 
+
+{% if volumes %}
 lvm_logical_volume:
   lvm:
     - vg_present
     - name: "cinder-volumes"
-{% if volumes %}
-    - devices:
-{% for device_id in volumes %}
-      - "{{ device_id }}"
-{% endfor %}
-{% endif %}
-{% if volumes %}
+    - devices: "{{ ','.join(volumes) }}"
     - require:
-{% for device_id in volumes %}
-      - lvm: pv_create_{{ device_id }}
+{% for disk_id in volumes %}
+      - lvm: pv_create_{{ disk_id }}
 {% endfor %}
 {% endif %}
       

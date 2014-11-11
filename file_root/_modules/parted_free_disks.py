@@ -5,18 +5,27 @@ __virtualname__ = 'partition_free_disks'
 def __virtual__():
     return __virtualname__
 
-def free_disks(min_disk_size='10'):
+def free_disks(unmounted_partitions=True, free_space=True, min_disk_size='10'):
     """
-    Check if partition with 'name' exists
-    Check if partition with 'name' is not mounted anywhere
-    If not create a partition on the specified disk
+    Retrieve a list of disk devices that are not active
+    do not include unmounted partitions if unmounted_partitions=False
+    do not include free spaces if free_space=False
+    
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' partition.free_disks
     """
     available_disks = []
-    for free_space in find_free_spaces(int(min_disk_size)):
-        __salt__['partition.mkpart'](free_space['device'], 'primary', 'fat32',
-                                     start=free_space['start'],
-                                     end=free_space['end'])
-        available_disks.append(free_space['device']+free_space['id'])
+    if unmounted_partitions:
+        available_disks.extend(unmounted_partitions())
+    if free_space:
+        for free_space in find_free_spaces(int(min_disk_size)):
+            __salt__['partition.mkpart'](free_space['device'], 'primary',
+                                         start=free_space['start'],
+                                         end=free_space['end'])
+            available_disks.append(free_space['device']+free_space['id'])
     return available_disks
 
 
@@ -37,7 +46,44 @@ def get_block_device():
     return devs
 
 
+def unmounted_partitions():
+    '''
+    Retrieve a list of unmounted partitions
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' partition.unmounted_partitions
+    '''
+    unused_partitions = []
+    active_mounts = __salt__['mount.active']()
+    mounted_devices = [active_mounts[mount_point]['alt_device'] for mount_point in active_mounts]
+    mounted_devices.extend(__salt__['mount.swaps']())
+    for block_device in get_block_device():
+        device_name = '/dev/%s' % block_device
+        part_data = __salt__['partition.part_list'](device_name)
+        for partition_id in part_data['partitions']:
+            partition_name = device_name + partition_id
+            if partition_name not in mounted_devices:
+                unused_partitions.append(partition_name)
+    return unused_partitions
+        
+
+
 def find_free_spaces(min_disk_size):
+    '''
+    Retrieve a list of free space where partitions can be created
+    returns device name, partition id when created, start and end sector
+    returns only spaces greated than min_disk_size, which
+    defaults to 10, units are in Gigabytes
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' partition.find_free_spaces
+    '''
     free_spaces = []
     for block_device in get_block_device():
         device_name = '/dev/%s' % block_device
