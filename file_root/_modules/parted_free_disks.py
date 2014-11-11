@@ -119,6 +119,8 @@ def find_free_spaces(min_disk_size=10, max_disk_size=None):
 def _last_allocated_sector(part_data):
     last_allocated_sector = 2048
     for partition_id, partition_data in part_data.iteritems():
+        LOG.debug('checking partition {0} {0}'.format(
+            partition_id, str(partition_data)))
         sector_end_in_int = _sector_to_int(partition_data['end'])
         if sector_end_in_int > last_allocated_sector:
             last_allocated_sector = sector_end_in_int
