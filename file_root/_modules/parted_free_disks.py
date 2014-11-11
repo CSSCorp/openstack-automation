@@ -22,12 +22,14 @@ def free_disks(free_partitions=True, free_space=True, min_disk_size='10',
     if free_partitions:
         available_disks.extend(unmounted_partitions())
     if free_space:
-        while find_free_spaces(min_disk_size, max_disk_size):
-            __salt__['partition.mkpart'](free_space['device'], 'primary',
-                                         start=free_space['start'],
-                                         end=free_space['end'])
+        free_disk_space = find_free_spaces(min_disk_size, max_disk_size)
+        while free_disk_space:
+            __salt__['partition.mkpart'](free_disk_space['device'], 'primary',
+                                         start=free_disk_space['start'],
+                                         end=free_disk_space['end'])
             __salt__['cmd.run']('partprobe')
-            available_disks.append(free_space['device']+free_space['id'])
+            available_disks.append(free_disk_space['device']+free_disk_space['id'])
+            free_disk_space = find_free_spaces(min_disk_size, max_disk_size)
     return available_disks
 
 
