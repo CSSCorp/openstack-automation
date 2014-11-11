@@ -122,13 +122,12 @@ def vg_present(name, devices=None, **kwargs):
         ret['comment'] = ''
         for device in devices.split(','):
             pvs = __salt__['lvm.pvdisplay'](device)
-            pv = pvs.get(device, None)
-            if pv:
-                if pv['Volume Group Name'] == name:
+            if pvs and pvs.get(device, None):
+                if pvs[device]['Volume Group Name'] == name:
                     ret['comment'] = '{0}\n{0}'.format(
                         ret['comment'],
                         '{0} is part of Volume Group'.format(device))
-                elif pv['Volume Group Name'] == '#orphans_lvm2':
+                elif pvs[device]['Volume Group Name'] == '#orphans_lvm2':
                     __salt__['lvm.vgextend'](name, device)
                     pvs = __salt__['lvm.pvdisplay'](device)
                     if pvs[device]['Volume Group Name'] == name:
@@ -144,17 +143,17 @@ def vg_present(name, devices=None, **kwargs):
                 else:
                     ret['comment'] = '{0}\n{0}'.format(
                         ret['comment'],
-                        '{0} is part of {0}'.format(device,
-                                                    pv['Volume Group Name']))
+                        '{0} is part of {0}'.format(
+                            device, pvs[device]['Volume Group Name']))
                     ret['result'] = False
             else:
                 ret['comment'] = '{0}\n{0}'.format(
                     ret['comment'],
                     'pv {0} is not present'.format(device))
                 ret['result'] = False
-            ret['comment'] = '{0}\n{0}'.format(
-                ret['comment'],
-                'Volume Group {0} already present'.format(name))
+        ret['comment'] = '{0}\n{0}'.format(
+            ret['comment'],
+            'Volume Group {0} already present'.format(name))
     elif __opts__['test']:
         ret['comment'] = 'Volume Group {0} is set to be created'.format(name)
         ret['result'] = None
