@@ -95,6 +95,7 @@ def find_free_spaces(min_disk_size=10, max_disk_size=None):
         part_data = __salt__['partition.list'](device_name, unit='s')
         sector_size = _sector_to_int(part_data['info']['logical sector'])
         disk_final_sector_int = _sector_to_int(part_data['info']['size'])
+        LOG.debug('got part data {0}'.format(str(part_data)))
         last_device_id, last_allocated_sector_int = _last_allocated_sector(part_data['partitions'])
         disk_size_G = _sector_to_G(disk_final_sector_int - last_allocated_sector_int, sector_size)
         if disk_size_G > min_disk_size:
