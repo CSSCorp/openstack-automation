@@ -1,8 +1,8 @@
 roles: 
-  - "compute"
   - "controller"
   - "network"
   - "storage"
+  - "compute"
 compute: 
   - "openstack.icehouse"
 controller: 
