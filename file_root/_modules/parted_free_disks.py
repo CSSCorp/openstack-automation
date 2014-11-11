@@ -66,7 +66,7 @@ def unmounted_partitions():
     mounted_devices.extend(__salt__['mount.swaps']())
     for block_device in get_block_device():
         device_name = '/dev/%s' % block_device
-        part_data = __salt__['partition.part_list'](device_name)
+        part_data = __salt__['partition.list'](device_name)
         for partition_id in part_data['partitions']:
             partition_name = device_name + partition_id
             if partition_name not in mounted_devices:
