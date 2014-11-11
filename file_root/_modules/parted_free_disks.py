@@ -91,7 +91,7 @@ def find_free_spaces(min_disk_size=10, max_disk_size=None):
     min_disk_size=int(min_disk_size)
     for block_device in get_block_device():
         device_name = '/dev/%s' % block_device
-        part_data = __salt__['partition.part_list'](device_name, unit='s')
+        part_data = __salt__['partition.list'](device_name, unit='s')
         sector_size = _sector_to_int(part_data['info']['logical sector'])
         disk_final_sector_int = _sector_to_int(part_data['info']['size'])
         last_device_id, last_allocated_sector_int = _last_allocated_sector(part_data['partitions'])
