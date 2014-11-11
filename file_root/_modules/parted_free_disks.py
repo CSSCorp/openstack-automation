@@ -104,12 +104,12 @@ def find_free_spaces(min_disk_size=10, max_disk_size=None):
                 end_sector_int = start_sector_int + _G_to_sector(int(max_disk_size), sector_size) -1
             else:
                 end_sector_int = disk_final_sector_int - 1
-            device_id = str(last_device_id+1)
+            device_id = last_device_id+1
             if device_id > 4:
                 LOG.error('maximum disks created, no more to allocate')
                 return
             return {'device': device_name,
-                    'id': device_id,
+                    'id': str(device_id),
                     'start': _int_to_sector(start_sector_int),
                     'end': _int_to_sector(end_sector_int)}
         else:
