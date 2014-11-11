@@ -97,7 +97,7 @@ def find_free_spaces(min_disk_size=10, max_disk_size=None):
         if disk_size_G > min_disk_size:
             start_sector_int = last_allocated_sector_int+1
             if max_disk_size and disk_size_G > max_disk_size:
-                end_sector_int = start_sector_int + _G_to_sector(int(max_disk_size)) -1
+                end_sector_int = start_sector_int + _G_to_sector(int(max_disk_size), sector_size) -1
             else:
                 end_sector_int = disk_final_sector_int-1
             return {'device': device_name,
