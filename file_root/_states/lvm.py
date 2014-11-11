@@ -122,7 +122,7 @@ def vg_present(name, devices=None, **kwargs):
         ret['comment'] = 'Volume Group {0} already present'.format(name)
         for device in devices.split(','):
             pvs = __salt__['lvm.pvdisplay'](device)
-            pv = pvs.get(device, default=None)
+            pv = pvs.get(device, None)
             if pv:
                 if pv['Volume Group Name'] == name:
                     ret['comment'] = '{0}\n{0}'.format(
