@@ -119,7 +119,7 @@ def vg_present(name, devices=None, **kwargs):
            'result': True}
 
     if __salt__['lvm.vgdisplay'](name):
-        ret['comment'] = 'Volume Group {0} already present'.format(name)
+        ret['comment'] = ''
         for device in devices.split(','):
             pvs = __salt__['lvm.pvdisplay'](device)
             pv = pvs.get(device, None)
@@ -152,6 +152,9 @@ def vg_present(name, devices=None, **kwargs):
                     ret['comment'],
                     'pv {0} is not present'.format(device))
                 ret['result'] = False
+            ret['comment'] = '{0}\n{0}'.format(
+                ret['comment'],
+                'Volume Group {0} already present'.format(name))
     elif __opts__['test']:
         ret['comment'] = 'Volume Group {0} is set to be created'.format(name)
         ret['result'] = None
