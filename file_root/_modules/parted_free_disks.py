@@ -1,5 +1,6 @@
 
-
+import logging
+LOG = logging.getLogger(__name__)
 __virtualname__ = 'partition_free_disks'
 
 def __virtual__():
@@ -95,20 +96,25 @@ def find_free_spaces(min_disk_size=10, max_disk_size=None):
         sector_size = _sector_to_int(part_data['info']['logical sector'])
         disk_final_sector_int = _sector_to_int(part_data['info']['size'])
         last_device_id, last_allocated_sector_int = _last_allocated_sector(part_data['partitions'])
-        disk_size_G = _sector_to_G(disk_final_sector_int-last_allocated_sector_int, sector_size)
+        disk_size_G = _sector_to_G(disk_final_sector_int - last_allocated_sector_int, sector_size)
         if disk_size_G > min_disk_size:
-            start_sector_int = last_allocated_sector_int+1
+            start_sector_int = last_allocated_sector_int + 1
             if max_disk_size and disk_size_G > max_disk_size:
                 end_sector_int = start_sector_int + _G_to_sector(int(max_disk_size), sector_size) -1
             else:
-                end_sector_int = disk_final_sector_int-1
+                end_sector_int = disk_final_sector_int - 1
             device_id = str(last_device_id+1)
             if device_id > 4:
+                LOG.error('maximum disks created, no more to allocate')
                 return
             return {'device': device_name,
                     'id': device_id,
                     'start': _int_to_sector(start_sector_int),
                     'end': _int_to_sector(end_sector_int)}
+        else:
+            LOG.error('space {0} less than minimum {0}'.format(
+                      disk_size_G, min_disk_size))
+    LOG.error('No free space found')
 
 def _last_allocated_sector(part_data):
     last_allocated_sector = 2048
