@@ -5,11 +5,11 @@ __virtualname__ = 'partition_free_disks'
 def __virtual__():
     return __virtualname__
 
-def free_disks(unmounted_partitions=True, free_space=True, min_disk_size='10',
+def free_disks(free_partitions=True, free_space=True, min_disk_size='10',
                max_disk_size=None):
     """
     Retrieve a list of disk devices that are not active
-    do not include unmounted partitions if unmounted_partitions=False
+    do not include unmounted partitions if free_partitions=False
     do not include free spaces if free_space=False
     
     CLI Example:
@@ -19,7 +19,7 @@ def free_disks(unmounted_partitions=True, free_space=True, min_disk_size='10',
         salt '*' partition.free_disks
     """
     available_disks = []
-    if unmounted_partitions:
+    if free_partitions:
         available_disks.extend(unmounted_partitions())
     if free_space:
         while find_free_spaces(min_disk_size, max_disk_size):
