@@ -125,7 +125,8 @@ def _last_allocated_sector(part_data):
         sector_end_in_int = _sector_to_int(partition_data['end'])
         if sector_end_in_int > last_allocated_sector:
             last_allocated_sector = sector_end_in_int
-    return int(partition_id), last_allocated_sector
+            last_partition = partition_id
+    return int(last_partition), last_allocated_sector
         
 def _sector_to_int(sector):
     if sector[-1] == 's':
