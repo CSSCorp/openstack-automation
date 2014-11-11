@@ -61,8 +61,8 @@ def unmounted_partitions():
         salt '*' partition.unmounted_partitions
     '''
     unused_partitions = []
-    active_mounts = __salt__['mount.active']()
-    mounted_devices = [active_mounts[mount_point]['alt_device'] for mount_point in active_mounts]
+    active_mounts = __salt__['disk.usage']()
+    mounted_devices = [active_mounts[mount_point]['filesystem'] for mount_point in active_mounts]
     mounted_devices.extend(__salt__['mount.swaps']())
     for block_device in get_block_device():
         device_name = '/dev/%s' % block_device
