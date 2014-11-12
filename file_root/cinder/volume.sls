@@ -1,24 +1,33 @@
 {% from "cluster/resources.jinja" import get_candidate with context %}
+{% from "cluster/volumes.jinja" import volumes with context %}
+
 lvm_pkg_install:
   pkg:
     - installed
     - name: {{ salt['pillar.get']('packages:lvm', default='lvm2') }}
 
-lvm_physical_volume:
+{% for disk_id in volumes %}
+pv_create_{{ disk_id }}:
   lvm:
     - pv_present
-    - name: "/dev/sda4"
+    - name: "{{ disk_id }}"
     - require:
       - pkg: lvm_pkg_install
+{% endfor %}
 
+
+{% if volumes %}
 lvm_logical_volume:
   lvm:
     - vg_present
     - name: "cinder-volumes"
-    - devices:
-      - "/dev/sda4"
+    - devices: "{{ ','.join(volumes) }}"
     - require:
-      - lvm: lvm_physical_volume
+{% for disk_id in volumes %}
+      - lvm: pv_create_{{ disk_id }}
+{% endfor %}
+{% endif %}
+      
 
 cinder_volume_package:
   pkg:
