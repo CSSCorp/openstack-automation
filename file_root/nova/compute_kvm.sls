@@ -104,7 +104,7 @@ nova-instance-directory:
     - name: /var/lib/nova/instances/
     - user: nova
     - group: nova
-    - mode: 644
+    - mode: 744
     - recurse: 
       - user
       - group
