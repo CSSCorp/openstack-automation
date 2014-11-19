@@ -1,3 +1,5 @@
+{% from "cluster/resources.jinja" import get_candidate with context %}
+
 {% for image_name in pillar.get('images', ()) %}
 image-{{ image_name }}:
   glance:
