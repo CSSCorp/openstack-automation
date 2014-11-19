@@ -92,7 +92,7 @@ def image_create(profile=None, **connection_args):
     fields = dict(
         filter(
             lambda x: x[0] in glanceclient.v1.images.CREATE_PARAMS,
-            kwargs.items()
+            connection_args.items()
         )
     )
 
