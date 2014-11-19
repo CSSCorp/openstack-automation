@@ -60,11 +60,11 @@ def __virtual__():
 __opts__ = {}
 
 
-def _auth(profile=None):
+def _auth(profile=None, **connection_args):
     '''
     Set up keystone credentials
     '''
-    kstone = __salt__['keystone.auth'](profile)
+    kstone = __salt__['keystone.auth'](profile, **connection_args)
     token = kstone.auth_token
     endpoint = kstone.service_catalog.url_for(
         service_type='image',
