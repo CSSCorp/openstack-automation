@@ -29,7 +29,7 @@ Management of Glance images
         - connection_auth_url: 'http://127.0.0.1:5000/v2.0'
 '''
 import logging
-LOG = logging.getLogger(__name___)
+LOG = logging.getLogger(__name__)
 
 
 def __virtual__():
