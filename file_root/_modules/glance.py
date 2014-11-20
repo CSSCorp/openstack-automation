@@ -97,8 +97,7 @@ def image_create(profile=None, **connection_args):
     )
 
     image = nt_ks.images.create(**fields)
-    newimage = image_list(str(image.id))
-    return {newimage['name']: newimage}
+    return image_show(id=str(image.id))
 
 
 def image_delete(id=None, name=None, profile=None, **connection_args):  # pylint: disable=C0103
