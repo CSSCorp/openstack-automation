@@ -28,6 +28,8 @@ Management of Glance images
         - connection_tenant: admin
         - connection_auth_url: 'http://127.0.0.1:5000/v2.0'
 '''
+import logging
+LOG = logging.getLogger(__name___)
 
 
 def __virtual__():
@@ -88,14 +90,13 @@ def image_present(name,
     #if anything is different delete and recreate
     for key in non_null_arguments:
         if existing_image.get(key, None) != non_null_arguments[key]:
-            #delete and recreate
+            LOG.debug('{0} has changed to {0}'.format(
+                key, non_null_arguments[key]))
             __salt__['glance.image_delete'](
                 name=name, profile=profile, **connection_args)
             non_null_arguments.update({'profile': profile})
             non_null_arguments.update(connection_args)
-            ret = image_present(**non_null_arguments)
-            ret['changes']['old_settings'] = existing_image
-            return ret
+            return image_present(**non_null_arguments)
     ret['changes'] = {}
     ret['comment'] = 'Image "{0}" present in correct state'.format(name)
     return ret
