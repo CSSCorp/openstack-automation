@@ -150,7 +150,7 @@ def image_show(id=None, name=None, profile=None, **connection_args):  # pylint: 
     ret[image.name] = {
             'id': image.id,
             'name': image.name,
-            'checksum': image.checksum,
+            'checksum': getattr(image, 'checksum', 'Creating'),
             'container_format': image.container_format,
             'created_at': image.created_at,
             'deleted': image.deleted,
