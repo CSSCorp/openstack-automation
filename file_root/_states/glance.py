@@ -29,6 +29,7 @@ Management of Glance images
         - connection_auth_url: 'http://127.0.0.1:5000/v2.0'
 '''
 import logging
+import time
 LOG = logging.getLogger(__name__)
 
 
@@ -123,13 +124,14 @@ def image_absent(name, profile=None, **connection_args):
             name=name, profile=profile, **connection_args):
         __salt__['glance.image_delete'](
             name=name, profile=profile, **connection_args)
-        if not __salt__['glance.image_show'](
+        time.sleep(2)
+        if __salt__['glance.image_show'](
                 name=name, profile=profile, **connection_args):
-            ret['changes'] = {name: 'deleted'}
-            ret['comment'] = 'Image "{0}" remove'.format(name)
+            ret['result'] = False
+            ret['comment'] = 'Image "{0}" can not be remove'.format(name)
             return ret
-        ret['result'] = False
-        ret['comment'] = 'Image "{0}" can not be remove'.format(name)
+        ret['changes'] = {name: 'deleted'}
+        ret['comment'] = 'Image "{0}" remove'.format(name)
         return ret
     ret['changes'] = {}
     ret['comment'] = 'Image "{0}" absent'.format(name)
