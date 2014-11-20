@@ -91,7 +91,7 @@ def image_present(name,
     #iterate over all given arguments
     #if anything is different delete and recreate
     for key in non_null_arguments:
-        if existing_image.get(key, None) != non_null_arguments[key]:
+        if existing_image[name].get(key, None) != non_null_arguments[key]:
             LOG.debug('{0} has changed to {1}'.format(
                 key, non_null_arguments[key]))
             __salt__['glance.image_delete'](
