@@ -76,6 +76,8 @@ def image_present(name,
                                 checksum=checksum,
                                 copy_from=copy_from,
                                 store=store)
+    LOG.debug('running state glance.image_present with arguments {0}'.format(
+        str(non_null_arguments)))
     if 'Error' in existing_image:
         non_null_arguments.update({'profile': profile})
         non_null_arguments.update(connection_args)
