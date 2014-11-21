@@ -77,9 +77,20 @@ def auth_decorator(func_name):
             endpoint_type='publicURL')
         neutron_interface = client.Client(
             endpoint_url=endpoint, token=token)
-        return func_name(neutron_interface, **kwargs)
+        return_data = func_name(neutron_interface, **kwargs)
+        if isinstance(return_data, list):
+            return openstack_list_data_formater(return_data)
+        return return_data
     return decorator_method
 
+
+def openstack_list_data_formater(*return_data):
+    salt_return_data = {}
+    for item in return_data:
+        if item.get('name', None):
+            salt_return_data.update({item['name']: item})
+    return salt_return_data
+                
 
 @auth_decorator
 def list_floatingips(neutron_interface, **kwargs):
