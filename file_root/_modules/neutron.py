@@ -73,6 +73,7 @@ def auth_decorator(func_name):
 
 
 class Neutron(object):
+    __name__ = 'neutron'
     def __init__(self, client=None):
         super(Neutron, self).__init__()
         self._client = client
