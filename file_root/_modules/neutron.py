@@ -35,7 +35,7 @@ Module for handling openstack neutron calls.
     of a configuration profile by declaring it explicitly.
     For example::
 
-        salt '*' glance.image_list profile=openstack1
+        salt '*' neutron.list_subnets profile=openstack1
 '''
 
 import logging
@@ -85,31 +85,40 @@ def auth_decorator(func_name):
 def list_floatingips(neutron_interface, **kwargs):
     return neutron_interface.list_floatingips(**kwargs)['floatingips']
 
+@auth_decorator
 def list_security_groups(neutron_interface, **kwargs):
     return neutron_interface.list_security_groups(**kwargs)['security_groups']
 
+@auth_decorator
 def list_subnets(neutron_interface, **kwargs):
-    return neutron_interface.list_subnets(neutron_interface, **kwargs)['subnets']
+    return neutron_interface.list_subnets(**kwargs)['subnets']
 
+@auth_decorator
 def list_networks(neutron_interface, **kwargs):
-    return neutron_interface.list_networks(neutron_interface, **kwargs)['networks']
+    return neutron_interface.list_networks(**kwargs)['networks']
 
+@auth_decorator
 def list_ports(neutron_interface, **kwargs):
-    return neutron_interface.list_ports(neutron_interface, **kwargs)['ports']
+    return neutron_interface.list_ports(**kwargs)['ports']
 
+@auth_decorator
 def list_routers(neutron_interface, **kwargs):
-    return neutron_interface.list_routers(neutron_interface, **kwargs)['routers']
+    return neutron_interface.list_routers(**kwargs)['routers']
 
+@auth_decorator
 def update_security_group(neutron_interface, **kwargs):
     neutron_interface.update_security_group({'security_group': kwargs})
 
+@auth_decorator
 def update_floating_ip(neutron_interface, fip, port_id):
     neutron_interface.update_floatingip(fip, {"floatingip":
                                         {"port_id": port_id}})
 
+@auth_decorator
 def update_subnet(neutron_interface, subnet_id, subnet):
     neutron_interface.update_subnet(subnet_id, {'subnet': subnet})
 
+@auth_decorator
 def update_router(neutron_interface, router_id, external_network_id):
     neutron_interface.update_router(router_id,
                               {'router':
@@ -117,57 +126,70 @@ def update_router(neutron_interface, router_id, external_network_id):
                                       {'network_id':
                                           external_network_id}}})
 
+@auth_decorator
 def create_router(neutron_interface, **kwargs):
     response = neutron_interface.create_router({'router': kwargs})
     if 'router' in response and 'id' in response['router']:
         return response['router']['id']
 
+@auth_decorator
 def router_add_interface(neutron_interface, router_id, subnet_id):
     neutron_interface.add_interface_router(router_id, {'subnet_id': subnet_id})
 
+@auth_decorator
 def router_rem_interface(neutron_interface, router_id, subnet_id):
     neutron_interface.remove_interface_router(router_id,
                                         {'subnet_id': subnet_id})
 
+@auth_decorator
 def create_security_group(neutron_interface, **kwargs):
     response = neutron_interface.create_security_group({'security_group':
                                                  kwargs})
     if 'security_group' in response and 'id' in response['security_group']:
         return response['security_group']['id']
 
+@auth_decorator
 def create_security_group_rule(neutron_interface, rule):
     neutron_interface.create_security_group_rule({'security_group_rule':
                                             rule})
 
+@auth_decorator
 def create_floatingip(neutron_interface, floatingip):
     response = neutron_interface.create_floatingip({'floatingip': floatingip})
     if 'floatingip' in response and 'id' in response['floatingip']:
         return response['floatingip']['id']
 
+@auth_decorator
 def create_subnet(neutron_interface, **kwargs):
     response = neutron_interface.create_subnet({'subnet': kwargs})
     if 'subnet' in response and 'id' in response['subnet']:
         return response['subnet']['id']
 
+@auth_decorator
 def create_network(neutron_interface, **kwargs):
     response = neutron_interface.create_network({'network': kwargs})
     if 'network' in response and 'id' in response['network']:
         return response['network']['id']
 
+@auth_decorator
 def create_port(neutron_interface, **kwargs):
     response = neutron_interface.create_port({'port': kwargs})
     if 'port' in response and 'id' in response['port']:
         return response['port']['id']
 
+@auth_decorator
 def update_port(neutron_interface, port_id, port):
     neutron_interface.update_port(port_id, {'port': port})
 
+@auth_decorator
 def delete_floating_ip(neutron_interface, floating_ip_id):
     neutron_interface.delete_floatingip(floating_ip_id)
 
+@auth_decorator
 def delete_security_group(neutron_interface, sg_id):
     neutron_interface.delete_security_group(sg_id)
 
+@auth_decorator
 def delete_security_group_rule(neutron_interface, rule):
     sg_rules = neutron_interface.list_security_group_rules(
         security_group_id=rule['security_group_id'])
@@ -176,11 +198,14 @@ def delete_security_group_rule(neutron_interface, rule):
         if sg_rule == rule:
             neutron_interface.delete_security_group_rule(sgr_id)
 
+@auth_decorator
 def delete_subnet(neutron_interface, subnet_id):
     neutron_interface.delete_subnet(subnet_id)
 
+@auth_decorator
 def delete_network(neutron_interface, network_id):
     neutron_interface.delete_network(network_id)
 
+@auth_decorator
 def delete_router(neutron_interface, router_id):
     neutron_interface.delete_router(router_id)
