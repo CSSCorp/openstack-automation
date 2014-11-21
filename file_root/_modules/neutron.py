@@ -39,6 +39,7 @@ Module for handling openstack neutron calls.
 '''
 
 import logging
+from functools import wraps
 LOG = logging.getLogger(__name__)
 # Import third party libs
 HAS_NEUTRON = False
@@ -51,7 +52,7 @@ except ImportError:
 __opts__ = {}
 def __virtual__():
     '''
-    Only load this module if glance
+    Only load this module if neutron
     is installed on this minion.
     '''
     if HAS_NEUTRON:
@@ -60,6 +61,7 @@ def __virtual__():
 
 
 def auth_decorator(func_name):
+    @wraps(func_name)
     def decorator_method(
             profile=None, connection_user=None, connection_password=None,
             connection_tenant=None, connection_endpoint=None,
