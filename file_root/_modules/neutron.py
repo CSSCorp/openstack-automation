@@ -38,7 +38,6 @@ Module for handling openstack neutron calls.
         salt '*' glance.image_list profile=openstack1
 '''
 
-import sys
 import logging
 LOG = logging.getLogger(__name__)
 # Import third party libs
@@ -75,6 +74,7 @@ def auth_decorator(func_name):
             endpoint_type='publicURL')
         neutron_interface = client.Client(
             endpoing_url=endpoint, token=token)
+        LOG.error(neutron_interface.list_agents())
         return func_name(neutron_interface, **kwargs)
     return decorator_method
 
