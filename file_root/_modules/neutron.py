@@ -66,6 +66,7 @@ def auth_decorator(func_name):
             profile=None, connection_user=None, connection_password=None,
             connection_tenant=None, connection_endpoint=None,
             conection_token=None, connection_auth_url=None, **kwargs):
+        LOG.error('called with '+ str(kwargs))
         kstone = __salt__['keystone.auth'](
             profile=profile, connection_user=connection_user, connection_password=connection_password,
             connection_tenant=connection_tenant, connection_endpoint=connection_endpoint,
