@@ -62,23 +62,22 @@ def __virtual__():
 
 def _auth_decorator(func_name):
     @wraps(func_name)
-    def decorator_method(
-            profile=None, connection_user=None, connection_password=None,
-            connection_tenant=None, connection_endpoint=None,
-            conection_token=None, connection_auth_url=None, **kwargs):
-        LOG.error('called with '+ str(kwargs))
-        kstone = __salt__['keystone.auth'](
-            profile=profile, connection_user=connection_user, connection_password=connection_password,
-            connection_tenant=connection_tenant, connection_endpoint=connection_endpoint,
-            conection_token=conection_token, connection_auth_url=connection_auth_url)
+    def decorator_method(*args, **kwargs):
+        connection_args = {'profile': kwargs.get('profile', None)}
+        nkwargs = {}
+        for kwarg in kwargs:
+            if 'connection_' in kwarg:
+                connection_args.update({kwarg: kwargs[kwarg]})
+            elif '__' not in kwarg:
+                nkwargs.update({kwarg: kwargs[kwarg]})
+        kstone = __salt__['keystone.auth'](**connection_args)
         token = kstone.auth_token
         endpoint = kstone.service_catalog.url_for(
             service_type='network',
             endpoint_type='publicURL')
         neutron_interface = client.Client(
             endpoint_url=endpoint, token=token)
-        nkwargs = {key: kwargs[key] for key in kwargs if '__' not in key}
-        return_data = func_name(neutron_interface, **nkwargs)
+        return_data = func_name(neutron_interface,*args, **nkwargs)
         if isinstance(return_data, list):
             return _openstack_list_data_formater(return_data)
         return return_data
