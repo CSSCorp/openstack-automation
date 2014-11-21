@@ -74,6 +74,8 @@ def auth_decorator(func_name):
             endpoint_type='publicURL')
         neutron_interface = client.Client(
             endpoing_url=endpoint, token=token)
+        LOG.error('token ' + str(token))
+        LOG.error('endpoint' + str(endpoint))
         LOG.error(neutron_interface.list_agents())
         return func_name(neutron_interface, **kwargs)
     return decorator_method
