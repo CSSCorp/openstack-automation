@@ -84,7 +84,7 @@ def auth_decorator(func_name):
     return decorator_method
 
 
-def openstack_list_data_formater(*return_data):
+def openstack_list_data_formater(return_data):
     salt_return_data = {}
     for item in return_data:
         if item.get('name', None):
