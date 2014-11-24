@@ -15,15 +15,16 @@ And we are opensource.
 
 What is New
 ===========
-1. Branches icehouse and juno will alone exist and continue forward
-2. Repo modified to be used as git fileserver backend. User may use 'git_pillar' pointed to 'pillar_root' sub directory or download the files to use in 'roots' backend.
-3. Pull request to the project has some regulations, documented towards the end of the README.
-4. 'yaml' will be default format for sls files. This is done as maintaining sls files across format is causing mismatches and errors. Further 'json' does not go well with 'jinja' templating(formulas end up less readable).
-5. 'cluster_ops' salt module has been removed. Its functionality has been achieved using 'jinja macros', in an attempt to remove any dependencies that are not available in saltstack's list of modules.
-6. Support for cinder added. Check 'Cinder Volume' section of README.
-7. Support for all linux distros added. Check 'Packages, Services, Config files and Repositories section' of README.
-8. Partial support for 'single server single nic' installations. Check section 'Single Interface Scenario' for details.
-9. Pillar data has been segregated in multiple files according to its purpose. Check 'Customizations' section for details.
+1. Support for glance images to be created using glance state and module
+2. Support for cinder added. Check 'Cinder Volume' section of README.
+3. Support for all linux distros added. Check 'Packages, Services, Config files and Repositories section' of README.
+4. Partial support for 'single server single nic' installations. Check section 'Single Interface Scenario' for details.
+5. Pillar data has been segregated in multiple files according to its purpose. Check 'Customizations' section for details.
+6. Branches icehouse and juno will alone exist and continue forward
+7. Repo modified to be used as git fileserver backend. User may use 'git_pillar' pointed to 'pillar_root' sub directory or download the files to use in 'roots' backend.
+8. Pull request to the project has some regulations, documented towards the end of the README.
+9. 'yaml' will be default format for sls files. This is done as maintaining sls files across format is causing mismatches and errors. Further 'json' does not go well with 'jinja' templating(formulas end up less readable).
+10. 'cluster_ops' salt module has been removed. Its functionality has been achieved using 'jinja macros', in an attempt to remove any dependencies that are not available in saltstack's list of modules.
 
 Yet to Arrive
 =============

@@ -4,6 +4,7 @@ icehouse:
     - db_resources
     - access_resources
     - network_resources
+    - machine_images
     - openstack_cluster
     - deploy_files
     - {{ grains['os'] }}
