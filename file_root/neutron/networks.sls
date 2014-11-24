@@ -8,7 +8,7 @@ openstack-network-{{ network }}:
     - {{ network_param }}: {{ pillar['networks'][network][network_param] }}
 {% endif %}
 {% endfor %}
-{% for subnet in salt['pillar.get']('networks:%s:subnets' % network %}
+{% for subnet in salt['pillar.get']('networks:%s:subnets' % network, ()) %}
 openstack-subnet-{{ subnet }}:
   neutron:
     - subnet_present
