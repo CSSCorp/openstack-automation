@@ -279,8 +279,7 @@ def create_router(neutron_interface, **router_params):
 
     .. code-block:: bash
 
-        salt '*' neutron.create_router openstack-router-id name=External
-            provider_network_type=flat provider_physical_network=ext
+        salt '*' neutron.create_router name=R1
     '''
     response = neutron_interface.create_router({'router': router_params})
     if 'router' in response and 'id' in response['router']:
@@ -398,7 +397,8 @@ def create_network(neutron_interface, **network_params):
 
     .. code-block:: bash
 
-        salt '*' neutron.create_network name='network-name'
+        salt '*' neutron.create_network name=External
+            provider_network_type=flat provider_physical_network=ext
     '''
     network_params = {param.replace('_', ':', 1):
                       network_params[param] for param in network_params}
