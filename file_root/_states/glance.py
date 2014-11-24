@@ -8,10 +8,11 @@ Management of Glance images
 
 .. code-block:: yaml
 
-    glance image:
+    glance image present:
       glance.image_present:
         - name: Ubuntu
-        - copy_from: 'https://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img'
+        - copy_from: 'https://cloud-images.ubuntu.com/trusty/current/
+                        trusty-server-cloudimg-amd64-disk1.img'
         - container_format: bare
         - disk_format: qcow2
         - connection_user: admin
@@ -19,7 +20,7 @@ Management of Glance images
         - connection_tenant: admin
         - connection_auth_url: 'http://127.0.0.1:5000/v2.0'
 
-    admin:
+    glance image absent:
       glance.image_absent:
         - name: Ubuntu
         - disk_format: qcow2
@@ -65,17 +66,16 @@ def image_present(name,
         return ret
     existing_image = __salt__['glance.image_show'](
         name=name, profile=profile, **connection_args)
-    non_null_arguments = _get_non_null_args(
-                                name=name,
-                                disk_format=disk_format,
-                                container_format=container_format,
-                                min_disk=min_disk,
-                                min_ram=min_ram,
-                                is_public=is_public,
-                                protected=protected,
-                                checksum=checksum,
-                                copy_from=copy_from,
-                                store=store)
+    non_null_arguments = _get_non_null_args(name=name,
+                                            disk_format=disk_format,
+                                            container_format=container_format,
+                                            min_disk=min_disk,
+                                            min_ram=min_ram,
+                                            is_public=is_public,
+                                            protected=protected,
+                                            checksum=checksum,
+                                            copy_from=copy_from,
+                                            store=store)
     LOG.debug('running state glance.image_present with arguments {0}'.format(
         str(non_null_arguments)))
     if 'Error' in existing_image:
@@ -88,8 +88,8 @@ def image_present(name,
         else:
             ret['comment'] = 'Image "{0}" created'.format(name)
         return ret
-    #iterate over all given arguments
-    #if anything is different delete and recreate
+    # iterate over all given arguments
+    # if anything is different delete and recreate
     for key in non_null_arguments:
         if key == 'copy_from':
             continue
@@ -140,6 +140,6 @@ def image_absent(name, profile=None, **connection_args):
 
 def _get_non_null_args(**kwargs):
     '''
-    Return thos kwargs which are not null
+    Return those kwargs which are not null
     '''
-    return {key: value for key,value in kwargs.iteritems() if kwargs[key]}
+    return {key: kwargs[key] for key in kwargs if kwargs[key]}
