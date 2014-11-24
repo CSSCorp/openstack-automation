@@ -40,4 +40,9 @@ neutron:
           start_ip: '10.8.127.10'
           end_ip: '10.8.127.30'
           enable_dhcp: false
-        
+  routers:
+    ExternalRouter:
+      interfaces:
+        - InternalSubnet
+      external_gateway: ExternalNetwork
+

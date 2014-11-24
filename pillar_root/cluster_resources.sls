@@ -24,6 +24,7 @@ sls:
     - "nova"
     - "horizon"
     - "glance"
+    - "glance.images"
     - "cinder"
   network: 
     - "mysql.client"
@@ -32,6 +33,9 @@ sls:
     - "neutron.openvswitch"
     - "neutron.ml2"
     - "neutron.guest_mtu"
+    - "neutron.networks"
+    - "neutron.routers"
+    - "neutron.security_groups"
   compute: 
     - "mysql.client"
     - "nova.compute_kvm"
