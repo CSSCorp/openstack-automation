@@ -378,6 +378,10 @@ def create_subnet(neutron_interface, **subnet_params):
         salt '*' neutron.create_subnet name='subnet name'
             network_id='openstack-network-id' cidr='192.168.10.0/24'
     '''
+    if 'start_ip' in subnet_params:
+        subnet_params.update(
+            {'allocation_pools': [{'start': subnet_params.pop('start_ip'),
+                                   'end': subnet_params.pop('end_ip', None)}]})
     response = neutron_interface.create_subnet({'subnet': subnet_params})
     if 'subnet' in response and 'id' in response['subnet']:
         return response['subnet']['id']
