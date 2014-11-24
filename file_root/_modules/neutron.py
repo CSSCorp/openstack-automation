@@ -376,7 +376,9 @@ def create_subnet(neutron_interface, **subnet_params):
     .. code-block:: bash
 
         salt '*' neutron.create_subnet name='subnet name'
-            network_id='openstack-network-id' cidr='192.168.10.0/24'
+            network_id='openstack-network-id' cidr='192.168.10.0/24' \\
+            gateway_ip='192.168.10.1' ip_version='4' enable_dhcp=false \\
+            start_ip='192.168.10.10' end_ip='192.168.10.20'
     '''
     if 'start_ip' in subnet_params:
         subnet_params.update(
