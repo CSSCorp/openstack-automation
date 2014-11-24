@@ -24,3 +24,34 @@ neutron:
     gre:
       tunnel_start: "1"
       tunnel_end: "1000"
+  networks:
+    Internal:
+      subnets:
+        InternalSubnet:
+          cidr: '192.168.10.0/24'
+    ExternalNetwork:
+      provider_physical_network: External
+      provider_network_type: flat
+      shared: true
+      router_external: true
+      subnets:
+        ExternalSubnet:
+          cidr: '10.8.127.0/24'
+          start_ip: '10.8.127.10'
+          end_ip: '10.8.127.30'
+          enable_dhcp: false
+  routers:
+    ExternalRouter:
+      interfaces:
+        - InternalSubnet
+      external_gateway: ExternalNetwork
+  security_groups:
+    Default:
+      description: 'Default security group'
+      rules:
+        - direction: ingress
+          ethertype: ipv4
+          remote_ip_prefix: '10.8.27.0/24'
+        - direction: ingress
+          remote_ip_prefix: '10.8.127.0/24'
+

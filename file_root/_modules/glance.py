@@ -31,8 +31,8 @@ Module for handling openstack glance calls.
           keystone.tenant_id: f80919baedab48ec8931f200c65a50df
           keystone.auth_url: 'http://127.0.0.2:5000/v2.0/'
 
-    With this configuration in place, any of the keystone functions can make use
-    of a configuration profile by declaring it explicitly.
+    With this configuration in place, any of the keystone functions can make
+    use of a configuration profile by declaring it explicitly.
     For example::
 
         salt '*' glance.image_list profile=openstack1
@@ -84,7 +84,8 @@ def image_create(profile=None, **connection_args):
 
         salt '*' glance.image_create name=f16-jeos is_public=true \\
                  disk_format=qcow2 container_format=ovf \\
-                 copy_from=http://berrange.fedorapeople.org/images/2012-02-29/f16-x86_64-openstack-sda.qcow2
+                 copy_from=http://berrange.fedorapeople.org/images/ \\
+                 2012-02-29/f16-x86_64-openstack-sda.qcow2
 
     For all possible values, run ``glance help image-create`` on the minion.
     '''
@@ -147,23 +148,21 @@ def image_show(id=None, name=None, profile=None, **connection_args):  # pylint: 
     if not id:
         return {'Error': 'Unable to resolve image id'}
     image = nt_ks.images.get(id)
-    ret[image.name] = {
-            'id': image.id,
-            'name': image.name,
-            'checksum': getattr(image, 'checksum', 'Creating'),
-            'container_format': image.container_format,
-            'created_at': image.created_at,
-            'deleted': image.deleted,
-            'disk_format': image.disk_format,
-            'is_public': image.is_public,
-            'min_disk': image.min_disk,
-            'min_ram': image.min_ram,
-            'owner': image.owner,
-            'protected': image.protected,
-            'size': image.size,
-            'status': image.status,
-            'updated_at': image.updated_at,
-            }
+    ret[image.name] = {'id': image.id,
+                       'name': image.name,
+                       'checksum': getattr(image, 'checksum', 'Creating'),
+                       'container_format': image.container_format,
+                       'created_at': image.created_at,
+                       'deleted': image.deleted,
+                       'disk_format': image.disk_format,
+                       'is_public': image.is_public,
+                       'min_disk': image.min_disk,
+                       'min_ram': image.min_ram,
+                       'owner': image.owner,
+                       'protected': image.protected,
+                       'size': image.size,
+                       'status': image.status,
+                       'updated_at': image.updated_at}
     return ret
 
 
@@ -180,23 +179,21 @@ def image_list(profile=None, **connection_args):  # pylint: disable=C0103
     nt_ks = _auth(profile, **connection_args)
     ret = {}
     for image in nt_ks.images.list():
-        ret[image.name] = {
-                'id': image.id,
-                'name': image.name,
-                'checksum': getattr(image, 'checksum', 'Creating'),
-                'container_format': image.container_format,
-                'created_at': image.created_at,
-                'deleted': image.deleted,
-                'disk_format': image.disk_format,
-                'is_public': image.is_public,
-                'min_disk': image.min_disk,
-                'min_ram': image.min_ram,
-                'owner': image.owner,
-                'protected': image.protected,
-                'size': image.size,
-                'status': image.status,
-                'updated_at': image.updated_at,
-            }
+        ret[image.name] = {'id': image.id,
+                           'name': image.name,
+                           'checksum': getattr(image, 'checksum', 'Creating'),
+                           'container_format': image.container_format,
+                           'created_at': image.created_at,
+                           'deleted': image.deleted,
+                           'disk_format': image.disk_format,
+                           'is_public': image.is_public,
+                           'min_disk': image.min_disk,
+                           'min_ram': image.min_ram,
+                           'owner': image.owner,
+                           'protected': image.protected,
+                           'size': image.size,
+                           'status': image.status,
+                           'updated_at': image.updated_at}
     return ret
 
 
@@ -215,16 +212,16 @@ def _item_list(profile=None, **connection_args):
     ret = []
     for item in nt_ks.items.list():
         ret.append(item.__dict__)
-        #ret[item.name] = {
+        # ret[item.name] = {
         #        'name': item.name,
         #    }
     return ret
 
-#The following is a list of functions that need to be incorporated in the
-#glance module. This list should be updated as functions are added.
+# The following is a list of functions that need to be incorporated in the
+# glance module. This list should be updated as functions are added.
 
-#image-download      Download a specific image.
-#image-update        Update a specific image.
-#member-create       Share a specific image with a tenant.
-#member-delete       Remove a shared image from a tenant.
-#member-list         Describe sharing permissions by image or tenant.
+# image-download      Download a specific image.
+# image-update        Update a specific image.
+# member-create       Share a specific image with a tenant.
+# member-delete       Remove a shared image from a tenant.
+# member-list         Describe sharing permissions by image or tenant.
