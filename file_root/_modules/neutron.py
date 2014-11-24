@@ -234,10 +234,40 @@ def update_router(neutron_interface, router_id, **router_params):
     .. code-block:: bash
 
         salt '*' neutron.update_router openstack-router-id name='new_name'
+            external_gateway='openstack-network-id' administrative_state=true
+    '''
+    neutron_interface.update_router(router_id, {'router': router_params})
+
+
+@_autheticate
+def router_gateway_set(neutron_interface, router_id, external_gateway):
+    '''
+    Set external gateway for a router
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' neutron.update_router openstack-router-id openstack-network-id
     '''
     neutron_interface.update_router(
         router_id, {'router': {'external_gateway_info':
-                               {'network_id': router_params}}})
+                               {'network_id': external_gateway}}})
+
+
+@_autheticate
+def router_gateway_clear(neutron_interface, router_id):
+    '''
+    Clear external gateway for a router
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' neutron.update_router openstack-router-id
+    '''
+    neutron_interface.update_router(
+        router_id, {'router': {'external_gateway_info': None}})
 
 
 @_autheticate
