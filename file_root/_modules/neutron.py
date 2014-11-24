@@ -273,15 +273,19 @@ def router_gateway_clear(neutron_interface, router_id):
 @_autheticate
 def create_router(neutron_interface, **router_params):
     '''
-    create OpenStack Neutron router
+    Create OpenStack Neutron router
 
     CLI Example:
 
     .. code-block:: bash
 
-        salt '*' neutron.create_router openstack-router-id name='new_name'
+        salt '*' neutron.create_router openstack-router-id name=External
+            provider_network_type=flat provider_physical_network=ext
     '''
-    response = neutron_interface.create_router({'router': router_params})
+    newrouter_params = {router_param.replace('provider_', 'provider:', 1):
+                        router_params[router_params]
+                        for router_param in router_params}
+    response = neutron_interface.create_router({'router': newrouter_params})
     if 'router' in response and 'id' in response['router']:
         return response['router']['id']
 
