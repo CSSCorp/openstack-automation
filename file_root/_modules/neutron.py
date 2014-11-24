@@ -283,7 +283,7 @@ def create_router(neutron_interface, **router_params):
             provider_network_type=flat provider_physical_network=ext
     '''
     newrouter_params = {router_param.replace('_', ':', 1):
-                        router_params[router_params]
+                        router_params[router_param]
                         for router_param in router_params}
     LOG.error('new router arguments ' + str(newrouter_params))
     response = neutron_interface.create_router({'router': newrouter_params})
