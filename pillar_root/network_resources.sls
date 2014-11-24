@@ -45,4 +45,13 @@ neutron:
       interfaces:
         - InternalSubnet
       external_gateway: ExternalNetwork
+  security_groups:
+    Default:
+      description: 'Default security group'
+      rules:
+        - direction: ingress
+          ethertype: ipv4
+          remote_ip_prefix: '10.8.27.0/24'
+        - direction: ingress
+          remote_ip_prefix: '10.8.127.0/24'
 
