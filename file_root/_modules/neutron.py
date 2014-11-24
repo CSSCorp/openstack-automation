@@ -100,7 +100,7 @@ def _autheticate(func_name):
         LOG.error('got return data ' + str(return_data))
         if isinstance(return_data, list):
             # format list as a dict for rendering
-            return {data('name', None) or data['id']: data
+            return {data.get('name', None) or data['id']: data
                     for data in return_data}
         return return_data
     return decorator_method
